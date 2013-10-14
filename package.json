@@ -1,0 +1,13 @@
+{
+  "name": "v15tools",
+  "version": "0.0.1",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shycherry/v15tools.git"
+  },
+  "main":"nwIndex.html",  
+  "dependencies": {    
+    "async": ">=0.2.9"
+  }
+}
