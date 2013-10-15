@@ -8,6 +8,7 @@
   },
   "main":"nwIndex.html",  
   "dependencies": {    
-    "async": ">=0.2.9"
+    "async": ">=0.2.9",
+    "uuid":"*"
   }
 }

@@ -1,11 +1,13 @@
-var Executor = require('./commandline').Executor;
+var ShellManager = require('./shellmanager').ShellManager;
 
 var _config = {
-  max_processes: 2
+  max_shells: 2
 };
 
 function _init(){
-  _executor = new Executor(_config);
+  _shellManager = new ShellManager(_config);
+  _shellManager.on('drain', function(){console.log('drained !');});
+  _shellManager.on('shell_created', function(shell){console.log('created!'); console.log(shell);});
 }
 
 function setConfig(iConfig){
@@ -15,16 +17,40 @@ function setConfig(iConfig){
   _init();
 }
 
-function call(iCommand, iCallback){
-  _executor.enqueue({
-    command: iCommand,
-    callback: iCallback
-  });
+/*
+iTask = {
+  shellManager,
+  [callback],
+  [releaseAtEnd],
+  [uuid],
+  [ownerUuid]
+}
+*/
+function call(iTask){  
+  _shellManager.enqueue(iTask);
+}
+
+function getShells(){
+  return _shellManager.getShells();
+}
+
+function getWSPath(iWSName, iCallback){
+  var task = {
+    command : '\\\\dsone\\rnd\\tools\\tck_init && tck_profile SCMV5 && adl_ds_ws '+iWSName,
+    callback : function(err, data){
+      if(iCallback){
+        iCallback(null, /WINDOWS.+(\\\\.+)/.exec(data)[1]);              
+      }      
+    }
+  }
+  _shellManager.enqueue(task);
 }
 
 _init();
 
 exports.V15Tools = {
   setConfig: setConfig,
-  call: call
+  call: call,
+  getWSPath : getWSPath,
+  getShells: getShells
 };
