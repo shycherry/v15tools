@@ -4,42 +4,32 @@
     <title>V15Tools</title>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="css/select2.css">
+    <link rel="stylesheet" type="text/css" href="css/v15tools.css">
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/select2.js"></script>
-    
-    <script>
-      window.vt = global.vt = require('./main.js').V15Tools;
-      $(document).ready(function() { 
-        $("#e1").select2();         
-      });
-      
-    </script>	
+    <script src="js/main.js"></script>	
+
 </head>
 <body>
-	<div class="container">
-    <div class="btn-group-vertical">
-      <button type="button" class="btn btn-default">Wsps</button>
-      <button type="button" class="btn btn-default">Fws</button>
-      <button type="button" class="btn btn-default">Mods</button>
-      <button type="button" class="btn btn-default">File</button>
-      
+	
+    <div class="v15left panel panel-default col-xs-2">
+      <div class="panel-heading">
+        V15Tools
+      </div>
+      <div class="panel-body">
+        <div class="btn-group-vertical v15ToolsContainer">
+          <button type="button" class="btn btn-default">Wsps</button>
+          <button type="button" class="btn btn-default">Fws</button>
+          <button type="button" class="btn btn-default">Mods</button>
+          <button type="button" class="btn btn-default">File</button>
+        </div>
+      </div>
+
     </div>
-    <div class="alert alert-block alert-danger fade in">alert</div>
+    <div class="v15main col-xs-8">Center</div>
+    <div class="v15right col-xs-2">right</div>
+  
 
-
-      <select name="e1" style="width:100%" multiple>
-      <optgroup label="MechanicalModeler">
-        <optgroup label="MechMod.m">
-          <option value="AL">Alabama</option>
-          <option value="WY">Wyoming</option>
-        </optgroup>     
-        <optgroup label="Mecha.m">
-          <option value="Ad">Boulldsl</option>
-          <option value="Wd">Boua</option>
-        </optgroup>     
-      </optgroup>        
-    </select>
-    <br/>
 </body>
 </html>
