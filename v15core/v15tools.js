@@ -2,22 +2,42 @@ var fs = require('fs');
 var ShellManager = require('./shellmanager').ShellManager;
 var Tool = require('./tool').Tool;
 
-var _config = {
-  max_shells: 2
-};
+var util = require('util');
+var EventEmitter = require('events').EventEmitter;
+util.inherits(V15Tools, EventEmitter);
 
+
+/*
+* events : shellmanager_drained, shell_created
+*/
 function _init(){
-  _shellManager = new ShellManager(_config);
-  _shellManager.on('drain', function(){console.log('drained !');});
-  _shellManager.on('shell_created', function(shell){console.log('created!'); console.log(shell);});
+  var self = this;
+  this._shellManager = new ShellManager(this._config);
+  this._shellManager.on('drain', function(){
+    self.emit('shellmanager_drained');
+  });
+
+  this._shellManager.on('shell_created', function(shell){
+    self.emit('shell_created', shell);
+  });
 }
 
-function setConfig(iConfig){
-  for(var idx in iConfig){
-    _config[idx] = iConfig[idx];
-  }
-  _init();
+function V15Tools(){
+  this.setConfig({
+    'tools_dir':'./tools',
+    'max_shells':2
+  });
 }
+
+V15Tools.prototype.setConfig = function (iConfig){
+  if(!this._config)
+    this._config = {};
+
+  for(var idx in iConfig){
+    this._config[idx] = iConfig[idx];
+  }
+  _init.call(this);
+};
 
 /*
 iTask = {
@@ -28,15 +48,16 @@ iTask = {
   [ownerUuid]
 }
 */
-function call(iTask){
-  _shellManager.enqueue(iTask);
-}
+V15Tools.prototype.call = function (iTask){
+  this._shellManager.enqueue(iTask);
+};
 
-function getShells(){
-  return _shellManager.getShells();
-}
+V15Tools.prototype.getShells = function (){
+  return this._shellManager.getShells();
+};
 
-function getWSPath(iWSName, iCallback){
+
+V15Tools.prototype.getWSPath = function(iWSName, iCallback){
   var task = {
     command : '\\\\dsone\\rnd\\tools\\tck_init && tck_profile SCMV5 && adl_ds_ws '+iWSName,
     callback : function(err, data){
@@ -45,11 +66,12 @@ function getWSPath(iWSName, iCallback){
       }
     }
   };
-  _shellManager.enqueue(task);
-}
+  this._shellManager.enqueue(task);
+};
 
-function loadTools(iCallback){
-  fs.readdir('./tools', function(err, files){
+V15Tools.prototype.loadTools = function(iCallback){
+  var tools_dir = this._config['tools_dir'];
+  fs.readdir(tools_dir, function(err, files){
     if(err){
       iCallback(err, null);
       return;
@@ -57,9 +79,9 @@ function loadTools(iCallback){
     var tools = [];
     for(var idx in files){
       var currentToolName = files[idx];
-      if(fs.existsSync('./tools/'+currentToolName+'/layout.html')){
+      if(fs.existsSync(tools_dir+'/'+currentToolName+'/layout.html')){
         var newTool = new Tool({
-          'pathToDir': './tools/'+currentToolName,
+          'pathToDir': tools_dir+'/'+currentToolName,
           'name': currentToolName
         });
         tools.push(newTool);
@@ -67,9 +89,9 @@ function loadTools(iCallback){
     }
     iCallback(null, tools);
   });
-}
+};
 
-function findModelInArray(iModel, iArray){
+V15Tools.prototype.findModelInArray = function(iModel, iArray){
   for(var idxModel in iArray){
     var model = iArray[idxModel];
     for(var prop in iModel){
@@ -79,15 +101,6 @@ function findModelInArray(iModel, iArray){
     }
   }
   
-}
-
-_init();
-
-exports.V15Tools = {
-  setConfig: setConfig,
-  call: call,
-  getWSPath : getWSPath,
-  getShells: getShells,
-  loadTools: loadTools,
-  findModelInArray : findModelInArray
 };
+
+exports.V15Tools = new V15Tools();

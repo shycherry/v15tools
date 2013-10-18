@@ -12,10 +12,10 @@ function switchTool(iTool, iCallback){
   });
 }
 
-function loadTools(){  
+function loadTools(){
   vt.loadTools(function(err, iTools){
     if(!err){
-      tools = iTools;      
+      tools = iTools;
       for(var idx in iTools){
         var iTool = iTools[idx];
         $('#vt-tabs').append('<span class="v15tool" id="'+iTool.vid+'"><p>'+iTool.name+'</p></span>');
@@ -31,6 +31,12 @@ function loadTools(){
       });
     }
     });
+}
+
+function makeShellsGUI(){
+  vt.on('shell_created', function(shell){
+    $('.v15-status-row').append('<button class="v15-shell btn btn-default">'+shell+"</button>");
+  });
 }
 
 $(document).ready(function() {

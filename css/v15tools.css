@@ -91,3 +91,17 @@ html, body{
   height: 30px;
   overflow: auto;
 }
+
+.v15-big-row{
+  height: 90%;
+}
+
+.row{
+  margin: 0;  
+}
+
+.v15-status-row{
+  height: 10%;
+  background-color: rgba(64,64,64,0.5);
+  overflow: auto;
+}

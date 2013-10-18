@@ -20,10 +20,11 @@ function ShellManager(iConfig){
 
 ShellManager.prototype.getShells = function(){
   return this._shells;
-}
+};
 
-ShellManager.prototype.worker = function(iTask, iCallback){  
-  var shell = iTask['shellManager'].getShellFor(iTask['ownerUuid']);  
+ShellManager.prototype.worker = function(iTask, iCallback){
+  var shell = iTask['shellManager'].getShellFor(iTask['ownerUuid']);
+  
   shell.write(_StartTransactionMarker+iTask['uuid']+'\n');
   shell.write(iTask.command+'\n');
   shell.write(_EndTransactionMarker+iTask['uuid']+'\n');
@@ -36,7 +37,7 @@ ShellManager.prototype.worker = function(iTask, iCallback){
         shell.setOwner(null);
       }
       
-      iCallback(null, dataBuffer);      
+      iCallback(null, dataBuffer);
     }
   });
 };
@@ -47,20 +48,21 @@ ShellManager.prototype.getShellFor = function(iOwnerUuid){
     var shell = this._shells[idx];
     if(shell.getOwner() == iOwnerUuid){
       return shell;
-    }    
+    }
   }
 
   //existing non owned shell
   for(var idx in this._shells){
     var shell = this._shells[idx];
     if(!shell.getOwner()){
+      shell.setOwner(iOwnerUuid);
       return shell;
-    }    
+    }
   }
 
   //new shell
   if(this._shells.length < this._config.max_shells){
-    var newShell = new Shell();    
+    var newShell = new Shell();
     newShell.setOwner(iOwnerUuid);
     this._shells.push(newShell);
     this.emit('shell_created', newShell);
@@ -68,7 +70,7 @@ ShellManager.prototype.getShellFor = function(iOwnerUuid){
   }
 };
 
-ShellManager.prototype.enqueue = function(iTask){  
+ShellManager.prototype.enqueue = function(iTask){
   iTask['shellManager'] = this;
   var task = new Task(iTask);
   this._queue.push(task, task.callback);
