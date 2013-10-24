@@ -1,5 +1,7 @@
 html, body{
   height: 100%;
+  margin: 0;
+  padding: 0; 
 }
 
 .logo{
@@ -8,20 +10,35 @@ html, body{
   background-image: url('./logo.png');
 }
 
-.v15left{
+#vt-tabs{  
+  background-color: rgba(34,34,34,0.5);
+  height: 30px;
+  overflow: auto;
+}
+
+#vt-central{  
+}
+
+#vt-main{
+  display: inline-block;
+  vertical-align: top;
   height: 100%;
+  width: 80%;
+  background-color: rgba(96,96,96,0.5);
+  overflow: auto;
+}
+
+#vt-share{
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+  width: 20%;
+  background-color: rgba(64,64,64,0.5);
+  overflow: auto;
+}
+
+#vt-status{  
   background-color: rgba(128,128,128,0.5);
-  overflow: auto;
-}
-
-.v15main{
-  height: 100%;
-  background-color: rgba(96,96,96,0.5);;
-  overflow: auto;
-}
-
-.v15right{
-  height: 100%;
-  background-color: rgba(64,64,64,0.5);;
+  height: 30px;
   overflow: auto;
 }
