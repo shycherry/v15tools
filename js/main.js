@@ -18,10 +18,12 @@ function loadTools(){
       tools = iTools;      
       for(var idx in iTools){
         var iTool = iTools[idx];
-        $('#vt-tabs').append('<span class="v15tool" id="'+iTool.vid+'">'+iTool.name+'</span>');
+        $('#vt-tabs').append('<span class="v15tool" id="'+iTool.vid+'"><p>'+iTool.name+'</p></span>');
       }
       
-      $('.v15tool').click(function(){        
+      $('.v15tool').click(function(){
+        $('.v15tool').removeClass('active');
+        $(this).addClass('active');
         var tool = vt.findModelInArray({vid:$(this).attr('id')}, tools);
         switchTool(tool, function(err, data){
           console.log(tool.name+' loaded');

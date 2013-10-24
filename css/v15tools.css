@@ -14,18 +14,43 @@
 }
 
 html, body{
+  font-family: "Lucida Console", Monospace;
   height: 100%;
   margin: 0;
   padding: 0; 
+  -webkit-user-select: none;
 }
 
 .v15tool{
-  vertical-align: middle;
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+  font-weight: bold;
+  margin-right: 2px;
+}
+
+.v15tool p{
+  margin-top: 5px;
+}
+
+.v15tool.active p{
+  margin-top: 10px;
+}
+
+.v15tool.active{
+  background-color: rgba(240,240,240,0.5);
+  -webkit-filter: invert(100%);  
+}
+
+.v15tool:hover{
+  background-color: rgba(240,240,240,0.5);
+  -webkit-filter: invert(100%);
+  cursor: pointer;
 }
 
 #vt-logo{
   display: inline-block;
-  vertical-align: middle;
+  vertical-align: top;
   width: 30px;
   height: 30px;
   background-size: contain;
@@ -43,6 +68,7 @@ html, body{
 }
 
 #vt-main{
+  -webkit-user-select: all;
   display: inline-block;
   vertical-align: top;
   height: 100%;
