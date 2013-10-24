@@ -1,12 +1,35 @@
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+ 
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+}
+ 
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+
 html, body{
   height: 100%;
   margin: 0;
   padding: 0; 
 }
 
-.logo{
-  width: 100%;
-  height: 100%;
+.v15tool{
+  vertical-align: middle;
+}
+
+#vt-logo{
+  display: inline-block;
+  vertical-align: middle;
+  width: 30px;
+  height: 30px;
+  background-size: contain;
+  background-repeat: no-repeat;
   background-image: url('./logo.png');
 }
 
@@ -24,7 +47,7 @@ html, body{
   vertical-align: top;
   height: 100%;
   width: 80%;
-  background-color: rgba(96,96,96,0.5);
+  /*background-color: rgba(96,96,96,0.5);*/
   overflow: auto;
 }
 
