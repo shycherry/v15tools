@@ -14,10 +14,12 @@ function loadTools(){
       tools = iTools;      
       for(var idx in iTools){
         var iTool = iTools[idx];
-        $('.v15ToolsContainer').append('<button class="btn btn-default v15tool" id="'+iTool.vid+'">'+iTool.name+'</button>');
+        $('.v15ToolsContainer').append('<li class="v15tool" id="'+iTool.vid+'"><a href="#">'+iTool.name+'</a></li>');
       }
       
       $('.v15tool').click(function(){
+        $('.v15tool').removeClass('active');
+        $(this).addClass('active');
         var tool = vt.findModelInArray({vid:$(this).attr('id')}, tools);
         switchTool(tool, function(err, data){
           console.log(tool.name+' loaded');
