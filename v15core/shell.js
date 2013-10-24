@@ -7,8 +7,12 @@ var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 util.inherits(Shell, EventEmitter);
 
-function Shell(){
-  var self = this;  
+var globId = 0;
+
+function Shell(){  
+  var self = this;
+  this.vid = 'Shell_'+globId;
+  globId++;
   this.fullOutput = '';
   this.child_process = cp.spawn('cmd');
   this.child_process.stdout.on('data', function(data){

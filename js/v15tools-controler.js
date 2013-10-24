@@ -1,8 +1,9 @@
+global.$ = window.$;
 window.vt = global.vt = require('./v15core/v15tools.js').V15Tools;
 var fs = require('fs');
 var tools = [];
 
-function doLayout(){
+function relayout(){
   $('#vt-central').height($(window).height() - 60);
 }
 
@@ -12,7 +13,7 @@ function switchTool(iTool, iCallback){
   });
 }
 
-function loadTools(){
+function bindToolsGui(){
   vt.loadTools(function(err, iTools){
     if(!err){
       tools = iTools;
@@ -33,18 +34,33 @@ function loadTools(){
     });
 }
 
-function makeShellsGUI(){
+function makeShellTooltipContent(iShell){
+  return function(){
+    var eData = String(iShell.fullOutput).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/(\n)/g,'<br/>');  
+    return '<div class="v15shell-tooltip">'+eData+'</div>';
+  }  
+}
+
+function bindShellsGui(){
   vt.on('shell_created', function(shell){
-    $('.v15-status-row').append('<button class="v15-shell btn btn-default">'+shell+"</button>");
+    var newShellDiv = $('<div class="v15shell" vid="'+shell.vid+'">Shell</div>');
+    $(newShellDiv).tooltip({
+      content:makeShellTooltipContent(shell),
+      items:'.v15shell',      
+      show:500,
+      hide:10000
+    });
+    $('#vt-status').append(newShellDiv);    
   });
 }
 
 $(document).ready(function() {
-  doLayout();
+  relayout();
   
   $(window).resize(function(){
-    doLayout();
+    relayout();
   });
 
-  loadTools();
+  bindToolsGui();
+  bindShellsGui();
 });

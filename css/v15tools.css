@@ -19,6 +19,7 @@ html, body{
   margin: 0;
   padding: 0; 
   -webkit-user-select: none;
+  overflow: hidden;
 }
 
 .v15tool{
@@ -48,6 +49,21 @@ html, body{
   cursor: pointer;
 }
 
+.v15shell{
+  display: inline-block;
+  background-color: rgba(25,25,25,0.5);
+  vertical-align: top;
+  height: 100%;
+}
+
+.v15shell-tooltip{
+  -webkit-user-select: text;
+  font-size: small;
+  height: 200px;
+  width: 100%;
+  overflow: auto;
+}
+
 #vt-logo{
   display: inline-block;
   vertical-align: top;
@@ -68,7 +84,7 @@ html, body{
 }
 
 #vt-main{
-  -webkit-user-select: all;
+  -webkit-user-select: text;
   display: inline-block;
   vertical-align: top;
   height: 100%;
@@ -97,7 +113,7 @@ html, body{
 }
 
 .row{
-  margin: 0;  
+  margin: 0;
 }
 
 .v15-status-row{
