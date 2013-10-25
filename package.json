@@ -9,6 +9,7 @@
   "main":"v15tools.html",  
   "dependencies": {
     "async": ">=0.2.9",
-    "uuid":"*"
+    "uuid":"*",
+    "collections": ">=0.2.1"
   }
 }
