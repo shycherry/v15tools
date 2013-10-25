@@ -1,5 +1,7 @@
 global.$ = window.$;
 window.vt = global.vt = require('./v15core/v15tools.js').V15Tools;
+window.makeWSPGui = global.makeWSPGui = makeWSPGui;
+
 var fs = require('fs');
 var tools = [];
 
@@ -52,6 +54,10 @@ function bindShellsGui(){
     });
     $('#vt-status').append(newShellDiv);    
   });
+}
+
+function makeWSPGui(iWSPModel){
+  return $('<div class="vt-wsp" id="'+iWSPModel.vid+'">'+iWSPModel.name+'</div>');
 }
 
 $(document).ready(function() {

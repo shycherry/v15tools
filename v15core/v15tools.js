@@ -99,8 +99,7 @@ V15Tools.prototype.findModelInArray = function(iModel, iArray){
         return model;
       }
     }
-  }
-  
+  }  
 };
 
 exports.V15Tools = new V15Tools();

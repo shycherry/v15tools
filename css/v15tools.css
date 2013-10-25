@@ -22,6 +22,13 @@ html, body{
   overflow: hidden;
 }
 
+.vt-wsp{
+  display: inline-block;
+  vertical-align: top;
+  height: 30px;
+  background-color: orange;
+}
+
 .v15tool{
   display: inline-block;
   vertical-align: top;
