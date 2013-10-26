@@ -36,6 +36,30 @@ function bindToolsGui(){
     });
 }
 
+function bindShareGui () {
+  $('#vt-share').droppable({
+    accept: '.vt-itempath',
+    drop: function(event, ui){
+      if(!ui.draggable){
+        return;
+      }
+      var vid = ui.draggable.attr('id');
+      if(!vid){
+        return;
+      }
+      var model = vt.findModelInCache({
+        'vid': vid
+      });
+      if(!model){
+        return;
+      }
+
+      $('#vt-share').append(makeWSPGui(model));
+
+    }
+  });
+}
+
 function makeShellTooltipContent(iShell){
   return function(){
     var eData = String(iShell.fullOutput).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/(\n)/g,'<br/>');  
@@ -43,7 +67,7 @@ function makeShellTooltipContent(iShell){
   }  
 }
 
-function bindShellsGui(){
+function bindShellsGui(){  
   vt.on('shell_created', function(shell){
     var newShellDiv = $('<div class="v15shell" vid="'+shell.vid+'">Shell</div>');
     $(newShellDiv).tooltip({
@@ -54,10 +78,26 @@ function bindShellsGui(){
     });
     $('#vt-status').append(newShellDiv);    
   });
+
+  vt.on('shell_owned', function(shell){
+    //$('.v15shell')
+    console.log(shell.vid+' owned');
+  });
+
+  vt.on('shell_released', function(shell){
+    console.log(shell.vid+' shell_released');
+  });
 }
 
 function makeWSPGui(iWSPModel){
-  return $('<div class="vt-wsp" id="'+iWSPModel.vid+'">'+iWSPModel.name+'</div>');
+  var newWSPGui = $('<div id="'+iWSPModel.vid+'">'+iWSPModel.name+'</div>');
+  newWSPGui.addClass("vt-itempath vt-wsp");
+  newWSPGui.draggable({
+    revert: 'invalid',
+    helper: 'clone',
+    containment: 'window'
+  });
+  return newWSPGui;
 }
 
 $(document).ready(function() {
@@ -68,5 +108,8 @@ $(document).ready(function() {
   });
 
   bindToolsGui();
+  bindShareGui();
   bindShellsGui();
+
+  vt.loadSavedModels();
 });

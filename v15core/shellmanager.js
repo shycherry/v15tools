@@ -6,7 +6,7 @@ var _StartTransactionMarker = 'V15TStart_';
 var _EndTransactionMarker = 'V15TEnd_';
 
 /*
-* events : drain, shell_created
+* events : drain, shell_created, shell_owned, shell_released
 */
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
@@ -23,6 +23,7 @@ ShellManager.prototype.getShells = function(){
 };
 
 ShellManager.prototype.worker = function(iTask, iCallback){
+  var self = this;
   var shell = iTask['shellManager'].getShellFor(iTask['ownerUuid']);
   
   shell.write(_StartTransactionMarker+iTask['uuid']+'\n');
@@ -30,19 +31,22 @@ ShellManager.prototype.worker = function(iTask, iCallback){
   shell.write(_EndTransactionMarker+iTask['uuid']+'\n');
   
   var dataBuffer='';
-  shell.on('data', function(data){
+  var dataCallback = function(data){
     dataBuffer += data.toString();
     if(RegExp(_EndTransactionMarker+iTask['uuid']).test(data)){
       if(iTask['releaseAtEnd']){
-        shell.setOwner(null);
+        shell.setOwner(null);        
       }
-      
+      shell.removeListener('data', dataCallback);
       iCallback(null, dataBuffer);
     }
-  });
+  }
+  shell.on('data', dataCallback);
 };
 
 ShellManager.prototype.getShellFor = function(iOwnerUuid){
+  var self = this;
+
   //previously owned shell
   for(var idx in this._shells){
     var shell = this._shells[idx];
@@ -64,14 +68,20 @@ ShellManager.prototype.getShellFor = function(iOwnerUuid){
   if(this._shells.length < this._config.max_shells){
     var newShell = new Shell();
     newShell.setOwner(iOwnerUuid);
-    this._shells.push(newShell);
+    newShell.on('owned', function(){
+      self.emit('shell_owned', newShell);
+    });
+    newShell.on('released', function(){
+      self.emit('shell_released', newShell);
+    });
+    this._shells.push(newShell);    
     this.emit('shell_created', newShell);
     return newShell;
   }
 };
 
 ShellManager.prototype.enqueue = function(iTask){
-  iTask['shellManager'] = this;
+  iTask.shellManager = this;
   var task = new Task(iTask);
   this._queue.push(task, task.callback);
 };

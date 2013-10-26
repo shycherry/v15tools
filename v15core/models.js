@@ -66,8 +66,21 @@ function FILE(){
   type=Types.FILE;
 }
 
-exports.Types = Types
-exports.WSP = WSP
-exports.FW = FW
-exports.MOD = MOD
-exports.FILE = FILE
+function Factory (arg) {
+  if(arg && arg.type){
+    var newInstance = eval('new '+arg.type);
+    delete arg.vid;
+    for(i in arg){
+      newInstance[i] = arg[i];
+    }
+    return newInstance;
+  }
+  return null;
+}
+
+exports.Types = Types;
+exports.WSP = WSP;
+exports.FW = FW;
+exports.MOD = MOD;
+exports.FILE = FILE;
+exports.Factory = Factory;

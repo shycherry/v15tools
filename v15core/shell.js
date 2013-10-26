@@ -1,7 +1,7 @@
 var cp = require('child_process');
 
 /*
-* events: data
+* events: data, released, owned
 */
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
@@ -23,7 +23,13 @@ function Shell(){
 }
 
 Shell.prototype.setOwner = function(iOwner){
+  var old = this.owner;
   this.owner = iOwner;
+  if(this.owner){
+    this.emit('owned');
+  }else if(old && !this.owner){
+    this.emit('released');
+  }
 }
 
 Shell.prototype.getOwner = function(){
