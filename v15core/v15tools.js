@@ -93,7 +93,7 @@ V15Tools.prototype.loadTools = function(iCallback){
           'name': currentToolName
         });
         tools.push(newTool);
-        _cachedModels.push(newTool);
+        _models.push(newTool);
       }
     }
     if(iCallback)
@@ -116,7 +116,7 @@ V15Tools.prototype.loadSavedModels = function(iCallback) {
       var newItem = Models.Factory(rawItem);
       if(newItem){
         models.push(newItem);
-        _cachedModels.push(newItem);
+        _models.push(newItem);
       }
     }
     if(iCallback)
@@ -135,9 +135,26 @@ V15Tools.prototype.findModelInArray = function(iModel, iArray){
   }  
 };
 
-V15Tools.prototype.findModelInCache = function(iModel){
-  return this.findModelInArray(iModel, _cachedModels);
+V15Tools.prototype.findModelsInArray = function(iModel, iArray){
+  var results = [];
+  for(var idxModel in iArray){
+    var model = iArray[idxModel];
+    for(var prop in iModel){
+      if(model.hasOwnProperty(prop) && model[prop] == iModel[prop]){
+        results.push(model);
+      }
+    }
+  }
+  return results;
 };
 
-var _cachedModels = [];
+V15Tools.prototype.findModel = function(iModel){
+  return this.findModelInArray(iModel, _models);
+};
+
+V15Tools.prototype.findModels = function(iModel){
+  return this.findModelsInArray(iModel, _models);
+};
+
+var _models = [];
 exports.V15Tools = new V15Tools();

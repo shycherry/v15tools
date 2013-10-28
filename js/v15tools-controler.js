@@ -3,7 +3,8 @@ window.vt = global.vt = require('./v15core/v15tools.js').V15Tools;
 window.makeWSPGui = global.makeWSPGui = makeWSPGui;
 
 var fs = require('fs');
-var tools = [];
+var _tools = [];
+var _sharedItems = [];
 
 function relayout(){
   $('#vt-central').height($(window).height() - 60);
@@ -18,7 +19,7 @@ function switchTool(iTool, iCallback){
 function bindToolsGui(){
   vt.loadTools(function(err, iTools){
     if(!err){
-      tools = iTools;
+      _tools = iTools;
       for(var idx in iTools){
         var iTool = iTools[idx];
         $('#vt-tabs').append('<span class="v15tool" id="'+iTool.vid+'"><p>'+iTool.name+'</p></span>');
@@ -27,7 +28,7 @@ function bindToolsGui(){
       $('.v15tool').click(function(){
         $('.v15tool').removeClass('active');
         $(this).addClass('active');
-        var tool = vt.findModelInArray({vid:$(this).attr('id')}, tools);
+        var tool = vt.findModelInArray({vid:$(this).attr('id')}, _tools);
         switchTool(tool, function(err, data){
           console.log(tool.name+' loaded');
         });
@@ -47,15 +48,17 @@ function bindShareGui () {
       if(!vid){
         return;
       }
-      var model = vt.findModelInCache({
+      var model = vt.findModel({
         'vid': vid
       });
       if(!model){
         return;
       }
 
-      $('#vt-share').append(makeWSPGui(model));
-
+      if(_sharedItems.indexOf(model) == -1){
+        $('#vt-share').append(makeWSPGui(model));
+        _sharedItems.push(model);
+      }
     }
   });
 }

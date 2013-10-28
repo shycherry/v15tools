@@ -6,7 +6,7 @@ var _StartTransactionMarker = 'V15TStart_';
 var _EndTransactionMarker = 'V15TEnd_';
 
 /*
-* events : drain, shell_created, shell_owned, shell_released
+* events : saturated, drain, shell_created, shell_owned, shell_released
 */
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
@@ -89,8 +89,14 @@ ShellManager.prototype.enqueue = function(iTask){
 ShellManager.prototype.init = function(){
   var self = this;
   this._queue = new async.queue(ShellManager.prototype.worker, this._config.max_shells);
-  this._queue.drain = function(){self.emit('drain');};
-  this._queue.saturated = function(){console.log('all processes occupied');};
+  this._queue.drain = function(){
+    console.log('all shells finished working');
+    self.emit('drain');
+  };
+  this._queue.saturated = function(){
+    console.log('all shells are working');
+    self.emit('saturated');
+  };
 };
 
 

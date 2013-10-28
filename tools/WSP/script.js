@@ -1,4 +1,8 @@
 exports.listWSPs = function(){
-  var model = vt.findModelInCache({name:'NMMR208'});  
-  $('#wsp-list').append(makeWSPGui(model));
+  var models = vt.findModels({type:'WSP'}); 
+  for(var idx in models){
+    var model = models[idx];
+    $('#wsp-list').append(makeWSPGui(model));
+  }
+  
 }
