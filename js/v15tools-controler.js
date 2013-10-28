@@ -72,7 +72,7 @@ function makeShellTooltipContent(iShell){
 
 function bindShellsGui(){  
   vt.on('shell_created', function(shell){
-    var newShellDiv = $('<div class="v15shell" vid="'+shell.vid+'">Shell</div>');
+    var newShellDiv = $('<div class="v15shell" vid="'+shell.vid+'">> _</div>');
     $(newShellDiv).tooltip({
       content:makeShellTooltipContent(shell),
       items:'.v15shell',      

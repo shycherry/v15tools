@@ -64,6 +64,7 @@ html, body{
   background-color: rgba(25,25,25,0.5);
   vertical-align: top;
   height: 100%;
+  margin-right: 2px;
 }
 
 .v15shell-tooltip{
