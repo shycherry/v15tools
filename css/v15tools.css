@@ -13,13 +13,16 @@
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }
 
-html, body{
+*{
   font-family: "Lucida Console", Monospace;
-  height: 100%;
-  margin: 0;
-  padding: 0; 
   -webkit-user-select: none;
   overflow: hidden;
+}
+
+html, body{  
+  height: 100%;
+  margin: 0;
+  padding: 0;  
 }
 
 .vt-wsp{
@@ -30,6 +33,11 @@ html, body{
   height: 30px;
   background-color: greenyellow;
   margin: 1px;
+}
+
+.vt-itempath.selected{
+  border: solid;
+  border-color: red;
 }
 
 .v15tool{
@@ -119,16 +127,6 @@ html, body{
   overflow: auto;
 }
 
-.v15-big-row{
-  height: 90%;
-}
-
-.row{
-  margin: 0;
-}
-
-.v15-status-row{
-  height: 10%;
-  background-color: rgba(64,64,64,0.5);
-  overflow: auto;
+.ui-selecting {
+  background: #ccc;
 }
