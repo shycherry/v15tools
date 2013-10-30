@@ -1,5 +1,6 @@
 var fs = require('fs');
 var ShellManager = require('./shellmanager').ShellManager;
+var ShellTask = require('./shelltask').ShellTask;
 var Tool = require('./tool').Tool;
 var Models = require('./models');
 
@@ -46,17 +47,10 @@ V15Tools.prototype.setConfig = function (iConfig){
   _init.call(this);
 };
 
-/*
-iTask = {
-  shellManager,
-  [callback],
-  [releaseAtEnd],
-  [uuid],
-  [ownerUuid]
-}
-*/
-V15Tools.prototype.call = function (iTask){
-  this._shellManager.enqueue(iTask);
+V15Tools.prototype.ShellTask = ShellTask;
+
+V15Tools.prototype.pushShellTask = function (iShellTask){
+  this._shellManager.enqueue(iShellTask);
 };
 
 V15Tools.prototype.getShells = function (){

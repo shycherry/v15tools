@@ -79,10 +79,9 @@ ShellManager.prototype.getShellFor = function(iShellTaskVid){
   }
 };
 
-ShellManager.prototype.enqueue = function(iShellTask){
-  iShellTask.shellManager = this;
-  var shelltask = new ShellTask(iShellTask);
-  this._queue.push(shelltask, shelltask.callback);
+ShellManager.prototype.enqueue = function(iShellTask){    
+  if(iShellTask)
+    this._queue.push(iShellTask, iShellTask.callback);  
 };
 
 ShellManager.prototype.init = function(){
