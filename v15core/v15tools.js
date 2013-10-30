@@ -18,6 +18,9 @@ function _init(){
   this._shellManager.on('drain', function(){
     self.emit('shellmanager_drained');
   });
+  this._shellManager.on('saturated', function(){
+    self.emit('shellmanager_saturated');
+  });
   this._shellManager.on('shell_created', function(shell){
     self.emit('shell_created', shell);
   });

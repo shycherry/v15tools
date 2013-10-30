@@ -119,6 +119,15 @@ function bindShellsGui(){
   vt.on('shell_released', function(shell){
     console.log(shell.vid+' shell_released');
   });
+
+  vt.on('shellmanager_drained', function(){
+    console.log('all shells finished working');
+  });
+
+  vt.on('shellmanager_saturated', function(){
+    console.log('all shells are working');
+  });
+
 }
 
 function makeWSPGui(iWSPModel){
