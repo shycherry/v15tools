@@ -52,6 +52,14 @@ V15Tools.prototype.setConfig = function (iConfig){
 
 V15Tools.prototype.ShellTask = ShellTask;
 
+V15Tools.prototype.createModel = function(arg){
+  var newModel = Models.Factory(arg);
+  if(newModel){
+    _models.push(newModel);    
+  }  
+  return newModel;
+};
+
 V15Tools.prototype.pushShellTask = function (iShellTask){
   this._shellManager.enqueue(iShellTask);
 };
@@ -62,15 +70,26 @@ V15Tools.prototype.getShells = function (){
 
 
 V15Tools.prototype.getWSPath = function(iWSName, iCallback){
-  var task = {
+  var shellTask = new ShellTask({
     command : '\\\\dsone\\rnd\\tools\\tck_init && tck_profile SCMV5 && adl_ds_ws '+iWSName,
     callback : function(err, data){
-      if(iCallback){
-        iCallback(null, /WINDOWS.+(\\\\.+)/.exec(data)[1]);
+      if(err){
+        if(iCallback){
+          iCallback(err, null);
+        }
+        return;
       }
+      if(iCallback){
+        var winImagePathMatch = /WINDOWS.+(\\\\.+)/.exec(data);
+        if(!winImagePathMatch){
+          iCallback('no match', null);
+          return;
+        }
+        iCallback(null, winImagePathMatch[1]);
+      }     
     }
-  };
-  this._shellManager.enqueue(task);
+  });
+  this.pushShellTask(shellTask);
 };
 
 V15Tools.prototype.loadTools = function(iCallback){

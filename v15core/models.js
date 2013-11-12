@@ -3,7 +3,7 @@ var util = require('util');
 
 var Types = {
   ItemPath : 'ItemPath',
-  WSP:'WSP',
+  WS:'WS',
   FW:'FW',
   MOD:'MOD',
   FILE:'FILE',
@@ -29,13 +29,13 @@ ItemPath.prototype.exists = function() {
 };
 
 
-util.inherits(WSP, ItemPath);
-function WSP(){
-  this.vid = 'WSP_'+globId;
+util.inherits(WS, ItemPath);
+function WS(){
+  this.vid = 'WS_'+globId;
   globId++;
-  this.name='wsp';
-  this.absolute='/path/to/wsp';
-  this.type = Types.WSP;
+  this.name='ws';
+  this.absolute='/path/to/ws';
+  this.type = Types.WS;
 }
 
 util.inherits(FW, ItemPath);
@@ -79,7 +79,7 @@ function Factory (arg) {
 }
 
 exports.Types = Types;
-exports.WSP = WSP;
+exports.WS = WS;
 exports.FW = FW;
 exports.MOD = MOD;
 exports.FILE = FILE;

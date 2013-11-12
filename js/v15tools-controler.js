@@ -1,6 +1,6 @@
 global.$ = window.$;
 window.vt = global.vt = require('./v15core/v15tools.js').V15Tools;
-window.makeWSPGui = global.makeWSPGui = makeWSPGui;
+window.makeWSGui = global.makeWSGui = makeWSGui;
 
 var fs = require('fs');
 var _tools = [];
@@ -130,27 +130,27 @@ function bindShellsGui(){
 
 }
 
-function makeWSPGui(iWSPModel){
-  var newWSPGui = $('<div id="'+iWSPModel.vid+'">'+iWSPModel.name+'</div>');
-  newWSPGui.addClass("vt-itempath vt-wsp");
-  newWSPGui.draggable({
+function makeWSGui(iWSModel){
+  var newWSGui = $('<div id="'+iWSModel.vid+'">'+iWSModel.name+'</div>');
+  newWSGui.addClass("vt-itempath vt-ws");
+  newWSGui.draggable({
     revert: 'invalid',
     helper: 'clone',
     containment: 'window',
     distance:10
   });
 
-  newWSPGui.click(function(){    
-    newWSPGui.toggleClass('selected');
+  newWSGui.click(function(){    
+    newWSGui.toggleClass('selected');
   });
 
-  return newWSPGui;
+  return newWSGui;
 }
 
 
 function addSharedItem(model){
   if(_sharedItems.indexOf(model) == -1){
-    $('#vt-share').append(makeWSPGui(model));
+    $('#vt-share').append(makeWSGui(model));
     _sharedItems.push(model);
   }
 }

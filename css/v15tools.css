@@ -25,7 +25,7 @@ html, body{
   padding: 0;  
 }
 
-.vt-wsp{
+.vt-ws{
   -webkit-user-select: none;
   cursor:move;
   display: inline-block;
