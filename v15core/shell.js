@@ -13,6 +13,7 @@ function Shell(){
   var self = this;
   this.vid = 'Shell_'+globId;
   globId++;
+  this._working = false;
   this.globTransactionId = 0;
   this.fullOutput = '';
   this.child_process = cp.spawn('cmd');
@@ -37,14 +38,23 @@ Shell.prototype.getOwner = function(){
   return this.owner;
 };
 
+Shell.prototype.isWorking = function(){
+  return this._working;
+};
+
+Shell.prototype.setWorking = function(isWorking){
+  this._working = isWorking;
+};
+
 
 Shell.prototype.write = function(iData){
   this.child_process.stdin.write(iData);
 };
 
-Shell.prototype.worker = function(iShellTask, iCallback){
+Shell.prototype.doTask = function(iShellTask, iCallback){
   var self = this;
   var transactionId = '_Trans_'+this.globTransactionId;
+  this.setWorking(true);
   this.write(_StartTransactionMarker+iShellTask.vid+transactionId+'\n');
   this.write(iShellTask.command+'\n');
   this.write(_EndTransactionMarker+iShellTask.vid+transactionId+'\n');
@@ -53,6 +63,7 @@ Shell.prototype.worker = function(iShellTask, iCallback){
   var dataCallback = function(data){
     dataBuffer += data.toString();
     if(RegExp(_EndTransactionMarker+iShellTask.vid+transactionId).test(data)){
+      this.setWorking(false);
       if(iShellTask.releaseAtEnd){
         self.setOwner(null);        
       }
