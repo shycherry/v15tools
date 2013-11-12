@@ -37,10 +37,10 @@ function bindToolsGui(){
     });
 }
 
-function bindShareGui () {  
+function bindShareGui () {
   var $vt_share = $('#vt-share');
   
-  $vt_share.contextmenu({    
+  $vt_share.contextmenu({
     menu:[
       {
         title:'clear',

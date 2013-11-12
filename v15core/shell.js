@@ -9,7 +9,7 @@ util.inherits(Shell, EventEmitter);
 
 var globId = 0;
 
-function Shell(){  
+function Shell(){
   var self = this;
   this.vid = 'Shell_'+globId;
   globId++;
@@ -20,7 +20,7 @@ function Shell(){
   this.child_process.stdout.on('data', function(data){
     self.fullOutput += data;
     self.emit('data', data);
-  })
+  });
   this.owner = null;
 }
 
@@ -65,7 +65,7 @@ Shell.prototype.doTask = function(iShellTask, iCallback){
     if(RegExp(_EndTransactionMarker+iShellTask.vid+transactionId).test(data)){
       this.setWorking(false);
       if(iShellTask.releaseAtEnd){
-        self.setOwner(null);        
+        self.setOwner(null);
       }
       self.removeListener('data', dataCallback);
       self.globTransactionId++;
