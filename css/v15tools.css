@@ -15,7 +15,7 @@
 
 *{
   font-family: "Lucida Console", Monospace;
-  font-size: medium;
+  font-size: small;
   -webkit-user-select: none;
   overflow: hidden;
 }
@@ -74,6 +74,11 @@ html, body{
   vertical-align: top;
   height: 100%;
   margin-right: 2px;
+}
+
+.vt-shell-viewport{
+  overflow: auto;
+  -webkit-user-select: text;
 }
 
 .v15shell-tooltip{

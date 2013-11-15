@@ -47,7 +47,6 @@ Shell.prototype.setWorking = function(isWorking){
   this._working = isWorking;
 };
 
-
 Shell.prototype.write = function(iData){
   this.child_process.stdin.write(iData);
 };

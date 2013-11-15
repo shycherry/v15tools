@@ -10,6 +10,7 @@ function ShellTask(iInfos){
   };
   this.releaseAtEnd = (iInfos.releaseAtEnd!=undefined)? iInfos.releaseAtEnd : true;
   this.command = (iInfos.command!=undefined)? iInfos.command : 'echo pas de commande';    
+  this.requiredShellVID = iInfos.requiredShellVID;
 }
 
 exports.ShellTask = ShellTask;

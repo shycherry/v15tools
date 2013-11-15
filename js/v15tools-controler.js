@@ -25,16 +25,53 @@ function makeWSGui(iWSModel){
     distance:10
   });
 
-  newWSGui.click(function(){    
+  newWSGui.click(function(){
     newWSGui.toggleClass('selected');
   });
 
   return newWSGui;
 }
 
+function makeShellWindow(iShellModel){
+  var newShellWindow = $('<div title="'+iShellModel.vid+'" vid="'+iShellModel.vid+'"></div>');
+  var newShellViewport = $('<div class="vt-shell-viewport"></div>').appendTo(newShellWindow);
+  var newShellInputBar = $('<div class="vt-shell-inputbar"></div>').appendTo(newShellWindow);
+  var newShellInputText = $('<input/>').appendTo(newShellInputBar);
+  var newShellEnqueueBtn = $('<button>Enqueue</button>').button().appendTo(newShellInputBar);
+  
+  newShellWindow.dialog({
+    autoOpen: false,
+    resize: function(){      
+      newShellViewport.height(newShellWindow.height() - newShellInputBar.height());
+    }
+  });
+  
+  iShellModel.on('data', function(data){
+    newShellViewport.append(encodeHTML(data));
+    newShellViewport[0].scrollTop=newShellViewport[0].scrollHeight
+  });
+
+  newShellEnqueueBtn.click(function(){
+    var userInput = newShellInputText.val();
+    if(userInput && userInput !== ""){
+      var userShellTask = new vt.ShellTask({
+        requiredShellVID: iShellModel.vid,
+        command: userInput,
+        callback: function(){}
+      });
+      vt.pushShellTask(userShellTask);
+    }
+  });  
+  return newShellWindow;
+}
+
 function makeShellGui(iShellModel){
   var newShellGui = $('<div vid="'+iShellModel.vid+'">> _</div>');
   newShellGui.addClass("v15shell");
+  var newShellWindow = makeShellWindow(iShellModel);  
+  newShellGui.click(function(){
+    newShellWindow.dialog('open');
+  });
   newShellGui.tooltip({
     content:templateShellTooltip(iShellModel),
     items:'.v15shell',      
@@ -45,11 +82,19 @@ function makeShellGui(iShellModel){
 }
 
 function relayout(){
-  $('#vt-central').height($(window).height() - 60);
+  $('#vt-central').height($(window).height() - ($('#vt-status').height() + $('#vt-tabs').height()));
 }
 
 function encodeHTML(iText){
-  return iText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/(\n)/g,'<br/>');
+  if( !(iText.replace) ){
+    iText = iText.toString();
+  }
+
+  if(iText.replace){
+    return iText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/(\n)/g,'<br/>');  
+  }else{
+    return '';
+  }
 }
 
 function switchTool(iTool, iCallback){
@@ -140,8 +185,7 @@ function bindShellsGui(){
     $('#vt-status').append(newShellGui);    
   });
 
-  vt.on('shell_owned', function(shell){
-    //$('.v15shell')
+  vt.on('shell_owned', function(shell){    
     console.log(shell.vid+' owned');
   });
 

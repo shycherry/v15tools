@@ -24,7 +24,7 @@ ShellManager.prototype.getShells = function(){
 };
 
 ShellManager.prototype.worker = function(iShellTask, iCallback){
-  var shell = this.getShellFor(iShellTask.vid);
+  var shell = this.getShellFor(iShellTask);
   shell.write(_StartTransactionMarker+iShellTask.vid+'\n');
   shell.write(iShellTask.command+'\n');
   shell.write(_EndTransactionMarker+iShellTask.vid+'\n');
@@ -43,10 +43,19 @@ ShellManager.prototype.worker = function(iShellTask, iCallback){
   shell.on('data', dataCallback);
 };
 
-ShellManager.prototype.getShellFor = function(iShellTaskVid){
+ShellManager.prototype.getShellFor = function(iShellTask){
   var self = this;
+  var iShellTaskVid = iShellTask.vid;
 
-  //previously owned shell
+  //explicitly named shell
+  for(var idx in this._shells){
+    var shell = this._shells[idx];
+    if(shell.vid == iShellTask.requiredShellVID){
+      return shell;
+    }
+  }
+
+  //shell owned by task 
   for(var idx in this._shells){
     var shell = this._shells[idx];
     if(shell.getOwner() == iShellTaskVid){
