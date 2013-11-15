@@ -8,7 +8,7 @@ function makeWSList(){
 
 
 function bindGui(){
-  $('#ws-btn-retrieve-from-name').click(function(){
+  $('#ws-btn-retrieve-from-name').button().click(function(){
     var wsName = $('#ws-input-name').val();
     if(wsName.length != 0){
       var wsPath = vt.getWSPath(wsName, function(err, data){

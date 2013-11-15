@@ -3,7 +3,7 @@ function isODTKo(iLine){
 }
 
 exports.init = function(){
-  $('#rwf_filter_btn').click(function(){
+  $('#rwf_filter_btn').button().click(function(){
   	var lines=[];
   	var total_output='';
   	var total_input = $('#rwf_input').val();
