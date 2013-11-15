@@ -13,6 +13,7 @@ var EventEmitter = require('events').EventEmitter;
 util.inherits(ShellManager, EventEmitter);
 
 function ShellManager(iConfig){
+  EventEmitter.prototype.constructor.call(this);
   this._config = iConfig;
   this._shells = [];
   this.init();

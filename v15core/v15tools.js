@@ -13,6 +13,7 @@ util.inherits(V15Tools, EventEmitter);
 * events : shellmanager_drained, shell_created, shell_owned, shell_released
 */
 function _init(){
+  EventEmitter.prototype.constructor.call(this);
   var self = this;
   this._shellManager = new ShellManager(this._config);
   this._shellManager.on('drain', function(){

@@ -10,6 +10,7 @@ util.inherits(Shell, EventEmitter);
 var globId = 0;
 
 function Shell(){
+  EventEmitter.prototype.constructor.call(this);
   var self = this;
   this.vid = 'Shell_'+globId;
   globId++;
