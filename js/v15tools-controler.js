@@ -1,5 +1,6 @@
 global.$ = window.$;
 window.vt = global.vt = require('./v15core/v15tools.js').V15Tools;
+window.encodeHTML = global.encodeHTML = encodeHTML;
 window.makeWSGui = global.makeWSGui = makeWSGui;
 
 var fs = require('fs');
@@ -8,6 +9,10 @@ var _sharedItems = [];
 
 function relayout(){
   $('#vt-central').height($(window).height() - 60);
+}
+
+function encodeHTML(iText){
+  return iText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/(\n)/g,'<br/>');
 }
 
 function switchTool(iTool, iCallback){
@@ -92,9 +97,9 @@ function bindShareGui () {
 
 }
 
-function makeShellTooltipContent(iShell){
+function templateShellTooltip(iShell){
   return function(){
-    var eData = String(iShell.fullOutput).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/(\n)/g,'<br/>');  
+    var eData = encodeHTML(iShell.fullOutput);
     return '<div class="v15shell-tooltip">'+eData+'</div>';
   }  
 }
@@ -103,7 +108,7 @@ function bindShellsGui(){
   vt.on('shell_created', function(shell){
     var newShellDiv = $('<div class="v15shell" vid="'+shell.vid+'">> _</div>');
     $(newShellDiv).tooltip({
-      content:makeShellTooltipContent(shell),
+      content:templateShellTooltip(shell),
       items:'.v15shell',      
       show:500,
       hide:10000

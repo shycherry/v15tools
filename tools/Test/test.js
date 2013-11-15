@@ -2,7 +2,7 @@ exports.dir = function(){
   var shelltask = new vt.ShellTask({
     command:'dir',
     callback:function(err, data){
-      $('#console-out').html(data);
+      $('#console-out').html(encodeHTML(data));
     }
   });
 
