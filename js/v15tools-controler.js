@@ -7,6 +7,43 @@ var fs = require('fs');
 var _tools = [];
 var _sharedItems = [];
 
+
+function templateShellTooltip(iShell){
+  return function(){
+    var eData = encodeHTML(iShell.fullOutput);
+    return '<div class="v15shell-tooltip">'+eData+'</div>';
+  }  
+}
+
+function makeWSGui(iWSModel){
+  var newWSGui = $('<div id="'+iWSModel.vid+'">'+iWSModel.name+'</div>');
+  newWSGui.addClass("vt-itempath vt-ws");
+  newWSGui.draggable({
+    revert: 'invalid',
+    helper: 'clone',
+    containment: 'window',
+    distance:10
+  });
+
+  newWSGui.click(function(){    
+    newWSGui.toggleClass('selected');
+  });
+
+  return newWSGui;
+}
+
+function makeShellGui(iShellModel){
+  var newShellGui = $('<div vid="'+iShellModel.vid+'">> _</div>');
+  newShellGui.addClass("v15shell");
+  newShellGui.tooltip({
+    content:templateShellTooltip(iShellModel),
+    items:'.v15shell',      
+    show:500,
+    hide:10000
+  });  
+  return newShellGui;
+}
+
 function relayout(){
   $('#vt-central').height($(window).height() - 60);
 }
@@ -97,23 +134,10 @@ function bindShareGui () {
 
 }
 
-function templateShellTooltip(iShell){
-  return function(){
-    var eData = encodeHTML(iShell.fullOutput);
-    return '<div class="v15shell-tooltip">'+eData+'</div>';
-  }  
-}
-
 function bindShellsGui(){  
   vt.on('shell_created', function(shell){
-    var newShellDiv = $('<div class="v15shell" vid="'+shell.vid+'">> _</div>');
-    $(newShellDiv).tooltip({
-      content:templateShellTooltip(shell),
-      items:'.v15shell',      
-      show:500,
-      hide:10000
-    });
-    $('#vt-status').append(newShellDiv);    
+    var newShellGui = makeShellGui(shell);
+    $('#vt-status').append(newShellGui);    
   });
 
   vt.on('shell_owned', function(shell){
@@ -133,23 +157,6 @@ function bindShellsGui(){
     console.log('all shells are working');
   });
 
-}
-
-function makeWSGui(iWSModel){
-  var newWSGui = $('<div id="'+iWSModel.vid+'">'+iWSModel.name+'</div>');
-  newWSGui.addClass("vt-itempath vt-ws");
-  newWSGui.draggable({
-    revert: 'invalid',
-    helper: 'clone',
-    containment: 'window',
-    distance:10
-  });
-
-  newWSGui.click(function(){    
-    newWSGui.toggleClass('selected');
-  });
-
-  return newWSGui;
 }
 
 
