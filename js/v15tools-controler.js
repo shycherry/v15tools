@@ -39,16 +39,31 @@ function makeShellWindow(iShellModel){
   var newShellInputText = $('<input/>').appendTo(newShellInputBar);
   var newShellEnqueueBtn = $('<button>Enqueue</button>').button().appendTo(newShellInputBar);
   
+  var relayoutShellWindow = function(){
+    newShellViewport.height(newShellWindow.height() - newShellInputBar.height());
+  }
+
+  var scrollViewportToBottom = function(){
+    newShellViewport[0].scrollTop=newShellViewport[0].scrollHeight;
+  }
+
   newShellWindow.dialog({
     autoOpen: false,
-    resize: function(){      
-      newShellViewport.height(newShellWindow.height() - newShellInputBar.height());
+    resize: relayoutShellWindow,
+    focus: function(){
+      console.log('focus');
+      relayoutShellWindow();
+      newShellViewport[0].scrollTop = newShellViewport[0].lastScrollValue;  
     }
+  });
+
+  newShellViewport.scroll(function(){
+    newShellViewport[0].lastScrollValue = newShellViewport[0].scrollTop;
   });
   
   iShellModel.on('data', function(data){
     newShellViewport.append(encodeHTML(data));
-    newShellViewport[0].scrollTop=newShellViewport[0].scrollHeight
+    scrollViewportToBottom();
   });
 
   newShellEnqueueBtn.click(function(){

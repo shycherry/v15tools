@@ -81,6 +81,14 @@ html, body{
   -webkit-user-select: text;
 }
 
+.vt-shell-inputbar{
+  background-color: rgba(128,128,128,0.5);
+}
+
+.vt-shell-inputbar button{
+  text-align: right;
+}
+
 .v15shell-tooltip{
   -webkit-user-select: text;
   font-size: small;
