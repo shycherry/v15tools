@@ -60,10 +60,6 @@ function makeShellWindow(iShellModel){
   });
 
   newShellEnqueueBtn.button();
-
-  newShellViewport.scroll(function(){
-    newShellViewport[0].lastScrollValue = newShellViewport[0].scrollTop;
-  });
   
   iShellModel.on('data', function(data){
     newShellViewport.append(encodeHTML(data));
