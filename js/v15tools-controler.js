@@ -33,12 +33,7 @@ function makeWSGui(iWSModel){
 }
 
 function makeShellWindow(iShellModel){
-  var newShellWindow = $('<div title="'+iShellModel.vid+'" vid="'+iShellModel.vid+'"></div>');
-  var newShellViewport = $('<div class="vt-shell-viewport"></div>').appendTo(newShellWindow);
-  var newShellInputBar = $('<div class="vt-shell-inputbar"></div>').appendTo(newShellWindow);
-  var newShellInputText = $('<input/>').appendTo(newShellInputBar);
-  var newShellEnqueueBtn = $('<button>Enqueue</button>').button().appendTo(newShellInputBar);
-  
+  var shellHistory = [];
   var relayoutShellWindow = function(){
     newShellViewport.height(newShellWindow.height() - newShellInputBar.height());
   }
@@ -47,15 +42,24 @@ function makeShellWindow(iShellModel){
     newShellViewport[0].scrollTop=newShellViewport[0].scrollHeight;
   }
 
+  var newShellWindow = $('<div title="'+iShellModel.vid+'" vid="'+iShellModel.vid+'"></div>');
+  var newShellViewport = $('<div class="vt-shell-viewport"></div>').appendTo(newShellWindow);
+  var newShellInputBar = $('<div class="vt-shell-inputbar"></div>').appendTo(newShellWindow);
+  var newShellInputText = $('<input/>').appendTo(newShellInputBar);
+  var newShellEnqueueBtn = $('<button>Enqueue</button>').appendTo(newShellInputBar);
+
   newShellWindow.dialog({
     autoOpen: false,
     resize: relayoutShellWindow,
-    focus: function(){
-      console.log('focus');
-      relayoutShellWindow();
-      newShellViewport[0].scrollTop = newShellViewport[0].lastScrollValue;  
-    }
+    focus: relayoutShellWindow      
   });
+
+  newShellInputText.autocomplete({
+    source: shellHistory,
+    position: {my: 'left bottom', at: 'left top'}
+  });
+
+  newShellEnqueueBtn.button();
 
   newShellViewport.scroll(function(){
     newShellViewport[0].lastScrollValue = newShellViewport[0].scrollTop;
@@ -75,6 +79,7 @@ function makeShellWindow(iShellModel){
         callback: function(){}
       });
       vt.pushShellTask(userShellTask);
+      shellHistory.push(userInput);
     }
   });  
   return newShellWindow;

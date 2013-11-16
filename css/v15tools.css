@@ -26,6 +26,10 @@ html, body{
   padding: 0;  
 }
 
+input{
+  vertical-align: middle;
+}
+
 .vt-ws{
   -webkit-user-select: none;
   cursor:move;
