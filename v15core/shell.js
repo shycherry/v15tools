@@ -1,7 +1,10 @@
 var cp = require('child_process');
-
+var async = require('async');
+var _StartTransactionMarker = 'V15TStart_';
+var _EndTransactionMarker = 'V15TEnd_';
+var _TransactionMarker = '_Trans_';
 /*
-* events: data, released, owned
+* events: data, released, owned, drain, saturated
 */
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
@@ -14,6 +17,13 @@ function Shell(){
   var self = this;
   this.vid = 'Shell_'+globId;
   globId++;
+  this._queue = new async.queue(Shell.prototype.doTask.bind(this), 1);
+  this._queue.drain = function(){
+    self.emit('drain');
+  };
+  this._queue.saturated = function(){
+    self.emit('saturated');
+  };
   this._working = false;
   this.globTransactionId = 0;
   this.fullOutput = '';
@@ -24,6 +34,11 @@ function Shell(){
   });
   this.owner = null;
 }
+
+Shell.prototype.enqueue = function(iShellTask){
+  if(iShellTask)
+    this._queue.push(iShellTask, iShellTask.callback);
+};
 
 Shell.prototype.setOwner = function(iOwner){
   var old = this.owner;
@@ -53,7 +68,7 @@ Shell.prototype.write = function(iData){
 
 Shell.prototype.doTask = function(iShellTask, iCallback){
   var self = this;
-  var transactionId = '_Trans_'+this.globTransactionId;
+  var transactionId = _TransactionMarker+this.globTransactionId;
   this.setWorking(true);
   this.write(_StartTransactionMarker+iShellTask.vid+transactionId+'\n');
   this.write(iShellTask.command+'\n');

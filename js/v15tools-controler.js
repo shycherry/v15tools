@@ -50,8 +50,11 @@ function makeShellWindow(iShellModel){
 
   newShellWindow.dialog({
     autoOpen: false,
+    height: 300,
+    width: 600,
     resize: relayoutShellWindow,
-    focus: relayoutShellWindow      
+    focus: relayoutShellWindow,
+    open: scrollViewportToBottom
   });
 
   newShellInputText.autocomplete({
