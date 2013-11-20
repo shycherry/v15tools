@@ -1,7 +1,7 @@
 var cp = require('child_process');
 var async = require('async');
-var _StartTransactionMarker = 'V15TStart_';
-var _EndTransactionMarker = 'V15TEnd_';
+var _StartTransactionMarker = 'echo V15TStart_';
+var _EndTransactionMarker = 'echo V15TEnd_';
 var _TransactionMarker = '_Trans_';
 /*
 * events: data, released, owned, drain, saturated
@@ -28,10 +28,12 @@ function Shell(){
   this.globTransactionId = 0;
   this.fullOutput = '';
   this.child_process = cp.spawn('cmd');
-  this.child_process.stdout.on('data', function(data){
+  var dataCallback = function(data){
     self.fullOutput += data;
     self.emit('data', data);
-  });
+  };
+  this.child_process.stdout.on('data', dataCallback);
+  this.child_process.stderr.on('data', dataCallback);
   this.owner = null;
 }
 
