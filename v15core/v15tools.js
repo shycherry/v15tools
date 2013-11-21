@@ -73,7 +73,7 @@ V15Tools.prototype.getShells = function (){
 V15Tools.prototype.getWSPath = function(iWSName, iCallback){
   var shellTask = new ShellTask({
     command : '\\\\dsone\\rnd\\tools\\tck_init && tck_profile SCMV5 && adl_ds_ws '+iWSName,
-    callback : function(err, data){
+    completeCallback : function(err, data){
       if(err){
         if(iCallback){
           iCallback(err, null);
