@@ -80,8 +80,19 @@ input{
   margin-right: 2px;
 }
 
+.vt-shell-stdout{
+  background-color: rgba(0,0,255,0.1);
+}
+
+.vt-shell-stderr{
+  background-color: rgba(255,0,0,0.1);
+}
+
 .vt-shell-viewport{
   overflow: auto;
+}
+
+.vt-shell-viewport *{  
   -webkit-user-select: text;
 }
 

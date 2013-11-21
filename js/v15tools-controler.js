@@ -34,7 +34,9 @@ function makeWSGui(iWSModel){
 
 function makeShellWindow(iShellModel){
   var shellHistory = [];
-  var relayoutShellWindow = function(){
+  
+  var relayoutShellWindow = function(){    
+    newShellInputText.width(newShellInputBar.width() - newShellEnqueueBtn.width() - 10);
     newShellViewport.height(newShellWindow.height() - newShellInputBar.height());
   }
 
@@ -98,6 +100,7 @@ function makeShellWindow(iShellModel){
   });
 
   newShellEnqueueBtn.click(pushCommandCallback);  
+
   return newShellWindow;
 }
 
