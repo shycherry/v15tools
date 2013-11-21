@@ -42,6 +42,22 @@ function makeShellWindow(iShellModel){
     newShellViewport[0].scrollTop=newShellViewport[0].scrollHeight;
   }
 
+  var pushCommandCallback = function(){
+    var userInput = newShellInputText.val();
+    if(userInput && userInput !== ""){
+      var userShellTask = new vt.ShellTask({
+        requiredShellVID: iShellModel.vid,
+        command: userInput,        
+      });
+      vt.pushShellTask(userShellTask);
+      if(shellHistory.indexOf(userInput) == -1){
+        shellHistory.push(userInput);
+      }
+      newShellInputText.val('');
+      newShellInputText.autocomplete("close");
+    }
+  }
+
   var newShellWindow = $('<div title="'+iShellModel.vid+'" vid="'+iShellModel.vid+'"></div>');
   var newShellViewport = $('<div class="vt-shell-viewport"></div>').appendTo(newShellWindow);
   var newShellInputBar = $('<div class="vt-shell-inputbar"></div>').appendTo(newShellWindow);
@@ -64,23 +80,24 @@ function makeShellWindow(iShellModel){
 
   newShellEnqueueBtn.button();
   
-  iShellModel.on('data', function(data){
-    newShellViewport.append(encodeHTML(data));
+  iShellModel.on('stdout_data', function(data){
+    newShellViewport.append('<div class="vt-shell-stdout">'+encodeHTML(data)+'</div>');
     scrollViewportToBottom();
   });
 
-  newShellEnqueueBtn.click(function(){
-    var userInput = newShellInputText.val();
-    if(userInput && userInput !== ""){
-      var userShellTask = new vt.ShellTask({
-        requiredShellVID: iShellModel.vid,
-        command: userInput,
-        callback: function(){}
-      });
-      vt.pushShellTask(userShellTask);
-      shellHistory.push(userInput);
+  iShellModel.on('stderr_data', function(data){
+    newShellViewport.append('<div class="vt-shell-stderr">'+encodeHTML(data)+'</div>');
+    scrollViewportToBottom();
+  });
+
+  newShellInputText.keydown(function(event){
+    if(event.which == 13){ //enter key
+      // event.preventDefault();
+      pushCommandCallback();
     }
-  });  
+  });
+
+  newShellEnqueueBtn.click(pushCommandCallback);  
   return newShellWindow;
 }
 
@@ -204,22 +221,14 @@ function bindShellsGui(){
     $('#vt-status').append(newShellGui);    
   });
 
-  vt.on('shell_owned', function(shell){    
-    console.log(shell.vid+' owned');
+  vt.on('shell_locked', function(shell){    
+    console.log(shell.vid+' locked');
   });
 
   vt.on('shell_released', function(shell){
-    console.log(shell.vid+' shell_released');
+    console.log(shell.vid+' released');
   });
-
-  vt.on('shellmanager_drained', function(){
-    console.log('all shells finished working');
-  });
-
-  vt.on('shellmanager_saturated', function(){
-    console.log('all shells are working');
-  });
-
+  
 }
 
 

@@ -3,7 +3,7 @@ var Shell = require('./shell').Shell;
 var ShellTask = require('./shelltask').ShellTask;
 
 /*
-* events : shell_created, shell_owned, shell_released
+* events : shell_created, shell_locked, shell_released
 */
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
@@ -20,30 +20,34 @@ ShellManager.prototype.getShells = function(){
 };
 
 ShellManager.prototype.getShellFor = function(iShellTask){
-  var self = this;
-  var iShellTaskVid = iShellTask.vid;
+  var self = this;  
+
+  //TODO : named shell + lockId case ... how to handle if lockid is already in another shell ?
 
   //explicitly named shell
-  for(var idx in this._shells){
-    var shell = this._shells[idx];
-    if(shell.vid == iShellTask.requiredShellVID){
-      return shell;
+  if(iShellTask.requiredShellVID){
+    for(var idx in this._shells){
+      var shell = this._shells[idx];
+      if(shell.vid == iShellTask.requiredShellVID){
+        return shell;
+      }
     }
   }
 
-  //shell owned by task 
-  for(var idx in this._shells){
-    var shell = this._shells[idx];
-    if(shell.getOwner() == iShellTaskVid){
-      return shell;
-    }
-  }
+  //shell by lockId
+  if(iShellTask.lockId){
+    for(var idx in this._shells){
+      var shell = this._shells[idx];
+      if(shell.getLockId() == iShellTask.lockId){
+        return shell;
+      }
+    }  
+  }  
 
-  //existing non owned shell
+  //existing non-saturated shell
   for(var idx in this._shells){
     var shell = this._shells[idx];
-    if(!shell.getOwner()){
-      shell.setOwner(iShellTaskVid);
+    if(!shell.isSaturated()){
       return shell;
     }
   }
@@ -51,17 +55,25 @@ ShellManager.prototype.getShellFor = function(iShellTask){
   //new shell
   if(this._shells.length < this._config.max_shells){
     var newShell = new Shell();
-    newShell.on('owned', function(){
-      self.emit('shell_owned', newShell);
+    newShell.on('locked', function(){
+      self.emit('shell_locked', newShell);
     });
     newShell.on('released', function(){
       self.emit('shell_released', newShell);
-    });
+    });    
     this._shells.push(newShell);
-    this.emit('shell_created', newShell);
-    newShell.setOwner(iShellTaskVid);
+    this.emit('shell_created', newShell);    
     return newShell;
   }
+
+  //existing non locked shell
+  for(var idx in this._shells){
+    var shell = this._shells[idx];
+    if(!shell.getLockId()){
+      return shell;
+    }
+  }
+
 };
 
 ShellManager.prototype.enqueue = function(iShellTask){

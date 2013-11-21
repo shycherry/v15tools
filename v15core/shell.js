@@ -4,7 +4,7 @@ var _StartTransactionMarker = 'echo V15TStart_';
 var _EndTransactionMarker = 'echo V15TEnd_';
 var _TransactionMarker = '_Trans_';
 /*
-* events: data, released, owned, drain, saturated
+* events: stdout_data, stderr_data, data, released, owned, drain, saturated
 */
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
@@ -17,51 +17,63 @@ function Shell(){
   var self = this;
   this.vid = 'Shell_'+globId;
   globId++;
+  
   this._queue = new async.queue(Shell.prototype.doTask.bind(this), 1);
+  
   this._queue.drain = function(){
-    self.emit('drain');
+    console.log('drain');
+    self._saturated = false;
+    self.emit('drain');    
   };
+  
   this._queue.saturated = function(){
+    console.log('saturated');
+    self._saturated = true;
     self.emit('saturated');
   };
+  
   this._working = false;
   this.globTransactionId = 0;
   this.fullOutput = '';
   this.child_process = cp.spawn('cmd');
-  var dataCallback = function(data){
+  
+  var stdoutCallback = function(data){
     self.fullOutput += data;
+    self.emit('stdout_data', data);
     self.emit('data', data);
   };
-  this.child_process.stdout.on('data', dataCallback);
-  this.child_process.stderr.on('data', dataCallback);
-  this.owner = null;
+
+  var stderrCallback = function(data){
+    self.fullOutput += data;
+    self.emit('stderr_data', data);
+    self.emit('data', data);
+  };
+
+  this.child_process.stdout.on('data', stdoutCallback);
+  this.child_process.stderr.on('data', stderrCallback); 
 }
 
 Shell.prototype.enqueue = function(iShellTask){
-  if(iShellTask)
-    this._queue.push(iShellTask, iShellTask.callback);
+  console.log('enqueue');
+  if(iShellTask){
+    if(iShellTask.lockId){
+      this._lockId = lockId;
+      this.emit('locked');
+    }
+    this._queue.push(iShellTask, iShellTask.completeCallback);
+  }    
 };
 
-Shell.prototype.setOwner = function(iOwner){
-  var old = this.owner;
-  this.owner = iOwner;
-  if(this.owner){
-    this.emit('owned');
-  }else if(old && !this.owner){
-    this.emit('released');
-  }
+Shell.prototype.getLockId = function(){
+  return this._lockId;
 };
 
-Shell.prototype.getOwner = function(){
-  return this.owner;
+Shell.prototype.isSaturated = function(){
+  return this._saturated;
 };
 
 Shell.prototype.isWorking = function(){
   return this._working;
-};
-
-Shell.prototype.setWorking = function(isWorking){
-  this._working = isWorking;
 };
 
 Shell.prototype.write = function(iData){
@@ -70,26 +82,54 @@ Shell.prototype.write = function(iData){
 
 Shell.prototype.doTask = function(iShellTask, iCallback){
   var self = this;
-  var transactionId = _TransactionMarker+this.globTransactionId;
-  this.setWorking(true);
+  var transactionId = _TransactionMarker+this.globTransactionId;  
+  this._working = true;
+  
   this.write(_StartTransactionMarker+iShellTask.vid+transactionId+'\n');
   this.write(iShellTask.command+'\n');
   this.write(_EndTransactionMarker+iShellTask.vid+transactionId+'\n');
   
   var dataBuffer='';
+
   var dataCallback = function(data){
     dataBuffer += data.toString();
     if(RegExp(_EndTransactionMarker+iShellTask.vid+transactionId).test(data)){
-      this.setWorking(false);
+      self._working = false;
+      
       if(iShellTask.releaseAtEnd){
-        self.setOwner(null);
+        var oldLockId = self._lockId;
+        delete self._lockId;
+        if(oldLockId){
+          self.emit('released');          
+        }        
       }
-      self.removeListener('data', dataCallback);
+      
+      self.removeListener('stdout_data', dataCallback);
+      self.removeListener('stderr_data', dataCallback);
       self.globTransactionId++;
-      iCallback(null, dataBuffer);
+      
+      if(iCallback){
+        iCallback(null, dataBuffer);  
+      }
     }
   };
-  this.on('data', dataCallback);
+
+  var stdoutCallback = function(data){
+    dataCallback(data);
+    if(iShellTask.stdoutCallback){
+      iShellTask.stdoutCallback(data);
+    }
+  };
+
+  var stderrCallback = function(data){
+    dataCallback(data);
+    if(iShellTask.stdoutCallback){
+      iShellTask.stdoutCallback(data);
+    }
+  }
+
+  this.on('stdout_data', stdoutCallback);
+  this.on('stderr_data', stderrCallback);
 };
 
 exports.Shell = Shell;
