@@ -104,8 +104,8 @@ Shell.prototype.doTask = function(iShellTask, iCallback){
         }        
       }
       
-      self.removeListener('stdout_data', dataCallback);
-      self.removeListener('stderr_data', dataCallback);
+      self.removeListener('stdout_data', stdoutCallback);
+      self.removeListener('stderr_data', stderrCallback);
       self.globTransactionId++;
       
       if(iCallback){
