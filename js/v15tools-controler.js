@@ -12,7 +12,7 @@ function templateShellTooltip(iShell){
   return function(){
     var eData = encodeHTML(iShell.fullOutput);
     return '<div class="v15shell-tooltip">'+eData+'</div>';
-  }  
+  };
 }
 
 function makeWSGui(iWSModel){
@@ -35,21 +35,21 @@ function makeWSGui(iWSModel){
 function makeShellWindow(iShellModel){
   var shellHistory = [];
   
-  var relayoutShellWindow = function(){    
+  var relayoutShellWindow = function(){
     newShellInputText.width(newShellInputBar.width() - newShellEnqueueBtn.width() - 10);
     newShellViewport.height(newShellWindow.height() - newShellInputBar.height());
-  }
+  };
 
   var scrollViewportToBottom = function(){
     newShellViewport[0].scrollTop=newShellViewport[0].scrollHeight;
-  }
+  };
 
   var pushCommandCallback = function(){
     var userInput = newShellInputText.val();
     if(userInput && userInput !== ""){
       var userShellTask = new vt.ShellTask({
         requiredShellVID: iShellModel.vid,
-        command: userInput,        
+        command: userInput,
       });
       vt.pushShellTask(userShellTask);
       if(shellHistory.indexOf(userInput) == -1){
@@ -58,7 +58,7 @@ function makeShellWindow(iShellModel){
       newShellInputText.val('');
       newShellInputText.autocomplete("close");
     }
-  }
+  };
 
   var newShellWindow = $('<div title="'+iShellModel.vid+'" vid="'+iShellModel.vid+'"></div>');
   var newShellViewport = $('<div class="vt-shell-viewport"></div>').appendTo(newShellWindow);
@@ -93,13 +93,12 @@ function makeShellWindow(iShellModel){
   });
 
   newShellInputText.keydown(function(event){
-    if(event.which == 13){ //enter key
-      // event.preventDefault();
+    if(event.which == 13){ //enter key      
       pushCommandCallback();
     }
   });
 
-  newShellEnqueueBtn.click(pushCommandCallback);  
+  newShellEnqueueBtn.click(pushCommandCallback);
 
   return newShellWindow;
 }
@@ -107,16 +106,16 @@ function makeShellWindow(iShellModel){
 function makeShellGui(iShellModel){
   var newShellGui = $('<div vid="'+iShellModel.vid+'">> _</div>');
   newShellGui.addClass("v15shell");
-  var newShellWindow = makeShellWindow(iShellModel);  
+  var newShellWindow = makeShellWindow(iShellModel);
   newShellGui.click(function(){
     newShellWindow.dialog('open');
   });
   newShellGui.tooltip({
     content:templateShellTooltip(iShellModel),
-    items:'.v15shell',      
+    items:'.v15shell',
     show:500,
     hide:10000
-  });  
+  });
   return newShellGui;
 }
 
@@ -130,7 +129,7 @@ function encodeHTML(iText){
   }
 
   if(iText.replace){
-    return iText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/(\n)/g,'<br/>');  
+    return iText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/(\n)/g,'<br/>');
   }else{
     return '';
   }
@@ -191,7 +190,7 @@ function bindShareGui () {
         }
       }
     ]
-  });  
+  });
 
   $vt_share.droppable({
     accept: '.vt-itempath',
@@ -218,13 +217,13 @@ function bindShareGui () {
 
 }
 
-function bindShellsGui(){  
+function bindShellsGui(){
   vt.on('shell_created', function(shell){
     var newShellGui = makeShellGui(shell);
-    $('#vt-status').append(newShellGui);    
+    $('#vt-status').append(newShellGui);
   });
 
-  vt.on('shell_locked', function(shell){    
+  vt.on('shell_locked', function(shell){
     console.log(shell.vid+' locked');
   });
 
@@ -253,7 +252,7 @@ function removeSharedItem(model){
   if(_sharedItems.indexOf(model) != -1){
     _sharedItems = _sharedItems.filter(function(current){
       return current.vid != model.vid;
-    });    
+    });
     $('#vt-share .vt-itempath[id="'+model.vid+'"]').remove();
   }
 }
