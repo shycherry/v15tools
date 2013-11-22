@@ -69,7 +69,7 @@ input{
 
 .v15tool:hover{
   background-color: rgba(240,240,240,0.5);
-  -webkit-filter: invert(100%);  
+  -webkit-filter: invert(100%);
 }
 
 .v15shell{
@@ -80,6 +80,10 @@ input{
   margin-right: 2px;
 }
 
+.vt-shelltask:hover{
+  border: 1px solid black;
+}
+
 .vt-shelltask-canceled{
   background-color: rgba(0,0,0,0.5);
 }
@@ -88,10 +92,17 @@ input{
   background-color: rgba(0,255,0,0.5);
 }
 
-.vt-shelltasks-container{
+.vt-shelltask-enqueued{
   background-color: rgba(0,255,0,0.1);
+}
+
+.vt-shelltasks-container *{
+  -webkit-user-select: text;
+}
+
+.vt-shelltasks-container{
   max-height: 100px;
-  overflow: auto;
+  overflow: auto;  
 }
 
 .vt-shell-stdout{

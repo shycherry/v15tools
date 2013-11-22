@@ -33,7 +33,7 @@ function makeWSGui(iWSModel){
 }
 
 function makeShellTaskGui(iShellTaskModel){
-  var shellTaskGui = $('<div class="vt-shelltask-enqueued" id="'+iShellTaskModel.vid+'">'+iShellTaskModel.command+'</div>');
+  var shellTaskGui = $('<div class="vt-shelltask" id="'+iShellTaskModel.vid+'">'+iShellTaskModel.command+'</div>');
   
   shellTaskGui.click(function(){
     if(iShellTaskModel.getStatus() == 'enqueued'){
@@ -71,6 +71,7 @@ function makeShellTaskGui(iShellTaskModel){
 
   iShellTaskModel.on('change_status', statusChangeCallback);
 
+  statusChangeCallback(iShellTaskModel.getStatus());
   return shellTaskGui;
 }
 
