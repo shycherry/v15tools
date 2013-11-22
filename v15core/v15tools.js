@@ -10,26 +10,20 @@ util.inherits(V15Tools, EventEmitter);
 
 
 /*
-* events : shellmanager_drained, shell_created, shell_owned, shell_released
+* events : shell_created, shell_locked, shell_released
 */
 function _init(){
   EventEmitter.prototype.constructor.call(this);
   var self = this;
   this._shellManager = new ShellManager(this._config);
-  this._shellManager.on('drain', function(){
-    self.emit('shellmanager_drained');
-  });
-  this._shellManager.on('saturated', function(){
-    self.emit('shellmanager_saturated');
-  });
   this._shellManager.on('shell_created', function(shell){
     self.emit('shell_created', shell);
   });
   this._shellManager.on('shell_released', function(shell){
     self.emit('shell_released', shell);
   });
-  this._shellManager.on('shell_owned', function(shell){
-    self.emit('shell_owned', shell);
+  this._shellManager.on('shell_locked', function(shell){
+    self.emit('shell_locked', shell);
   });
 }
 
@@ -56,8 +50,8 @@ V15Tools.prototype.ShellTask = ShellTask;
 V15Tools.prototype.createModel = function(arg){
   var newModel = Models.Factory(arg);
   if(newModel){
-    _models.push(newModel);    
-  }  
+    _models.push(newModel);
+  }
   return newModel;
 };
 
@@ -87,7 +81,7 @@ V15Tools.prototype.getWSPath = function(iWSName, iCallback){
           return;
         }
         iCallback(null, winImagePathMatch[1]);
-      }     
+      }
     }
   });
   this.pushShellTask(shellTask);
@@ -149,7 +143,7 @@ V15Tools.prototype.findModelInArray = function(iModel, iArray){
         return model;
       }
     }
-  }  
+  }
 };
 
 V15Tools.prototype.findModelsInArray = function(iModel, iArray){
