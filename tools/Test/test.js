@@ -11,15 +11,15 @@ exports.dir = function(){
 
 exports.ping = function(){
   var shelltask = new vt.ShellTask({
-    command:'ping 1.1.1.1 -n 1 -w 3000 > nul'
+    command:'ping 1.1.1.1 -n 3 -w 3000'
   });
 
   vt.pushShellTask(shelltask);
-}
+};
 
 exports.calc = function(){
   var shelltask = new vt.ShellTask({
-    command:'calc'    
+    command:'calc'
   });
 
   vt.pushShellTask(shelltask);

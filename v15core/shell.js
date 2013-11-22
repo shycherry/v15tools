@@ -4,7 +4,10 @@ var _StartTransactionMarker = 'echo V15TStart_';
 var _EndTransactionMarker = 'echo V15TEnd_';
 var _TransactionMarker = '_Trans_';
 /*
-* events: stdout_data, stderr_data, data, released, owned, drain, saturated
+* events: stdout_data, stderr_data, data, 
+* released, locked, 
+* drain, saturated,
+* shelltask_enqueued (shelltask), shelltask_consumed(shelltask)
 */
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
@@ -23,7 +26,7 @@ function Shell(){
   this._queue.drain = function(){
     console.log('drain');
     self._saturated = false;
-    self.emit('drain');    
+    self.emit('drain');
   };
   
   this._queue.saturated = function(){
@@ -50,18 +53,19 @@ function Shell(){
   };
 
   this.child_process.stdout.on('data', stdoutCallback);
-  this.child_process.stderr.on('data', stderrCallback); 
+  this.child_process.stderr.on('data', stderrCallback);
 }
 
 Shell.prototype.enqueue = function(iShellTask){
-  console.log('enqueue');
   if(iShellTask){
     if(iShellTask.lockId){
       this._lockId = lockId;
       this.emit('locked');
     }
+    iShellTask.setStatus('enqueued');
+    this.emit('shelltask_enqueued', iShellTask);
     this._queue.push(iShellTask, iShellTask.completeCallback);
-  }    
+  }
 };
 
 Shell.prototype.getLockId = function(){
@@ -82,8 +86,17 @@ Shell.prototype.write = function(iData){
 
 Shell.prototype.doTask = function(iShellTask, iCallback){
   var self = this;
-  var transactionId = _TransactionMarker+this.globTransactionId;  
+  var transactionId = _TransactionMarker+this.globTransactionId;
+  
+  if(iShellTask.getStatus() === 'canceled'){
+    iCallback('task_canceled');
+    iShellTask.setStatus('consumed');
+    self.emit('shelltask_consumed', iShellTask);
+    return;
+  }
+
   this._working = true;
+  iShellTask.setStatus('working');
   
   this.write(_StartTransactionMarker+iShellTask.vid+transactionId+'\n');
   this.write(iShellTask.command+'\n');
@@ -95,13 +108,15 @@ Shell.prototype.doTask = function(iShellTask, iCallback){
     dataBuffer += data.toString();
     if(RegExp(_EndTransactionMarker+iShellTask.vid+transactionId).test(data)){
       self._working = false;
+      iShellTask.setStatus('consumed');
+      self.emit('shelltask_consumed', iShellTask);
       
       if(iShellTask.releaseAtEnd){
         var oldLockId = self._lockId;
         delete self._lockId;
         if(oldLockId){
-          self.emit('released');          
-        }        
+          self.emit('released');
+        }
       }
       
       self.removeListener('stdout_data', stdoutCallback);
@@ -109,7 +124,7 @@ Shell.prototype.doTask = function(iShellTask, iCallback){
       self.globTransactionId++;
       
       if(iCallback){
-        iCallback(null, dataBuffer);  
+        iCallback(null, dataBuffer);
       }
     }
   };
@@ -126,7 +141,7 @@ Shell.prototype.doTask = function(iShellTask, iCallback){
     if(iShellTask.stdoutCallback){
       iShellTask.stdoutCallback(data);
     }
-  }
+  };
 
   this.on('stdout_data', stdoutCallback);
   this.on('stderr_data', stderrCallback);

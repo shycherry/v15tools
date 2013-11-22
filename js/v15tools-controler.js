@@ -32,12 +32,54 @@ function makeWSGui(iWSModel){
   return newWSGui;
 }
 
+function makeShellTaskGui(iShellTaskModel){
+  var shellTaskGui = $('<div class="vt-shelltask-enqueued" id="'+iShellTaskModel.vid+'">'+iShellTaskModel.command+'</div>');
+  
+  shellTaskGui.click(function(){
+    if(iShellTaskModel.getStatus() == 'enqueued'){
+      iShellTaskModel.setStatus('canceled');
+    }else if(iShellTaskModel.getStatus() == 'canceled'){
+      iShellTaskModel.setStatus('enqueued');
+    }
+  });
+
+  var statusChangeCallback = function(iStatus){
+    switch(iStatus){
+      case 'working':
+        shellTaskGui.removeClass('vt-shelltask-enqueued');
+        shellTaskGui.removeClass('vt-shelltask-canceled');
+        shellTaskGui.addClass('vt-shelltask-working');
+      break;
+
+      case 'enqueued':
+        shellTaskGui.removeClass('vt-shelltask-working');
+        shellTaskGui.removeClass('vt-shelltask-canceled');
+        shellTaskGui.addClass('vt-shelltask-enqueued');
+      break;
+
+      case 'canceled':
+        shellTaskGui.removeClass('vt-shelltask-enqueued');
+        shellTaskGui.removeClass('vt-shelltask-working');
+        shellTaskGui.addClass('vt-shelltask-canceled');
+      break;
+
+      case 'consumed':
+        iShellTaskModel.removeListener('change_status', statusChangeCallback);
+      break;
+    }
+  };
+
+  iShellTaskModel.on('change_status', statusChangeCallback);
+
+  return shellTaskGui;
+}
+
 function makeShellWindow(iShellModel){
   var shellHistory = [];
   
   var relayoutShellWindow = function(){
     newShellInputText.width(newShellInputBar.width() - newShellEnqueueBtn.width() - 10);
-    newShellViewport.height(newShellWindow.height() - newShellInputBar.height());
+    newShellViewport.height(newShellWindow.height() - newShellInputBar.height() - newShellTasksContainer.height());
   };
 
   var scrollViewportToBottom = function(){
@@ -60,8 +102,9 @@ function makeShellWindow(iShellModel){
     }
   };
 
-  var newShellWindow = $('<div title="'+iShellModel.vid+'" vid="'+iShellModel.vid+'"></div>');
+  var newShellWindow = $('<div title="'+iShellModel.vid+'" id="'+iShellModel.vid+'"></div>');
   var newShellViewport = $('<div class="vt-shell-viewport"></div>').appendTo(newShellWindow);
+  var newShellTasksContainer = $('<div class="vt-shelltasks-container"></div>').appendTo(newShellWindow);
   var newShellInputBar = $('<div class="vt-shell-inputbar"></div>').appendTo(newShellWindow);
   var newShellInputText = $('<input/>').appendTo(newShellInputBar);
   var newShellEnqueueBtn = $('<button>Enqueue</button>').appendTo(newShellInputBar);
@@ -92,6 +135,18 @@ function makeShellWindow(iShellModel){
     scrollViewportToBottom();
   });
 
+  iShellModel.on('shelltask_enqueued', function(iShellTaskModel){
+    var newShellTaskGui = makeShellTaskGui(iShellTaskModel);
+    newShellTasksContainer.append(newShellTaskGui);
+    relayoutShellWindow();
+  });
+
+  iShellModel.on('shelltask_consumed', function(iShellTaskModel){
+    var shellTaskGui = newShellTasksContainer.find('#'+iShellTaskModel.vid);
+    shellTaskGui.remove();
+    relayoutShellWindow();
+  });
+
   newShellInputText.keydown(function(event){
     if(event.which == 13){ //enter key      
       pushCommandCallback();
@@ -104,7 +159,7 @@ function makeShellWindow(iShellModel){
 }
 
 function makeShellGui(iShellModel){
-  var newShellGui = $('<div vid="'+iShellModel.vid+'">> _</div>');
+  var newShellGui = $('<div id="'+iShellModel.vid+'">> _</div>');
   newShellGui.addClass("v15shell");
   var newShellWindow = makeShellWindow(iShellModel);
   newShellGui.click(function(){
@@ -124,6 +179,10 @@ function relayout(){
 }
 
 function encodeHTML(iText){
+  if(! iText){
+    return '';
+  }
+
   if( !(iText.replace) ){
     iText = iText.toString();
   }

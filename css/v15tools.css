@@ -80,6 +80,20 @@ input{
   margin-right: 2px;
 }
 
+.vt-shelltask-canceled{
+  background-color: rgba(0,0,0,0.5);
+}
+
+.vt-shelltask-working{
+  background-color: rgba(0,255,0,0.5);
+}
+
+.vt-shelltasks-container{
+  background-color: rgba(0,255,0,0.1);
+  max-height: 100px;
+  overflow: auto;
+}
+
 .vt-shell-stdout{
   background-color: rgba(0,0,255,0.1);
 }

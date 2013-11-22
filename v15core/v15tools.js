@@ -37,7 +37,7 @@ function V15Tools(){
   this.setConfig({
     'tools_dir':'./tools',
     'savedModels_dir':'./savedModels',
-    'max_shells':2
+    'max_shells':1
   });
 }
 

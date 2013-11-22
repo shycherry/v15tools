@@ -12,7 +12,7 @@ util.inherits(ShellManager, EventEmitter);
 function ShellManager(iConfig){
   EventEmitter.prototype.constructor.call(this);
   this._config = iConfig;
-  this._shells = [];  
+  this._shells = [];
 }
 
 ShellManager.prototype.getShells = function(){
@@ -20,7 +20,7 @@ ShellManager.prototype.getShells = function(){
 };
 
 ShellManager.prototype.getShellFor = function(iShellTask){
-  var self = this;  
+  var self = this;
 
   //TODO : named shell + lockId case ... how to handle if lockid is already in another shell ?
 
@@ -41,8 +41,8 @@ ShellManager.prototype.getShellFor = function(iShellTask){
       if(shell.getLockId() == iShellTask.lockId){
         return shell;
       }
-    }  
-  }  
+    }
+  }
 
   //existing non-saturated shell
   for(var idx in this._shells){
@@ -60,9 +60,9 @@ ShellManager.prototype.getShellFor = function(iShellTask){
     });
     newShell.on('released', function(){
       self.emit('shell_released', newShell);
-    });    
+    });
     this._shells.push(newShell);
-    this.emit('shell_created', newShell);    
+    this.emit('shell_created', newShell);
     return newShell;
   }
 
@@ -82,7 +82,7 @@ ShellManager.prototype.enqueue = function(iShellTask){
     if(shell){
       shell.enqueue(iShellTask);
     }
-  }   
+  }
 };
 
 exports.ShellManager = ShellManager;
