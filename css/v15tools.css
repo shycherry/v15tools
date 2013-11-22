@@ -74,14 +74,23 @@ input{
 
 .v15shell{
   display: inline-block;
+  cursor: pointer;
   background-color: rgba(25,25,25,0.5);
   vertical-align: top;
   height: 100%;
   margin-right: 2px;
 }
 
-.vt-shelltask:hover{
-  border: 1px solid black;
+.vt-interactif{
+ -webkit-transition: opacity 0.1s;
+}
+
+.vt-interactif:hover{
+  -webkit-filter:none;
+}
+
+.vt-interactif{
+  -webkit-filter: opacity(75%);
 }
 
 .vt-shelltask-canceled{

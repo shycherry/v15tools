@@ -17,7 +17,7 @@ function templateShellTooltip(iShell){
 
 function makeWSGui(iWSModel){
   var newWSGui = $('<div id="'+iWSModel.vid+'">'+iWSModel.name+'</div>');
-  newWSGui.addClass("vt-itempath vt-ws");
+  newWSGui.addClass("vt-interactif vt-itempath vt-ws");
   newWSGui.draggable({
     revert: 'invalid',
     helper: 'clone',
@@ -33,7 +33,7 @@ function makeWSGui(iWSModel){
 }
 
 function makeShellTaskGui(iShellTaskModel){
-  var shellTaskGui = $('<div class="vt-shelltask" id="'+iShellTaskModel.vid+'">'+iShellTaskModel.command+'</div>');
+  var shellTaskGui = $('<div class="vt-interactif vt-shelltask" id="'+iShellTaskModel.vid+'">'+iShellTaskModel.command+'</div>');
   
   shellTaskGui.click(function(){
     if(iShellTaskModel.getStatus() == 'enqueued'){
@@ -79,7 +79,7 @@ function makeShellWindow(iShellModel){
   var shellHistory = [];
   
   var relayoutShellWindow = function(){
-    newShellInputText.width(newShellInputBar.width() - newShellEnqueueBtn.width() - 10);
+    newShellInputText.width(newShellInputBar.width() - newShellEnqueueBtn.width() - 15);
     newShellViewport.height(newShellWindow.height() - newShellInputBar.height() - newShellTasksContainer.height());
   };
 
@@ -160,7 +160,7 @@ function makeShellWindow(iShellModel){
 }
 
 function makeShellGui(iShellModel){
-  var newShellGui = $('<div id="'+iShellModel.vid+'">> _</div>');
+  var newShellGui = $('<div class="vt-interactif" id="'+iShellModel.vid+'">> _</div>');
   newShellGui.addClass("v15shell");
   var newShellWindow = makeShellWindow(iShellModel);
   newShellGui.click(function(){
