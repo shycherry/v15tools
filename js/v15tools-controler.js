@@ -63,7 +63,7 @@ function makeShellTaskGui(iShellTaskModel){
         shellTaskGui.addClass('vt-shelltask-canceled');
       break;
 
-      case 'consumed':
+      case 'dropped':
         iShellTaskModel.removeListener('change_status', statusChangeCallback);
       break;
     }

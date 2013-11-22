@@ -1,7 +1,7 @@
 var globId = 0;
 
 /*
-* events: change_status (created, canceled, working, consumed)
+* events: change_status (enqueued, canceled, working, dropped)
 */
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
@@ -10,8 +10,6 @@ util.inherits(ShellTask, EventEmitter);
 function ShellTask(iInfos){
   this.vid = 'ShellTask_'+globId;
   globId++;
-  
-  this.status = 'created';
   
   this.completeCallback = iInfos.completeCallback;
   

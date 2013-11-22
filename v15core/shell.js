@@ -90,7 +90,6 @@ Shell.prototype.doTask = function(iShellTask, iCallback){
   
   if(iShellTask.getStatus() === 'canceled'){
     iCallback('task_canceled');
-    iShellTask.setStatus('consumed');
     self.emit('shelltask_consumed', iShellTask);
     return;
   }
@@ -108,7 +107,7 @@ Shell.prototype.doTask = function(iShellTask, iCallback){
     dataBuffer += data.toString();
     if(RegExp(_EndTransactionMarker+iShellTask.vid+transactionId).test(data)){
       self._working = false;
-      iShellTask.setStatus('consumed');
+      iShellTask.setStatus('executed');
       self.emit('shelltask_consumed', iShellTask);
       
       if(iShellTask.releaseAtEnd){
