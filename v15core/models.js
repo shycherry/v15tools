@@ -24,6 +24,10 @@ ItemPath.prototype.getName = function() {
   return this.name;
 };
 
+ItemPath.prototype.getSaveName = function(){
+  return this.absolute.replace(/\//g,'_').replace(/\\/g,'_').replace(/:/g,'_');
+}
+
 ItemPath.prototype.exists = function() {
   return Fs.existsSync(this.absolute);
 };
@@ -94,6 +98,37 @@ Factory.prototype.create = function(arg){
     return newInstance;
   }
   return null;
+}
+
+Factory.prototype.write = function(iModel, iCallback){
+  if(! this._config || !this._config.savedModels_dir || !this._config.max_parallel_fs_writes){
+    iCallback('error : invalid config for writting files...');
+    return;
+  }
+
+  var jsonData = null;
+  try{
+    jsonData = JSON.stringify(iModel, null, 2);
+  }catch(err){
+    iCallback('error: stringify failed');
+    return;
+  }
+
+  if(! (typeof iModel.getSaveName == 'function') ){
+    iCallback('model has no getSaveName function');
+    return;
+  }
+
+  var modelSaveName = iModel.getSaveName();
+
+  if(!modelSaveName){
+    iCallback('invalid save name');
+    return;
+  }
+
+  Fs.writeFile(this._config.savedModels_dir+'/'+modelSaveName, jsonData, function(err){    
+    iCallback(err);
+  });
 }
 
 exports.Types = Types;

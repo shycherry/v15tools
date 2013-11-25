@@ -36,7 +36,8 @@ function V15Tools(){
   this.setConfig({
     'tools_dir':'./tools',
     'savedModels_dir':'./savedModels',
-    'max_shells':2
+    'max_shells':2,
+    'max_parallel_fs_writes':2
   });
 }
 
@@ -147,13 +148,17 @@ V15Tools.prototype.findModels = function(iModel){
   return this.findModelsInArray(iModel, _models);
 };
 
-V15Tools.prototype.createModel = function(arg){
-  var newModel = this._factory.create(arg);
+V15Tools.prototype.createModel = function(iAmorce){
+  var newModel = this._factory.create(iAmorce);
   if(newModel){
     _models.push(newModel);
   }
   return newModel;
 };
+
+V15Tools.prototype.saveModel = function(iModel, iCallback){
+  this._factory.write(iModel, iCallback);
+}
 
 var _models = [];
 exports.V15Tools = new V15Tools();
