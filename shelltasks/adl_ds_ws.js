@@ -3,12 +3,12 @@ var TCK_INIT_PROFILE_SCMV5_TASK = require('./tck_init_profile_scmv5');
 
 exports.get = function(iWSName){
 
-  var adl_ds_ws_Task = new vt.ShellTask({
+  var tck_init_task = TCK_INIT_PROFILE_SCMV5_TASK.get();
+  
+  var adl_ds_ws_task = new vt.ShellTask({
     command : 'adl_ds_ws '+iWSName,
-  });
-
-  var newBatchTask = new vt.BatchTask({    
     completeCallback : function(err, data){
+      console.log(data);
       if(newBatchTask.userCallback){
         if(err){
           newBatchTask.userCallback(err);
@@ -24,8 +24,10 @@ exports.get = function(iWSName){
     }
   });
 
-  newBatchTask.pushTask(TCK_INIT_PROFILE_SCMV5_TASK.get());
-  newBatchTask.pushTask(adl_ds_ws_Task);
+  var newBatchTask = new vt.BatchTask();
+
+  newBatchTask.pushTask(tck_init_task);
+  newBatchTask.pushTask(adl_ds_ws_task);
 
   return newBatchTask;
 };
