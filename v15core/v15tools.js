@@ -3,6 +3,7 @@ var ShellManager = require('./shellmanager').ShellManager;
 var ShellTask = require('./shelltask').ShellTask;
 var Tool = require('./tool').Tool;
 var Models = require('./models');
+var ADL_DS_WS_Task = require('../shelltasks/adl_ds_ws');
 
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
@@ -64,26 +65,9 @@ V15Tools.prototype.getShells = function (){
 };
 
 
-V15Tools.prototype.getWSPath = function(iWSName, iCallback){
-  var shellTask = new ShellTask({
-    command : '\\\\dsone\\rnd\\tools\\tck_init && tck_profile SCMV5 && adl_ds_ws '+iWSName,
-    completeCallback : function(err, data){
-      if(err){
-        if(iCallback){
-          iCallback(err, null);
-        }
-        return;
-      }
-      if(iCallback){
-        var winImagePathMatch = /WINDOWS.+(\\\\.+)/.exec(data);
-        if(!winImagePathMatch){
-          iCallback('no match', null);
-          return;
-        }
-        iCallback(null, winImagePathMatch[1]);
-      }
-    }
-  });
+V15Tools.prototype.getWSPath = function(iWSName, iCallback){  
+  var shellTask = ADL_DS_WS_Task.get(iWSName);
+  shellTask.userCallback = iCallback;
   this.pushShellTask(shellTask);
 };
 

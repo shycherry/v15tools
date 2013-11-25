@@ -81,15 +81,11 @@ input{
   margin-right: 2px;
 }
 
-.vt-interactif{
- -webkit-transition: opacity 0.1s;
-}
-
 .vt-interactif:hover{
   -webkit-filter:none;
 }
 
-.vt-interactif{
+.vt-interactif{ 
   -webkit-filter: opacity(75%);
 }
 
