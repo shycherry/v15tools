@@ -66,7 +66,11 @@ function FILE(){
   type=Types.FILE;
 }
 
-function Factory (arg) {
+function Factory (iConfig) {
+  this._config = iConfig;  
+}
+
+Factory.prototype.create = function(arg){
   if(arg && arg.type){
     var newInstance = eval('new '+arg.type);
     delete arg.vid;

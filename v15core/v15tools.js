@@ -3,7 +3,7 @@ var ShellManager = require('./shellmanager').ShellManager;
 var ShellTask = require('./shelltask').ShellTask;
 var BatchTask = require('./batchtask').BatchTask;
 var Tool = require('./tool').Tool;
-var Models = require('./models');
+var Factory = require('./models').Factory;
 var ADL_DS_WS_Task = require('../shelltasks/adl_ds_ws');
 
 var util = require('util');
@@ -17,6 +17,9 @@ util.inherits(V15Tools, EventEmitter);
 function _init(){
   EventEmitter.prototype.constructor.call(this);
   var self = this;
+
+  this._factory = new Factory(this._config);
+
   this._shellManager = new ShellManager(this._config);
   this._shellManager.on('shell_created', function(shell){
     self.emit('shell_created', shell);
@@ -49,14 +52,6 @@ V15Tools.prototype.setConfig = function (iConfig){
 
 V15Tools.prototype.ShellTask = ShellTask;
 V15Tools.prototype.BatchTask = BatchTask;
-
-V15Tools.prototype.createModel = function(arg){
-  var newModel = Models.Factory(arg);
-  if(newModel){
-    _models.push(newModel);
-  }
-  return newModel;
-};
 
 V15Tools.prototype.pushShellTask = function (iShellTask){
   this._shellManager.enqueue(iShellTask);
@@ -98,6 +93,7 @@ V15Tools.prototype.loadTools = function(iCallback){
 };
 
 V15Tools.prototype.loadSavedModels = function(iCallback) {
+  var self = this;
   var models_dir = this._config['savedModels_dir'];
   fs.readdir(models_dir, function(err, files){
     if(err){
@@ -105,18 +101,17 @@ V15Tools.prototype.loadSavedModels = function(iCallback) {
         iCallback(err, null);
       return;
     }
-    var models = [];
+    var loadedModels = [];
     for (var idx in files) {
       var currentFile = files[idx];
       var rawItem = JSON.parse(fs.readFileSync(models_dir+'/'+currentFile));
-      var newItem = Models.Factory(rawItem);
+      var newItem = self.createModel(rawItem);
       if(newItem){
-        models.push(newItem);
-        _models.push(newItem);
+        loadedModels.push(newItem);        
       }
     }
     if(iCallback)
-      iCallback(null, models);
+      iCallback(null, loadedModels);
   });
 };
 
@@ -150,6 +145,14 @@ V15Tools.prototype.findModel = function(iModel){
 
 V15Tools.prototype.findModels = function(iModel){
   return this.findModelsInArray(iModel, _models);
+};
+
+V15Tools.prototype.createModel = function(arg){
+  var newModel = this._factory.create(arg);
+  if(newModel){
+    _models.push(newModel);
+  }
+  return newModel;
 };
 
 var _models = [];
