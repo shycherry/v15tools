@@ -72,11 +72,25 @@ function Factory (iConfig) {
 
 Factory.prototype.create = function(arg){
   if(arg && arg.type){
-    var newInstance = eval('new '+arg.type);
+    
+    var newInstance = null;
+    
+    try{
+      newInstance = eval('new '+arg.type);  
+    }catch(err){
+      return null;
+    }
+
+    if(!newInstance){
+      return null;
+    }
+    
     delete arg.vid;
+    
     for(i in arg){
       newInstance[i] = arg[i];
     }
+    
     return newInstance;
   }
   return null;
