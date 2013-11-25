@@ -157,8 +157,7 @@ input{
 }
 
 #vt-tabs{  
-  background-color: rgba(34,34,34,0.5);
-  height: 30px;
+  background-color: rgba(34,34,34,0.5);  
   overflow: auto;
 }
 
