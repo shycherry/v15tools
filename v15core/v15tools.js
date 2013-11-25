@@ -1,6 +1,7 @@
 var fs = require('fs');
 var ShellManager = require('./shellmanager').ShellManager;
 var ShellTask = require('./shelltask').ShellTask;
+var BatchTask = require('./batchtask').BatchTask;
 var Tool = require('./tool').Tool;
 var Models = require('./models');
 var ADL_DS_WS_Task = require('../shelltasks/adl_ds_ws');
@@ -32,7 +33,7 @@ function V15Tools(){
   this.setConfig({
     'tools_dir':'./tools',
     'savedModels_dir':'./savedModels',
-    'max_shells':20
+    'max_shells':2
   });
 }
 
@@ -47,6 +48,7 @@ V15Tools.prototype.setConfig = function (iConfig){
 };
 
 V15Tools.prototype.ShellTask = ShellTask;
+V15Tools.prototype.BatchTask = BatchTask;
 
 V15Tools.prototype.createModel = function(arg){
   var newModel = Models.Factory(arg);
@@ -63,7 +65,6 @@ V15Tools.prototype.pushShellTask = function (iShellTask){
 V15Tools.prototype.getShells = function (){
   return this._shellManager.getShells();
 };
-
 
 V15Tools.prototype.getWSPath = function(iWSName, iCallback){  
   var shellTask = ADL_DS_WS_Task.get(iWSName);

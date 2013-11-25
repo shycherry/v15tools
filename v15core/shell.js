@@ -98,7 +98,7 @@ Shell.prototype.doTask = function(iShellTask, iCallback){
   iShellTask.setStatus('working');
   
   this.write(_StartTransactionMarker+iShellTask.vid+transactionId+'\n');
-  this.write(iShellTask.command+'\n');
+  this.write( (iShellTask.command?iShellTask.command:'') + '\n');
   this.write(_EndTransactionMarker+iShellTask.vid+transactionId+'\n');
   
   var dataBuffer='';

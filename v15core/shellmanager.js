@@ -80,7 +80,11 @@ ShellManager.prototype.enqueue = function(iShellTask){
   if(iShellTask){
     var shell = this.getShellFor(iShellTask);
     if(shell){
-      shell.enqueue(iShellTask);
+      if(typeof iShellTask.command == 'function'){
+        iShellTask.command(shell);            
+      }else{
+        shell.enqueue(iShellTask);  
+      }
     }
   }
 };
