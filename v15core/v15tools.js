@@ -1,4 +1,5 @@
 var fs = require('fs');
+var async = require('async');
 var ShellManager = require('./shellmanager').ShellManager;
 var ShellTask = require('./shelltask').ShellTask;
 var BatchTask = require('./batchtask').BatchTask;
@@ -158,6 +159,17 @@ V15Tools.prototype.createModel = function(iAmorce){
 
 V15Tools.prototype.saveModel = function(iModel, iCallback){
   this._factory.write(iModel, iCallback);
+}
+
+V15Tools.prototype.saveModels = function(iModels, iCallback){
+  if(!iModels){
+    iCallback('invalid models');
+    return;
+  }
+
+  async.each(iModels, V15Tools.prototype.saveModel.bind(this), function(err){
+    iCallback(err);
+  });
 }
 
 var _models = [];
