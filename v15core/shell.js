@@ -7,7 +7,8 @@ var _TransactionMarker = '_Trans_';
 * events: stdout_data, stderr_data, data, 
 * released, locked, 
 * drain, saturated,
-* shelltask_enqueued (shelltask), shelltask_consumed(shelltask)
+* shelltask_enqueued (shelltask), shelltask_consumed(shelltask),
+* working, idle
 */
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
@@ -34,8 +35,7 @@ function Shell(){
     self._saturated = true;
     self.emit('saturated');
   };
-  
-  this._working = false;
+    
   this.globTransactionId = 0;
   this.fullOutput = '';
   this.child_process = cp.spawn('cmd');
@@ -76,10 +76,6 @@ Shell.prototype.isSaturated = function(){
   return this._saturated;
 };
 
-Shell.prototype.isWorking = function(){
-  return this._working;
-};
-
 Shell.prototype.write = function(iData){
   this.child_process.stdin.write(iData);
 };
@@ -94,7 +90,7 @@ Shell.prototype.doTask = function(iShellTask, iCallback){
     return;
   }
 
-  this._working = true;
+  this.emit('working');  
   iShellTask.setStatus('working');
   
   this.write(_StartTransactionMarker+iShellTask.vid+transactionId+'\n');
@@ -106,7 +102,7 @@ Shell.prototype.doTask = function(iShellTask, iCallback){
   var dataCallback = function(data){
     dataBuffer += data.toString();
     if(RegExp(_EndTransactionMarker+iShellTask.vid+transactionId).test(data)){
-      self._working = false;
+      self.emit('idle');
       iShellTask.setStatus('executed');
       self.emit('shelltask_consumed', iShellTask);
       

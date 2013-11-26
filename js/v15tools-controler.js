@@ -175,6 +175,15 @@ function makeShellGui(iShellModel){
     show:500,
     hide:10000
   });
+  iShellModel.on('working', function(){
+    newShellGui.removeClass('vt-idle');
+    newShellGui.addClass('vt-working');
+  })
+  iShellModel.on('idle', function(){
+    newShellGui.removeClass('vt-working');
+    newShellGui.addClass('vt-idle');    
+  })
+
   return newShellGui;
 }
 

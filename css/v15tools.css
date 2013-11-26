@@ -72,10 +72,17 @@ input{
   -webkit-filter: invert(100%);
 }
 
+.vt-working{
+  background-color: rgba(255,255,0,0.5);
+}
+
+.vt-idle{
+  background-color: rgba(0,255,0,0.5);
+}
+
 .v15shell{
   display: inline-block;
-  cursor: pointer;
-  background-color: rgba(25,25,25,0.5);
+  cursor: pointer;  
   vertical-align: top;
   height: 100%;
   margin-right: 2px;
