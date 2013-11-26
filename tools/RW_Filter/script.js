@@ -1,5 +1,5 @@
 function isODTKo(iLine){
-	return / : KO, rc =.*/.test(iLine);
+	return (/ : KO, rc =.*/.test(iLine)) || (/.*:.*failed code.*/.test(iLine));
 }
 
 exports.init = function(){
