@@ -34,12 +34,12 @@ function _init(){
 }
 
 function V15Tools(){
-  this.setConfig({
-    'tools_dir':'./tools',
-    'savedModels_dir':'./savedModels',
-    'max_shells':2,
-    'max_parallel_fs_writes':2
-  });
+  var config = require('../config.cfg').config;
+  this.setConfig(config);
+}
+
+V15Tools.prototype.getConfig = function(){
+  return this._config;
 }
 
 V15Tools.prototype.setConfig = function (iConfig){

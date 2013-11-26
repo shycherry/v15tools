@@ -77,6 +77,9 @@ function makeShellTaskGui(iShellTaskModel){
 
 function makeShellWindow(iShellModel){
   var shellHistory = [];
+  if(vt.getConfig().baseAutoComplete){
+    shellHistory = vt.getConfig().baseAutoComplete;
+  }
   
   var relayoutShellWindow = function(){
     newShellInputText.width(newShellInputBar.width() - newShellEnqueueBtn.width() - 15);
