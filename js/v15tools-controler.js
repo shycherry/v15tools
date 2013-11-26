@@ -130,12 +130,12 @@ function makeShellWindow(iShellModel){
   newShellEnqueueBtn.button();
   
   iShellModel.on('stdout_data', function(data){
-    newShellViewport.append('<div class="vt-shell-stdout">'+encodeHTML(data)+'</div>');
+    newShellViewport.append(encodeHTML(data));
     scrollViewportToBottom();
   });
 
   iShellModel.on('stderr_data', function(data){
-    newShellViewport.append('<div class="vt-shell-stderr">'+encodeHTML(data)+'</div>');
+    newShellViewport.append('<span class="vt-shell-stderr">'+encodeHTML(data)+'</span>');
     scrollViewportToBottom();
   });
 
