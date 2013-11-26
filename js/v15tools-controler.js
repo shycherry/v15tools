@@ -86,8 +86,9 @@ function makeShellWindow(iShellModel){
     newShellViewport.height(newShellWindow.height() - newShellInputBar.height() - newShellTasksContainer.height());
   };
 
-  var scrollViewportToBottom = function(){
+  var scrollViewportToBottomLeft = function(){
     newShellViewport[0].scrollTop=newShellViewport[0].scrollHeight;
+    newShellViewport[0].scrollLeft=0;
   };
 
   var pushCommandCallback = function(){
@@ -119,7 +120,7 @@ function makeShellWindow(iShellModel){
     width: 600,
     resize: relayoutShellWindow,
     focus: relayoutShellWindow,
-    open: scrollViewportToBottom
+    open: scrollViewportToBottomLeft
   });
 
   newShellInputText.autocomplete({
@@ -131,12 +132,12 @@ function makeShellWindow(iShellModel){
   
   iShellModel.on('stdout_data', function(data){
     newShellViewport.append(encodeHTML(data));
-    scrollViewportToBottom();
+    scrollViewportToBottomLeft();
   });
 
   iShellModel.on('stderr_data', function(data){
     newShellViewport.append('<span class="vt-shell-stderr">'+encodeHTML(data)+'</span>');
-    scrollViewportToBottom();
+    scrollViewportToBottomLeft();
   });
 
   iShellModel.on('shelltask_enqueued', function(iShellTaskModel){

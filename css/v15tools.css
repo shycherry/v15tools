@@ -127,6 +127,7 @@ input{
 
 .vt-shell-viewport{
   overflow: auto;
+  -webkit-user-select: text;
 }
 
 .vt-shell-viewport *{  
