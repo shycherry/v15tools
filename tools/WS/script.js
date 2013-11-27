@@ -2,7 +2,7 @@ function makeWSList(){
   var models = vt.findModels({type:'WS'}); 
   for(var idx in models){
     var model = models[idx];
-    $('#ws-list').append(makeWSGui(model));
+    $('#ws-list').append(makeModelGui(model));
   }
 }
 
@@ -21,7 +21,7 @@ function bindGui(){
           }
           var model = vt.createModel(amorceModel);
           if(model){
-            $('#ws-list').append(makeWSGui(model));
+            $('#ws-list').append(makeModelGui(model));
           }
         }
       });

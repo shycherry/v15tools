@@ -1,7 +1,7 @@
 global.$ = window.$;
 window.vt = global.vt = require('./v15core/v15tools.js').V15Tools;
 window.encodeHTML = global.encodeHTML = encodeHTML;
-window.makeWSGui = global.makeWSGui = makeWSGui;
+window.makeModelGui = global.makeModelGui = makeModelGui;
 
 var fs = require('fs');
 var _tools = [];
@@ -15,14 +15,14 @@ function templateShellTooltip(iShell){
   };
 }
 
-function makeWSGui(iWSModel){
+function makeModelGui(iWSModel){
   var newWSGui = $('<div id="'+iWSModel.vid+'">'+iWSModel.name+'</div>');
-  newWSGui.addClass("vt-interactif vt-itempath vt-ws");
+  newWSGui.addClass("vt-interactif vt-model vt-itempath vt-ws");
   newWSGui.draggable({
     revert: 'invalid',
     helper: function(event){
       var selectedCount = 1;
-      var selectedOthers = newWSGui.siblings('.vt-itempath.selected');
+      var selectedOthers = newWSGui.siblings('.vt-model.selected');
       if(selectedOthers){
         for(var idx = 0; idx < selectedOthers.length; idx++){
           
@@ -288,14 +288,14 @@ function bindShareGui () {
   });
 
   $vt_share.droppable({
-    accept: '.vt-itempath',
+    accept: '.vt-model',
     drop: function(event, ui){
 
       if(!ui.draggable){
         return;
       }
 
-      var selectedOthers = ui.draggable.siblings('.vt-itempath.selected');
+      var selectedOthers = ui.draggable.siblings('.vt-model.selected');
       if(selectedOthers){
         for(var idx = 0; idx < selectedOthers.length; idx++){
           
@@ -323,7 +323,7 @@ function bindShareGui () {
   });
 
   $vt_share.selectable({
-    filter:'.vt-itempath',
+    filter:'.vt-model',
     selected: function(event, ui){
       $(ui.selected).toggleClass('selected');
     }
@@ -350,7 +350,7 @@ function bindShellsGui(){
 
 function addSharedItem(model){
   if(_sharedItems.indexOf(model) == -1){
-    $('#vt-share').append(makeWSGui(model));
+    $('#vt-share').append(makeModelGui(model));
     _sharedItems.push(model);
   }
 }
@@ -367,7 +367,7 @@ function removeSharedItem(model){
     _sharedItems = _sharedItems.filter(function(current){
       return current.vid != model.vid;
     });
-    $('#vt-share .vt-itempath[id="'+model.vid+'"]').remove();
+    $('#vt-share .vt-model[id="'+model.vid+'"]').remove();
   }
 }
 
