@@ -20,7 +20,29 @@ function makeWSGui(iWSModel){
   newWSGui.addClass("vt-interactif vt-itempath vt-ws");
   newWSGui.draggable({
     revert: 'invalid',
-    helper: 'clone',
+    helper: function(event){
+      var selectedCount = 1;
+      var selectedOthers = newWSGui.siblings('.vt-itempath.selected');
+      if(selectedOthers){
+        for(var idx = 0; idx < selectedOthers.length; idx++){
+          
+          var otherSelected = $(selectedOthers[idx]);
+          if(!otherSelected) continue;
+
+          var vid = otherSelected.attr('id');
+          if(!vid) continue;
+
+          selectedCount++;
+        }
+      }
+
+      if(selectedCount >1){
+        return $('<div>...'+selectedCount+' items...</div>');        
+      }else{
+        return newWSGui.clone();
+      }
+      
+    },
     containment: 'window',
     distance:10
   });
@@ -268,9 +290,28 @@ function bindShareGui () {
   $vt_share.droppable({
     accept: '.vt-itempath',
     drop: function(event, ui){
+
       if(!ui.draggable){
         return;
       }
+
+      var selectedOthers = ui.draggable.siblings('.vt-itempath.selected');
+      if(selectedOthers){
+        for(var idx = 0; idx < selectedOthers.length; idx++){
+          
+          var otherSelected = $(selectedOthers[idx]);
+          if(!otherSelected) continue;
+
+          var vid = otherSelected.attr('id');
+          if(!vid) continue;
+
+          var model = vt.findModel({'vid': vid});
+          if(!model) continue;
+
+          addSharedItem(model);
+        }
+      }
+
       var vid = ui.draggable.attr('id');
       if(!vid) return;
       
