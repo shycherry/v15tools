@@ -1,0 +1,18 @@
+.vt-ws{
+  -webkit-user-select: none;
+  cursor:move;
+  display: inline-block;
+  vertical-align: top;
+  height: 30px;
+  background-color: greenyellow;
+  margin: 1px;
+}
+
+.vt-itempath.selected{
+  border: solid;
+  border-color: red;
+}
+
+.ui-selecting {
+  background: #ccc;
+}
