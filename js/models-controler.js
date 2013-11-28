@@ -15,7 +15,7 @@
   }
   
   function templateDefaultGui(iModel){
-    return $('<div id="'+iModel.vid+'">'+iModel.name+'</div>');
+    return $('<div id="'+iModel.vid+'"><div class="vt-model-namelayer">'+iModel.name+'</div><div class="vt-model-typelayer">'+iModel.type+'</div></div>');
   }
 
   function templateModelGuiFactory(iModel){
@@ -28,7 +28,7 @@
       default:
         return templateDefaultGui(iModel);
     }
-    return null;    
+    return null;
   }
 
   function makeModelGui(iModel){

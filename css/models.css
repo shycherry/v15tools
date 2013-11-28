@@ -15,14 +15,30 @@
   overflow: auto;
 }
 
+.vt-model-typelayer{
+  position: relative;
+  top: -30px;
+  font-size: 30px;
+  font-weight: bold;
+  height: 30px;
+  overflow: hidden;
+  color: rgba(0,0,0,0.1);
+}
+
+.vt-model-namelayer{
+  position: relative;
+  top: 0px;
+  height: 30px;
+  font-weight: bold;
+  text-overflow: ellipsis;
+}
+
 .vt-model{
   -webkit-user-select: none;
   cursor:move;
   display: inline-block;
   vertical-align: top;
   height: 30px;  
-  
-  text-overflow: ellipsis;
   margin: 1px;
 }
 
