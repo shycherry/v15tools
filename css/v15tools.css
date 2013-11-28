@@ -85,12 +85,9 @@ input{
 }
 
 #vt-share{
-  display: inline-block;
-  vertical-align: top;
   height: 100%;
   width: 20%;
   background-color: rgba(64,64,64,0.5);
-  overflow: auto;
 }
 
 #vt-status{  

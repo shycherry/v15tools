@@ -6,6 +6,15 @@
   background-color: greenyellow;
 }
 
+.vt-multidroppablezone{
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(64,64,64,0.2);
+  overflow: auto;
+}
+
 .vt-model{
   -webkit-user-select: none;
   cursor:move;

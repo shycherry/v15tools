@@ -4,8 +4,7 @@
   window.encodeHTML = global.encodeHTML = encodeHTML;
 
   var fs = require('fs');
-  var _tools = [];
-  var _sharedItems = [];
+  var _tools = [];  
 
   function templateShellTooltip(iShell){
     return function(){
@@ -224,67 +223,7 @@
 
   function bindShareGui () {
     var $vt_share = $('#vt-share');
-    
-    $vt_share.contextmenu({
-      menu:[
-        {
-          title:'clear',
-          action: function(){
-            clearSharedItems();
-          }
-        },
-        {
-          title:'remove selected',
-          action: function(){
-            var selectedSharedItems = $vt_share.find('.selected');
-            for(var idx = 0; idx < selectedSharedItems.length; idx++){
-              var current = $(selectedSharedItems[idx]);
-              if(!current) return;
-              
-              var vid = current.attr('id');
-              if(!vid) return;
-
-              var currentModel = vt.findModel({'vid':vid});
-              removeSharedItem(currentModel);
-            }
-          }
-        }
-      ]
-    });
-
-    $vt_share.droppable({
-      accept: '.vt-model',
-      tolerance: 'pointer',
-      drop: function(event, ui){
-
-        var draggedModelGui = ui.draggable;
-
-        if(!draggedModelGui){
-          return;
-        }
-
-        var selectedOthers = getOthersSelectedBrosModelsOf(draggedModelGui);
-        if(selectedOthers.length){
-          addSharedItems(selectedOthers);
-        }
-
-        var vid = draggedModelGui.attr('id');
-        if(!vid) return;
-        
-        var model = vt.findModel({'vid': vid});
-        if(!model) return;
-
-        addSharedItem(model);
-      }
-    });
-
-    $vt_share.selectable({
-      filter:'.vt-model',
-      selected: function(event, ui){
-        $(ui.selected).toggleClass('selected');
-      }
-    });
-
+    makeMultiDroppableZone($vt_share);
   }
 
   function bindShellsGui(){
@@ -301,42 +240,6 @@
       console.log(shell.vid+' released');
     });
     
-  }
-
-
-  function addSharedItem(model){
-    if(_sharedItems.indexOf(model) == -1){
-      $('#vt-share').append(makeModelGui(model));
-      _sharedItems.push(model);
-    }
-  }
-
-  function addSharedItems(models){
-    for(var idx in models){
-      var model = models[idx];
-      addSharedItem(model);
-    }
-  }
-
-  function removeSharedItem(model){
-    if(_sharedItems.indexOf(model) != -1){
-      _sharedItems = _sharedItems.filter(function(current){
-        return current.vid != model.vid;
-      });
-      $('#vt-share .vt-model[id="'+model.vid+'"]').remove();
-    }
-  }
-
-  function removeSharedItems(models){
-    for(var idx in models){
-      var model = models[idx];
-      removeSharedItem(model);
-    }
-  }
-
-  function clearSharedItems(){
-    $('#vt-share').contents().remove();
-    _sharedItems = [];
   }
 
   $(document).ready(function() {
