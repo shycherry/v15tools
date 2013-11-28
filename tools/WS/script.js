@@ -1,5 +1,7 @@
 function makeWSList(){
-  var models = vt.findModels({type:'WS'}); 
+  var amorceModel = {};
+  amorceModel[vt.Types.ItemPath] = 1;
+  var models = vt.findModels(amorceModel);
   for(var idx in models){
     var model = models[idx];
     $('#ws-list').append(makeModelGui(model));

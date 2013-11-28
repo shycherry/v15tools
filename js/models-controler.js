@@ -1,14 +1,40 @@
 (function(){
   window.makeModelGui = global.makeModelGui = makeModelGui;
+
+
+  function templateWSGui(iModel){
+    var gui = templateDefaultGui(iModel);
+    gui.addClass('vt-itempath vt-ws');
+    return gui;
+  }
   
-  function makeModelGui(iWSModel){
-    var newWSGui = $('<div id="'+iWSModel.vid+'">'+iWSModel.name+'</div>');
-    newWSGui.addClass("vt-interactif vt-model vt-itempath vt-ws");
-    newWSGui.draggable({
+  function templateDefaultGui(iModel){
+    return $('<div id="'+iModel.vid+'">'+iModel.name+'</div>');
+  }
+
+  function templateModelGuiFactory(iModel){
+    switch(iModel.type){
+      case 'WS':
+        return  templateWSGui(iModel);
+        break;
+      default:
+        return templateDefaultGui(iModel);
+    }
+    return null;    
+  }
+
+  function makeModelGui(iModel){
+    
+    var templateGui = templateModelGuiFactory(iModel)
+    if(!templateGui) return;
+
+    var newModelGui = templateGui;
+    newModelGui.addClass("vt-interactif vt-model");
+    newModelGui.draggable({
       revert: 'invalid',
       helper: function(event){
         var selectedCount = 1;
-        var selectedOthers = newWSGui.siblings('.vt-model.selected');
+        var selectedOthers = newModelGui.siblings('.vt-model.selected');
         if(selectedOthers){
           for(var idx = 0; idx < selectedOthers.length; idx++){
             
@@ -25,7 +51,7 @@
         if(selectedCount >1){
           return $('<div>...'+selectedCount+' items...</div>');        
         }else{
-          return newWSGui.clone();
+          return newModelGui.clone();
         }
         
       },
@@ -33,11 +59,11 @@
       distance:10
     });
 
-    newWSGui.click(function(){
-      newWSGui.toggleClass('selected');
+    newModelGui.click(function(){
+      newModelGui.toggleClass('selected');
     });
 
-    return newWSGui;
+    return newModelGui;
   }
 })();
   
