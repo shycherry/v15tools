@@ -2,5 +2,7 @@
   "vid": "WS_1",
   "name": "NMMR208",
   "absolute": "/path/to/NMMR208",
-  "type": "WS"
+  "ItemPath":1,
+  "WS": 1,
+  "type":"WS"
 }

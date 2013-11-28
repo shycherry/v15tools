@@ -5,6 +5,7 @@ var ShellTask = require('./shelltask').ShellTask;
 var BatchTask = require('./batchtask').BatchTask;
 var Tool = require('./tool').Tool;
 var Factory = require('./models').Factory;
+var Types = require('./models').Types
 var ADL_DS_WS_Task = require('../shelltasks/adl_ds_ws');
 
 var util = require('util');
@@ -52,6 +53,7 @@ V15Tools.prototype.setConfig = function (iConfig){
   _init.call(this);
 };
 
+V15Tools.prototype.Types = Types;
 V15Tools.prototype.ShellTask = ShellTask;
 V15Tools.prototype.BatchTask = BatchTask;
 
@@ -129,14 +131,18 @@ V15Tools.prototype.findModelInArray = function(iModel, iArray){
 };
 
 V15Tools.prototype.findModelsInArray = function(iModel, iArray){
-  var results = [];
+  var results = [];  
   for(var idxModel in iArray){
     var model = iArray[idxModel];
-    for(var prop in iModel){
-      if(model.hasOwnProperty(prop) && model[prop] == iModel[prop]){
-        results.push(model);
+    if(!iModel){
+      results.push(model);
+    }else{
+      for(var prop in iModel){
+        if(model.hasOwnProperty(prop) && model[prop] == iModel[prop]){
+          results.push(model);
+        }
       }
-    }
+    }    
   }
   return results;
 };

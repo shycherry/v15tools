@@ -2,5 +2,7 @@
   "vid": "WS_0",
   "name": "CGMPRJ",
   "absolute": "/path/to/CGMPRJ",
-  "type": "WS"
+  "ItemPath":1,
+  "WS": 1,
+  "type":"WS"
 }

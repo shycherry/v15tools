@@ -17,7 +17,8 @@ function ItemPath(){
   this.name='item';
   this.absolute='/full/path/to/item';
   this.relativeToChain='relative/path/to/item';
-  this.type=Types.ItemPath;
+  this[Types.ItemPath]=1;
+  this.type = Types.ItemPath;
 }
 
 ItemPath.prototype.getName = function() {
@@ -39,6 +40,7 @@ function WS(){
   globId++;
   this.name='ws';
   this.absolute='/path/to/ws';
+  this[Types.WS]=1;
   this.type = Types.WS;
 }
 
@@ -48,7 +50,8 @@ function FW(){
   globId++;
   this.name='fw';
   this.absolute='/path/to/fw';
-  this.type=Types.FW;  
+  this[Types.FW]=1;
+  this.type = Types.FW;
 }
 
 
@@ -58,7 +61,8 @@ function MOD(){
   globId++;
   name='mod';
   absolute='/path/to/mod';
-  type=Types.MOD;
+  this[Types.MOD]=1;
+  this.type = Types.MOD;
 }
 
 util.inherits(FILE, ItemPath);
@@ -67,7 +71,8 @@ function FILE(){
   globId++;
   name='file';
   absolute='/path/to/file';
-  type=Types.FILE;
+  this[Types.FILE]=1;
+  this.type = Types.FILE;
 }
 
 function Factory (iConfig) {
