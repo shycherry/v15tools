@@ -15,7 +15,7 @@ function bindGui(){
         if(!err){
           var amorceModel = 
           {
-            type:'WS',
+            type: vt.Types.WS.name,
             name : wsName,
             path : data
           }
@@ -25,6 +25,16 @@ function bindGui(){
           }
         }
       });
+    }
+  });
+
+  $('#ws-btn-create-dummy-with-name').button().click(function(){
+    var wsName = $('#ws-input-name').val();
+    if(wsName.length != 0){
+      var model = vt.createModel({type:vt.Types.WS.name ,name:wsName});
+      if(model){
+        $('#ws-list').append(makeModelGui(model));
+      }
     }
   });
 }
