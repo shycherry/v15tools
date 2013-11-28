@@ -2,6 +2,12 @@
   window.makeModelGui = global.makeModelGui = makeModelGui;
 
 
+  function templateFILEGui(iModel){
+    var gui = templateDefaultGui(iModel);
+    gui.addClass('vt-itempath vt-file');
+    return gui;
+  }
+  
   function templateWSGui(iModel){
     var gui = templateDefaultGui(iModel);
     gui.addClass('vt-itempath vt-ws');
@@ -14,9 +20,11 @@
 
   function templateModelGuiFactory(iModel){
     switch(iModel.type){
+      case 'FILE':
+        return templateFILEGui(iModel);
       case 'WS':
         return  templateWSGui(iModel);
-        break;
+        break;        
       default:
         return templateDefaultGui(iModel);
     }

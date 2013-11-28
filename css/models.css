@@ -1,12 +1,23 @@
+.vt-file{
+  background-color: yellow;
+}
+
 .vt-ws{
+  background-color: greenyellow;
+}
+
+.vt-model{
   -webkit-user-select: none;
   cursor:move;
   display: inline-block;
   vertical-align: top;
-  height: 30px;
-  background-color: greenyellow;
+  height: 30px;  
+  
+  text-overflow: ellipsis;
   margin: 1px;
 }
+
+
 
 .vt-model.selected{
   border: solid;

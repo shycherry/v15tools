@@ -254,6 +254,7 @@
 
     $vt_share.droppable({
       accept: '.vt-model',
+      tolerance: 'pointer',
       drop: function(event, ui){
 
         if(!ui.draggable){
