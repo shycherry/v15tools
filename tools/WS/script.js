@@ -1,8 +1,9 @@
+var _dropZone;
+
 function makeWSList(){  
   var models = vt.findModels(null, vt.Types.ItemPath);
-  for(var idx in models){
-    var model = models[idx];
-    $('#ws-list').append(makeModelGui(model));
+  if(models && _dropZone){
+    _dropZone.addSharedItems(models);  
   }
 }
 
@@ -20,8 +21,8 @@ function bindGui(){
             path : data
           }
           var model = vt.createModel(amorceModel);
-          if(model){
-            $('#ws-list').append(makeModelGui(model));
+          if(model && _dropZone){
+            _dropZone.addSharedItem(model);
           }
         }
       });
@@ -32,11 +33,13 @@ function bindGui(){
     var wsName = $('#ws-input-name').val();
     if(wsName.length != 0){
       var model = vt.createModel({type:vt.Types.WS.name ,name:wsName});
-      if(model){
-        $('#ws-list').append(makeModelGui(model));
+      if(model && _dropZone){
+        _dropZone.addSharedItem(model);
       }
     }
   });
+
+   _dropZone = makeMultiDroppableZone($('#ws-list'));
 }
 
 exports.init = function(){

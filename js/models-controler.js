@@ -87,21 +87,21 @@
     newGui.addClass('vt-multidroppablezone');
     var _sharedItems = [];
 
-    function addSharedItem(model){
+    newGui.addSharedItem = function addSharedItem(model){
       if(_sharedItems.indexOf(model) == -1){
         newGui.append(makeModelGui(model));
         _sharedItems.push(model);
       }
     }
 
-    function addSharedItems(models){
+    newGui.addSharedItems = function addSharedItems(models){
       for(var idx in models){
         var model = models[idx];
-        addSharedItem(model);
+        newGui.addSharedItem(model);
       }
     }
 
-    function removeSharedItem(model){
+    newGui.removeSharedItem = function removeSharedItem(model){
       if(_sharedItems.indexOf(model) != -1){
         _sharedItems = _sharedItems.filter(function(current){
           return current.vid != model.vid;
@@ -110,14 +110,14 @@
       }
     }
 
-    function removeSharedItems(models){
+    newGui.removeSharedItems = function removeSharedItems(models){
       for(var idx in models){
         var model = models[idx];
-        removeSharedItem(model);
+        newGui.removeSharedItem(model);
       }
     }
 
-    function clearSharedItems(){
+    newGui.clearSharedItems = function clearSharedItems(){
       newGui.contents().remove();
       _sharedItems = [];
     }
@@ -127,7 +127,7 @@
         {
           title:'clear',
           action: function(){
-            clearSharedItems();
+            newGui.clearSharedItems();
           }
         },
         {
@@ -142,7 +142,7 @@
               if(!vid) return;
 
               var currentModel = vt.findModel({'vid':vid});
-              removeSharedItem(currentModel);
+              newGui.removeSharedItem(currentModel);
             }
           }
         }
@@ -162,7 +162,7 @@
 
         var selectedOthers = getOthersSelectedBrosModelsOf(draggedModelGui);
         if(selectedOthers.length){
-          addSharedItems(selectedOthers);
+          newGui.addSharedItems(selectedOthers);
         }
 
         var vid = draggedModelGui.attr('id');
@@ -171,7 +171,7 @@
         var model = vt.findModel({'vid': vid});
         if(!model) return;
 
-        addSharedItem(model);
+        newGui.addSharedItem(model);
       }
     });
 
