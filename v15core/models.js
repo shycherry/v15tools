@@ -1,14 +1,6 @@
 ﻿var Fs = require('fs')
 var util = require('util');
 
-var Types = {
-  ItemPath : 'ItemPath',
-  WS:'WS',
-  FW:'FW',
-  MOD:'MOD',
-  FILE:'FILE',
-}
-
 var globId = 0;
 
 function ItemPath(){
@@ -16,9 +8,8 @@ function ItemPath(){
   globId++;
   this.name='item';
   this.absolute='/full/path/to/item';
-  this.relativeToChain='relative/path/to/item';
-  this[Types.ItemPath]=1;
-  this.type = Types.ItemPath;
+  this.relativeToChain='relative/path/to/item';  
+  this.type = ItemPath.name;
 }
 
 ItemPath.prototype.getName = function() {
@@ -40,8 +31,7 @@ function WS(){
   globId++;
   this.name='ws';
   this.absolute='/path/to/ws';
-  this[Types.WS]=1;
-  this.type = Types.WS;
+  this.type = WS.name;
 }
 
 util.inherits(FW, ItemPath);
@@ -50,8 +40,7 @@ function FW(){
   globId++;
   this.name='fw';
   this.absolute='/path/to/fw';
-  this[Types.FW]=1;
-  this.type = Types.FW;
+  this.type = FW.name;
 }
 
 
@@ -61,8 +50,7 @@ function MOD(){
   globId++;
   name='mod';
   absolute='/path/to/mod';
-  this[Types.MOD]=1;
-  this.type = Types.MOD;
+  this.type = MOD.name;
 }
 
 util.inherits(FILE, ItemPath);
@@ -71,8 +59,7 @@ function FILE(){
   globId++;
   name='file';
   absolute='/path/to/file';
-  this[Types.FILE]=1;
-  this.type = Types.FILE;
+  this.type = FILE.name;
 }
 
 function Factory (iConfig) {
@@ -136,9 +123,11 @@ Factory.prototype.write = function(iModel, iCallback){
   });
 }
 
-exports.Types = Types;
-exports.WS = WS;
-exports.FW = FW;
-exports.MOD = MOD;
-exports.FILE = FILE;
+exports.Types = {
+  ItemPath: ItemPath,
+  WS: WS,
+  FW: FW,
+  MOD: MOD,
+  FILE: FILE
+};
 exports.Factory = Factory;
