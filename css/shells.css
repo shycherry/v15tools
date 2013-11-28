@@ -6,6 +6,12 @@
   background-color: rgba(0,255,0,0.5);
 }
 
+
+.v15shell-tooltip{
+  -webkit-user-select: text;
+  overflow: auto;
+}
+
 .v15shell{
   display: inline-block;
   cursor: pointer;  

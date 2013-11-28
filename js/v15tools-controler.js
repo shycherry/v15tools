@@ -10,8 +10,8 @@ var _sharedItems = [];
 
 function templateShellTooltip(iShell){
   return function(){
-    var eData = encodeHTML(iShell.fullOutput);
-    return '<div class="v15shell-tooltip">'+eData+'</div>';
+    var eData = encodeHTML(iShell.vid);
+    return '<div class="v15shell-tooltip"> Shell# : '+eData+'</div>';
   };
 }
 
@@ -195,8 +195,8 @@ function makeShellGui(iShellModel){
   newShellGui.tooltip({
     content:templateShellTooltip(iShellModel),
     items:'.v15shell',
-    show:500,
-    hide:10000
+    show:100,
+    hide:500
   });
   iShellModel.on('working', function(){
     newShellGui.removeClass('vt-idle');

@@ -24,8 +24,7 @@ function Shell(){
   
   this._queue = new async.queue(Shell.prototype.doTask.bind(this), 1);
   
-  this._queue.drain = function(){
-    console.log('drain');
+  this._queue.drain = function(){    
     self._saturated = false;
     self.emit('drain');
   };

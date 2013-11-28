@@ -57,14 +57,6 @@ input{
   -webkit-filter: invert(100%);
 }
 
-.v15shell-tooltip{
-  -webkit-user-select: text;
-  font-size: small;
-  height: 200px;
-  width: 100%;
-  overflow: auto;
-}
-
 #vt-logo{
   display: inline-block;
   vertical-align: top;
