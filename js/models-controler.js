@@ -1,5 +1,6 @@
 (function(){
   window.makeModelGui = global.makeModelGui = makeModelGui;
+  window.getOthersSelectedBrosModelsOf = global.getOthersSelectedBrosModelsOf = getOthersSelectedBrosModelsOf;
 
 
   function templateFILEGui(iModel){
@@ -41,20 +42,7 @@
     newModelGui.draggable({
       revert: 'invalid',
       helper: function(event){
-        var selectedCount = 1;
-        var selectedOthers = newModelGui.siblings('.vt-model.selected');
-        if(selectedOthers){
-          for(var idx = 0; idx < selectedOthers.length; idx++){
-            
-            var otherSelected = $(selectedOthers[idx]);
-            if(!otherSelected) continue;
-
-            var vid = otherSelected.attr('id');
-            if(!vid) continue;
-
-            selectedCount++;
-          }
-        }
+        var selectedCount = 1 + getOthersSelectedBrosModelsOf(newModelGui).length;
 
         if(selectedCount >1){
           return $('<div>...'+selectedCount+' items...</div>');        
@@ -73,5 +61,28 @@
 
     return newModelGui;
   }
+
+  function getOthersSelectedBrosModelsOf(iModelGui){
+    var result = [];
+    var selectedOthers = iModelGui.siblings('.vt-model.selected');
+    if(selectedOthers){
+      for(var idx = 0; idx < selectedOthers.length; idx++){
+        
+        var otherSelected = $(selectedOthers[idx]);
+        if(!otherSelected) continue;
+
+        var vid = otherSelected.attr('id');
+        if(!vid) continue;
+        
+        var model = vt.findModel({'vid': vid});
+        if(!model) return;
+
+        result.push(model);
+      }
+    }
+    return result;
+  }
+
+
 })();
   

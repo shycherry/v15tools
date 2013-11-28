@@ -257,28 +257,18 @@
       tolerance: 'pointer',
       drop: function(event, ui){
 
-        if(!ui.draggable){
+        var draggedModelGui = ui.draggable;
+
+        if(!draggedModelGui){
           return;
         }
 
-        var selectedOthers = ui.draggable.siblings('.vt-model.selected');
-        if(selectedOthers){
-          for(var idx = 0; idx < selectedOthers.length; idx++){
-            
-            var otherSelected = $(selectedOthers[idx]);
-            if(!otherSelected) continue;
-
-            var vid = otherSelected.attr('id');
-            if(!vid) continue;
-
-            var model = vt.findModel({'vid': vid});
-            if(!model) continue;
-
-            addSharedItem(model);
-          }
+        var selectedOthers = getOthersSelectedBrosModelsOf(draggedModelGui);
+        if(selectedOthers.length){
+          addSharedItems(selectedOthers);
         }
 
-        var vid = ui.draggable.attr('id');
+        var vid = draggedModelGui.attr('id');
         if(!vid) return;
         
         var model = vt.findModel({'vid': vid});

@@ -17,7 +17,7 @@ function bindGui(){
           {
             type:'WS',
             name : wsName,
-            absolute : data
+            path : data
           }
           var model = vt.createModel(amorceModel);
           if(model){

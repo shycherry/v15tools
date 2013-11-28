@@ -7,8 +7,8 @@ function ItemPath(){
   this.vid = 'ItemPath_'+globId;
   globId++;
   this.name='item';
-  this.absolute='/full/path/to/item';
-  this.relativeToChain='relative/path/to/item';  
+  this.path='/full/path/to/item';
+  this.absolutePath='';
   this.type = ItemPath.name;
 }
 
@@ -17,7 +17,7 @@ ItemPath.prototype.getName = function() {
 };
 
 ItemPath.prototype.getSaveName = function(){
-  return this.absolute.replace(/\//g,'_').replace(/\\/g,'_').replace(/:/g,'_');
+  return this.path.replace(/\//g,'_').replace(/\\/g,'_').replace(/:/g,'_');
 }
 
 ItemPath.prototype.exists = function() {
@@ -30,7 +30,7 @@ function WS(){
   this.vid = 'WS_'+globId;
   globId++;
   this.name='ws';
-  this.absolute='/path/to/ws';
+  this.path='/path/to/ws';
   this.type = WS.name;
 }
 
@@ -39,7 +39,7 @@ function FW(){
   this.vid = 'FW_'+globId;
   globId++;
   this.name='fw';
-  this.absolute='/path/to/fw';
+  this.path='/path/to/fw';
   this.type = FW.name;
 }
 
@@ -49,7 +49,7 @@ function MOD(){
   this.vid = 'MOD_'+globId;
   globId++;
   name='mod';
-  absolute='/path/to/mod';
+  path='/path/to/mod';
   this.type = MOD.name;
 }
 
@@ -58,7 +58,7 @@ function FILE(){
   this.vid = 'FILE_'+globId;
   globId++;
   name='file';
-  absolute='/path/to/file';
+  path='/path/to/file';
   this.type = FILE.name;
 }
 
