@@ -8,7 +8,7 @@
   margin: 1px;
 }
 
-.vt-itempath.selected{
+.vt-model.selected{
   border: solid;
   border-color: red;
 }

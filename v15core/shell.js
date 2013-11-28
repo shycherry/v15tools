@@ -54,6 +54,7 @@ function Shell(){
 
   this.child_process.stdout.on('data', stdoutCallback);
   this.child_process.stderr.on('data', stderrCallback);
+  this.child_process.on('exit', function(){console.log('exit')});
 }
 
 Shell.prototype.enqueue = function(iShellTask){
