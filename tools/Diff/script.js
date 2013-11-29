@@ -1,8 +1,21 @@
+var Path = require('path');
 var _wsZone;
 var _filesZone;
 
 
 function createResultsTable(iWorkspaces, iFiles){
+
+    function getChecksumCallbackFor(iModel, iModelGui){
+      return function(err, data){
+        iModelGui.removeClass('vt-working');
+        if(err){
+          iModel.name = err;
+        }else{
+          iModel.name = data;
+        }
+        iModel.notify('name');
+      }
+    }
     
     var resultsTable = $('#diff-results-table');
     resultsTable.contents().remove();
@@ -34,9 +47,13 @@ function createResultsTable(iWorkspaces, iFiles){
         var newModel = vt.createModel({
           type:vt.Types.FullPath.name,
           name: wsIdx+'',
-          path:(currentWS.path+currentFile.path)
+          path:(Path.join(currentWS.path,currentFile.path))
         });
-        currentCol.append(makeModelGui(newModel));
+        var newFullPathGui = makeModelGui(newModel);
+        newFullPathGui.addClass('vt-working');
+
+        newModel.computeChecksum(getChecksumCallbackFor(newModel, newFullPathGui));
+        currentCol.append(newFullPathGui);
         currentRow.append(currentCol);
       }
 

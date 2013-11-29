@@ -27,7 +27,22 @@
   }
   
   function templateDefaultGui(iModel){
-    return $('<div id="'+iModel.vid+'">'+'<div class="vt-model-typelayer">'+iModel.type+'</div>'+'<div class="vt-model-namelayer">'+iModel.name+'</div>'+'</div>');
+    var mainDiv = $('<div id="'+iModel.vid+'"></div>');
+    var typeDiv = $('<div class="vt-model-typelayer">'+iModel.type+'</div>');
+    var nameDiv = $('<div class="vt-model-namelayer">'+iModel.name+'</div>');
+
+    var onChangeListener = function(iChange){
+      if(iChange === 'name'){
+        nameDiv.contents().remove();
+        nameDiv.append(''+iModel.name);
+      }
+    }
+
+    iModel.on('change', onChangeListener);
+
+    mainDiv.append(typeDiv);
+    mainDiv.append(nameDiv);    
+    return mainDiv;
   }
 
   function templateModelGuiFactory(iModel){

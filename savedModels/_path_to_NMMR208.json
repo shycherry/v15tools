@@ -1,6 +1,6 @@
 {
   "vid": "WS_1",
   "name": "NMMR208",
-  "absolute": "/path/to/NMMR208",
+  "path": "\\\\lenov223dsy\\home\\WS\\NMMR208",
   "type":"WS"
 }

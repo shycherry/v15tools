@@ -1,11 +1,19 @@
 ﻿var Fs = require('fs')
 var util = require('util');
+var EventEmitter = require('events').EventEmitter;
 
 var globId = 0;
 
+
+util.inherits(Model, EventEmitter);
 function Model(){
+  EventEmitter.prototype.constructor.call(this);
   this.vid = 'Model_'+globId;
   globId++;
+}
+
+Model.prototype.notify = function(iChange){
+  this.emit('change', iChange);
 }
 
 util.inherits(ItemPath, Model);
@@ -28,6 +36,27 @@ ItemPath.prototype.getSaveName = function(){
 ItemPath.prototype.exists = function() {
   return Fs.existsSync(this.path);
 };
+
+ItemPath.prototype.computeChecksum = function(iCallback){
+  if(this.exists()){
+    var Crypto = require('crypto');
+    var shasum = Crypto.createHash('sha1');
+    var s = Fs.ReadStream(this.path);
+    s.on('data', function(data){
+      shasum.update(data);
+    })
+    s.on('end', function(){
+      var sum = shasum.digest('hex');
+      if(iCallback){
+        iCallback(null, sum);
+      }
+    })
+  }else{
+    if(iCallback){
+      iCallback('file not found');
+    }
+  }
+}
 
 
 util.inherits(WS, ItemPath);
