@@ -1,8 +1,15 @@
 <html>
+  <link rel="stylesheet" type="text/css" href="./tools/Diff/style.css">
   <script type="text/javascript">
     $(document).ready(function(){
       require('./tools/Diff/script.js').init();
     })
   </script>  
-  <div id="widget"></div>
+  <p>WS:</p>
+  <div id="diff-ws-zone"></div>
+  <p>Files:</p>
+  <div id="diff-files-zone"></div>
+  <button id="diff-diff-btn">Compare</button>
+  <table id="diff-results-table">
+  </table>
 </html>

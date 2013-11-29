@@ -55,6 +55,7 @@
     });
 
     newModelGui.click(function(){
+      //todo : restreindre ce comportement aux zones de selection
       newModelGui.toggleClass('selected');
     });
 
@@ -82,12 +83,17 @@
     return result;
   }
 
-  function makeMultiDroppableZone(iJQueryObject){
+  function makeMultiDroppableZone(iJQueryObject, iRestrictedToClass){
     var newGui = (iJQueryObject)?iJQueryObject : $('<div></div>');
     newGui.addClass('vt-multidroppablezone');
     var _sharedItems = [];
 
     newGui.addSharedItem = function addSharedItem(model){
+      
+      if(iRestrictedToClass && !(model instanceof iRestrictedToClass)){
+        return;
+      }
+
       if(_sharedItems.indexOf(model) == -1){
         newGui.append(makeModelGui(model));
         _sharedItems.push(model);
@@ -97,7 +103,7 @@
     newGui.addSharedItems = function addSharedItems(models){
       for(var idx in models){
         var model = models[idx];
-        newGui.addSharedItem(model);
+        newGui.addSharedItem(model);        
       }
     }
 
@@ -120,6 +126,10 @@
     newGui.clearSharedItems = function clearSharedItems(){
       newGui.contents().remove();
       _sharedItems = [];
+    }
+
+    newGui.getModels = function getModels(){
+      return _sharedItems.slice(0);
     }
 
     newGui.contextmenu({
