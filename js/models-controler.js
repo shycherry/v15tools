@@ -2,6 +2,18 @@
   window.makeModelGui = global.makeModelGui = makeModelGui;
   window.makeMultiDroppableZone = global.makeMultiDroppableZone = makeMultiDroppableZone;
 
+  function templateModelTooltip(iModel){
+    return function(){      
+      var temp = $('<div class="v15-model-tooltip"></div>');
+      for(var idx in iModel){              
+        var htmlIdx = encodeHTML(idx);
+        var htmlValue = encodeHTML(iModel[idx]);
+        temp.append(htmlIdx+' : '+htmlValue+' <br/>');
+      }      
+      return temp.html();
+    };
+  } 
+
   function templateFILEGui(iModel){
     var gui = templateDefaultGui(iModel);
     gui.addClass('vt-itempath vt-file');
@@ -54,6 +66,13 @@
       distance:10
     });
 
+    newModelGui.tooltip({
+      content:templateModelTooltip(iModel),
+      items:'.vt-model',
+      show:1000,
+      hide:100
+    });
+
     newModelGui.click(function(){
       //todo : restreindre ce comportement aux zones de selection
       newModelGui.toggleClass('selected');
@@ -89,7 +108,7 @@
     var _sharedItems = [];
 
     newGui.addSharedItem = function addSharedItem(model){
-      
+
       if(iRestrictedToClass && !(model instanceof iRestrictedToClass)){
         return;
       }

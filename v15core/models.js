@@ -3,12 +3,17 @@ var util = require('util');
 
 var globId = 0;
 
-function ItemPath(){
-  this.vid = 'ItemPath_'+globId;
+function Model(){
+  this.vid = 'Model_'+globId;
   globId++;
+}
+
+util.inherits(ItemPath, Model);
+function ItemPath(){
+  Model.prototype.constructor.call(this);
+  this.vid = 'ItemPath_'+globId;  
   this.name='item';
-  this.path='/full/path/to/item';
-  this.absolutePath='';
+  this.path='/full/path/to/item';  
   this.type = ItemPath.name;
 }
 
@@ -21,15 +26,14 @@ ItemPath.prototype.getSaveName = function(){
 }
 
 ItemPath.prototype.exists = function() {
-  return Fs.existsSync(this.absolute);
+  return Fs.existsSync(this.path);
 };
 
 
 util.inherits(WS, ItemPath);
 function WS(){
-  ItemPath.constructor.call(this);
-  this.vid = 'WS_'+globId;
-  globId++;
+  ItemPath.prototype.constructor.call(this);
+  this.vid = 'WS_'+globId;  
   this.name='ws';
   this.path='/path/to/ws';
   this.type = WS.name;
@@ -37,9 +41,8 @@ function WS(){
 
 util.inherits(FW, ItemPath);
 function FW(){
-  ItemPath.constructor.call(this);
-  this.vid = 'FW_'+globId;
-  globId++;
+  ItemPath.prototype.constructor.call(this);
+  this.vid = 'FW_'+globId;  
   this.name='fw';
   this.path='/path/to/fw';
   this.type = FW.name;
@@ -48,26 +51,33 @@ function FW(){
 
 util.inherits(MOD, ItemPath);
 function MOD(){
-  ItemPath.constructor.call(this);
-  this.vid = 'MOD_'+globId;
-  globId++;
-  name='mod';
-  path='/path/to/mod';
+  ItemPath.prototype.constructor.call(this);
+  this.vid = 'MOD_'+globId;  
+  this.name='mod';
+  this.path='/path/to/mod';
   this.type = MOD.name;
 }
 
 util.inherits(FILE, ItemPath);
 function FILE(){
-  ItemPath.constructor.call(this);
-  this.vid = 'FILE_'+globId;
-  globId++;
-  name='file';
-  path='/path/to/file';
+  ItemPath.prototype.constructor.call(this);
+  this.vid = 'FILE_'+globId;  
+  this.name='file';
+  this.path='/path/to/file';
   this.type = FILE.name;
 }
 
 function Factory (iConfig) {
   this._config = iConfig;  
+}
+
+util.inherits(FullPath, ItemPath);
+function FullPath(){
+  ItemPath.prototype.constructor.call(this);
+  this.vid = 'FullPath_'+globId;
+  this.name='fullPath';
+  this.path='e:/path/to/file';
+  this.type = FullPath.name;
 }
 
 Factory.prototype.create = function(arg){
@@ -128,7 +138,9 @@ Factory.prototype.write = function(iModel, iCallback){
 }
 
 exports.Types = {
+  Model: Model,
   ItemPath: ItemPath,
+  FullPath: FullPath,
   WS: WS,
   FW: FW,
   MOD: MOD,

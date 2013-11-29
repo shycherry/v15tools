@@ -31,7 +31,12 @@ function createResultsTable(iWorkspaces, iFiles){
       for(var wsIdx in iWorkspaces){
         var currentWS = iWorkspaces[wsIdx];
         var currentCol = $('<td></td>');
-        currentCol.append(''+wsIdx);
+        var newModel = vt.createModel({
+          type:vt.Types.FullPath.name,
+          name: wsIdx+'',
+          path:(currentWS.path+currentFile.path)
+        });
+        currentCol.append(makeModelGui(newModel));
         currentRow.append(currentCol);
       }
 
