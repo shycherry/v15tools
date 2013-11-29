@@ -17,7 +17,7 @@
 
 .vt-model-typelayer{
   position: relative;
-  top: -30px;
+  top: 0px;
   font-size: 30px;
   font-weight: bold;
   height: 30px;
@@ -27,7 +27,7 @@
 
 .vt-model-namelayer{
   position: relative;
-  top: 0px;
+  top: -30px;
   height: 30px;
   font-weight: bold;
   text-overflow: ellipsis;

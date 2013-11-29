@@ -15,7 +15,7 @@
   }
   
   function templateDefaultGui(iModel){
-    return $('<div id="'+iModel.vid+'"><div class="vt-model-namelayer">'+iModel.name+'</div><div class="vt-model-typelayer">'+iModel.type+'</div></div>');
+    return $('<div id="'+iModel.vid+'">'+'<div class="vt-model-typelayer">'+iModel.type+'</div>'+'<div class="vt-model-namelayer">'+iModel.name+'</div>'+'</div>');
   }
 
   function templateModelGuiFactory(iModel){
