@@ -1,11 +1,6 @@
-.vt-shell-working{
-  background-color: rgba(255,255,0,0.5);
-}
-
 .vt-shell-idle{
   background-color: rgba(0,255,0,0.5);
 }
-
 
 .v15shell-tooltip{
   -webkit-user-select: text;
@@ -30,10 +25,6 @@
 
 .vt-shelltask-canceled{
   background-color: rgba(0,0,0,0.5);
-}
-
-.vt-shelltask-working{
-  background-color: rgba(0,255,0,0.5);
 }
 
 .vt-shelltask-enqueued{
