@@ -33,29 +33,37 @@ ItemPath.prototype.getSaveName = function(){
   return this.path.replace(/\//g,'_').replace(/\\/g,'_').replace(/:/g,'_');
 }
 
-ItemPath.prototype.exists = function() {
-  return Fs.existsSync(this.path);
+ItemPath.prototype.exists = function(iCallback){
+  return Fs.exists(this.path, iCallback);
 };
 
 ItemPath.prototype.computeChecksum = function(iCallback){
-  if(this.exists()){
-    var Crypto = require('crypto');
-    var shasum = Crypto.createHash('sha1');
-    var s = Fs.ReadStream(this.path);
-    s.on('data', function(data){
-      shasum.update(data);
-    })
-    s.on('end', function(){
-      var sum = shasum.digest('hex');
+  var self = this;
+  this.exists(function(iExists){
+    if(iExists){
+      var Crypto = require('crypto');
+      var shasum = Crypto.createHash('sha512');
+      var s = Fs.createReadStream(self.path);
+      s.on('data', function(data){
+        shasum.update(data);
+      });
+      s.on('end', function(){
+        var sum = shasum.digest('hex');
+        if(iCallback){
+          iCallback(null, sum);
+        }
+      });
+      s.on('error', function(error){
+        if(iCallback){
+          iCallback('error while streaming file', null);
+        }
+      });
+    }else{
       if(iCallback){
-        iCallback(null, sum);
-      }
-    })
-  }else{
-    if(iCallback){
-      iCallback('file not found');
+        iCallback('file not found');
+      }  
     }
-  }
+  });  
 }
 
 
