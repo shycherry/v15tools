@@ -30,6 +30,17 @@ input{
   vertical-align: middle;
 }
 
+@-webkit-keyframes working
+{
+  from {-webkit-filter : opacity(0);}
+  to {-webkit-filter : opacity(1);}
+}
+
+
+.vt-working{
+  -webkit-animation: working 1s infinite;
+}
+
 .v15tool{
   cursor: pointer;
   display: inline-block;

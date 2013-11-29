@@ -28,19 +28,19 @@
       switch(iStatus){
         case 'working':
           shellTaskGui.removeClass('vt-shelltask-enqueued');
-          shellTaskGui.removeClass('vt-shelltask-canceled');
-          shellTaskGui.addClass('vt-shelltask-working');
+          shellTaskGui.removeClass('vt-shelltask-canceled');          
+          shellTaskGui.addClass('vt-working');
         break;
 
         case 'enqueued':
-          shellTaskGui.removeClass('vt-shelltask-working');
+          shellTaskGui.removeClass('vt-working');
           shellTaskGui.removeClass('vt-shelltask-canceled');
           shellTaskGui.addClass('vt-shelltask-enqueued');
         break;
 
         case 'canceled':
           shellTaskGui.removeClass('vt-shelltask-enqueued');
-          shellTaskGui.removeClass('vt-shelltask-working');
+          shellTaskGui.removeClass('vt-working');
           shellTaskGui.addClass('vt-shelltask-canceled');
         break;
 
@@ -163,12 +163,12 @@
       hide:10000
     });
     iShellModel.on('working', function(){
-      newShellGui.removeClass('vt-idle');
+      newShellGui.removeClass('vt-shell-idle');
       newShellGui.addClass('vt-working');
     })
     iShellModel.on('idle', function(){
       newShellGui.removeClass('vt-working');
-      newShellGui.addClass('vt-idle');    
+      newShellGui.addClass('vt-shell-idle');    
     })
 
     return newShellGui;

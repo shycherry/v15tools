@@ -5,6 +5,7 @@ var _filesZone;
 function createResultsTable(iWorkspaces, iFiles){
     
     var resultsTable = $('#diff-results-table');
+    resultsTable.contents().remove();
 
     //first row is for workspaces
     var firstRow = $('<tr></tr>');

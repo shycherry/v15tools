@@ -27,6 +27,7 @@ ItemPath.prototype.exists = function() {
 
 util.inherits(WS, ItemPath);
 function WS(){
+  ItemPath.constructor.call(this);
   this.vid = 'WS_'+globId;
   globId++;
   this.name='ws';
@@ -36,6 +37,7 @@ function WS(){
 
 util.inherits(FW, ItemPath);
 function FW(){
+  ItemPath.constructor.call(this);
   this.vid = 'FW_'+globId;
   globId++;
   this.name='fw';
@@ -46,6 +48,7 @@ function FW(){
 
 util.inherits(MOD, ItemPath);
 function MOD(){
+  ItemPath.constructor.call(this);
   this.vid = 'MOD_'+globId;
   globId++;
   name='mod';
@@ -55,6 +58,7 @@ function MOD(){
 
 util.inherits(FILE, ItemPath);
 function FILE(){
+  ItemPath.constructor.call(this);
   this.vid = 'FILE_'+globId;
   globId++;
   name='file';
