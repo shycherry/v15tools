@@ -1,14 +1,20 @@
 (function(){
   window.makeModelGui = global.makeModelGui = makeModelGui;
+  window.removeModelGui = global.removeModelGui = removeModelGui;
   window.makeMultiDroppableZone = global.makeMultiDroppableZone = makeMultiDroppableZone;
+
+  var _globGID = 0;
+  var _changeListenersMap = {};
 
   function templateModelTooltip(iModel){
     return function(){      
       var temp = $('<div class="v15-model-tooltip"></div>');
-      for(var idx in iModel){              
-        var htmlIdx = encodeHTML(idx);
-        var htmlValue = encodeHTML(iModel[idx]);
-        temp.append(htmlIdx+' : '+htmlValue+' <br/>');
+      for(var idx in iModel){
+        if( (typeof iModel[idx]) != 'function'){
+          var htmlIdx = encodeHTML(idx);
+          var htmlValue = encodeHTML(iModel[idx]);
+          temp.append(htmlIdx+' : '+htmlValue+' <br/>');
+        }        
       }      
       return temp.html();
     };
@@ -27,44 +33,49 @@
   }
   
   function templateDefaultGui(iModel){
-    var mainDiv = $('<div id="'+iModel.vid+'"></div>');
+    var mainDiv = $('<div></div>');
     var typeDiv = $('<div class="vt-model-typelayer">'+iModel.type+'</div>');
     var nameDiv = $('<div class="vt-model-namelayer">'+iModel.name+'</div>');
 
-    var onChangeListener = function(iChange){
+    mainDiv.update = function(iModel, iChange){
       if(iChange === 'name'){
         nameDiv.contents().remove();
         nameDiv.append(''+iModel.name);
       }
     }
 
-    iModel.on('change', onChangeListener);
-
     mainDiv.append(typeDiv);
-    mainDiv.append(nameDiv);    
+    mainDiv.append(nameDiv);
+
     return mainDiv;
   }
 
   function templateModelGuiFactory(iModel){
+    var newModelGui = null;
     switch(iModel.type){
       case 'FILE':
-        return templateFILEGui(iModel);
+        newModelGui = templateFILEGui(iModel);
+        break;
       case 'WS':
-        return  templateWSGui(iModel);
+        newModelGui = templateWSGui(iModel);
         break;        
       default:
-        return templateDefaultGui(iModel);
+        newModelGui = templateDefaultGui(iModel);
     }
-    return null;
+    if(newModelGui){
+      newModelGui.addClass("vt-interactif vt-model");
+      newModelGui.attr('vid', iModel.vid);
+      newModelGui.attr('gid', _globGID);
+      _globGID++;
+    }
+    return newModelGui;
   }
 
   function makeModelGui(iModel){
     
-    var templateGui = templateModelGuiFactory(iModel)
-    if(!templateGui) return;
-
-    var newModelGui = templateGui;
-    newModelGui.addClass("vt-interactif vt-model");
+    var newModelGui = templateModelGuiFactory(iModel)
+    if(!newModelGui) return;
+    
     newModelGui.draggable({
       revert: 'invalid',
       helper: function(event){
@@ -93,7 +104,31 @@
       newModelGui.toggleClass('selected');
     });
 
+    var onChangeListener = function(iChange){      
+      newModelGui.update(iModel, iChange);
+    }
+    iModel.on('change', onChangeListener);
+    var newModelGuiGID = newModelGui.attr('gid');
+    _changeListenersMap[newModelGuiGID] = {
+      model: iModel,      
+      registeredListener: onChangeListener
+    };    
     return newModelGui;
+  }
+
+  function removeModelGui(iModelGui){
+    var modelGuiGID = iModelGui.attr('gid');
+    var modelGuiChangeListenerEntry = _changeListenersMap[modelGuiGID];
+    if(modelGuiChangeListenerEntry){
+      delete _changeListenersMap[modelGuiGID];
+    }
+    var model = modelGuiChangeListenerEntry.model;
+    var listener = modelGuiChangeListenerEntry.registeredListener;
+    if(model && listener){
+      model.removeListener('change', listener);
+    }
+
+    iModelGui.remove();
   }
 
   function getOthersSelectedBrosModelsOf(iModelGui){
@@ -105,7 +140,7 @@
         var otherSelected = $(selectedOthers[idx]);
         if(!otherSelected) continue;
 
-        var vid = otherSelected.attr('id');
+        var vid = otherSelected.attr('vid');
         if(!vid) continue;
         
         var model = vt.findModel({'vid': vid});
@@ -146,7 +181,10 @@
         _sharedItems = _sharedItems.filter(function(current){
           return current.vid != model.vid;
         });
-        newGui.find('.vt-model[id="'+model.vid+'"]').remove();        
+        var modelGui = newGui.find('.vt-model[vid="'+model.vid+'"]');
+        if(modelGui){
+          removeModelGui(modelGui);
+        }        
       }
     }
 
@@ -158,8 +196,7 @@
     }
 
     newGui.clearSharedItems = function clearSharedItems(){
-      newGui.contents().remove();
-      _sharedItems = [];
+      newGui.removeSharedItems(_sharedItems);
     }
 
     newGui.getModels = function getModels(){
@@ -182,7 +219,7 @@
               var current = $(selectedSharedItems[idx]);
               if(!current) return;
               
-              var vid = current.attr('id');
+              var vid = current.attr('vid');
               if(!vid) return;
 
               var currentModel = vt.findModel({'vid':vid});
@@ -209,7 +246,7 @@
           newGui.addSharedItems(selectedOthers);
         }
 
-        var vid = draggedModelGui.attr('id');
+        var vid = draggedModelGui.attr('vid');
         if(!vid) return;
         
         var model = vt.findModel({'vid': vid});

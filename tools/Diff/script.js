@@ -5,13 +5,20 @@ var _filesZone;
 
 function createResultsTable(iWorkspaces, iFiles){
 
+    var globHashIndice = 1;
+    var hashMap = {};
+
     function getChecksumCallbackFor(iModel, iModelGui){
       return function(err, data){
         iModelGui.removeClass('vt-working');
         if(err){
           iModel.name = err;
         }else{
-          iModel.name = data;
+          if(!hashMap[data]){
+            hashMap[data] = '#'+globHashIndice;
+            globHashIndice++;
+          }
+          iModel.name = hashMap[data];
         }
         iModel.notify('name');
       }
@@ -46,7 +53,7 @@ function createResultsTable(iWorkspaces, iFiles){
         var currentCol = $('<td></td>');
         var newModel = vt.createModel({
           type:vt.Types.FullPath.name,
-          name: wsIdx+'',
+          name: 'hashing...',
           path:(Path.join(currentWS.path,currentFile.path))
         });
         var newFullPathGui = makeModelGui(newModel);
