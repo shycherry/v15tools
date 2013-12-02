@@ -1,5 +1,20 @@
 var Path = require('path');
 var _lockedShell;
+var _createdModelsGuis = [];
+var _createdModels = [];
+
+function clearResultsTable(){  
+  for(var idx in _createdModelsGuis){
+    removeModelGui(_createdModelsGuis[idx]);
+  }
+  _createdModelsGuis = [];
+  $('#diff-results-table').contents().remove();
+
+  for(var idx in _createdModels){
+    vt.forgetModel(_createdModels[idx]);
+  }
+  _createdModels = [];
+}
 
 function createResultsTable(iWorkspaces, iFiles){
 
@@ -23,7 +38,7 @@ function createResultsTable(iWorkspaces, iFiles){
     }
     
     var resultsTable = $('#diff-results-table');
-    resultsTable.contents().remove();
+    clearResultsTable();
 
     //first row is for workspaces
     var firstRow = $('<tr></tr>');
@@ -32,7 +47,9 @@ function createResultsTable(iWorkspaces, iFiles){
     for(var wsIdx in iWorkspaces){
       var currentWS = iWorkspaces[wsIdx];
       var currentCol = $('<td></td>');
-      currentCol.append(makeModelGui(currentWS));
+      var currentWSGui = makeModelGui(currentWS);
+      _createdModelsGuis.push(currentWSGui);
+      currentCol.append(currentWSGui);
       firstRow.append(currentCol);
       resultsTable.append(firstRow);
     }
@@ -43,8 +60,10 @@ function createResultsTable(iWorkspaces, iFiles){
 
       //first col is for file
       var firstCol = $('<td></td>');
-      firstCol.append(makeModelGui(currentFile));
-      currentRow.append(firstCol);      
+      var currentFileGui = makeModelGui(currentFile);
+      _createdModelsGuis.push(currentFileGui);
+      firstCol.append(currentFileGui);
+      currentRow.append(firstCol);
 
       for(var wsIdx in iWorkspaces){
         var currentWS = iWorkspaces[wsIdx];
@@ -54,9 +73,11 @@ function createResultsTable(iWorkspaces, iFiles){
           name: 'hashing...',
           path:(Path.join(currentWS.path,currentFile.path))
         });
+        _createdModels.push(newModel);
         var newFullPathGui = makeModelGui(newModel);
         newFullPathGui.addClass('diff-fullpath');
         newFullPathGui.addClass('vt-working');
+        _createdModelsGuis.push(newFullPathGui);
         currentCol.append(newFullPathGui);
         currentRow.append(currentCol);
 

@@ -116,17 +116,16 @@
     return newModelGui;
   }
 
-  function removeModelGui(iModelGui){
-    console.log('remove');
+  function removeModelGui(iModelGui){    
     var modelGuiGID = iModelGui.attr('gid');
     var modelGuiChangeListenerEntry = _changeListenersMap[modelGuiGID];
     if(modelGuiChangeListenerEntry){
       delete _changeListenersMap[modelGuiGID];
-    }
-    var model = modelGuiChangeListenerEntry.model;
-    var listener = modelGuiChangeListenerEntry.registeredListener;
-    if(model && listener){
-      model.removeListener('change', listener);
+      var model = modelGuiChangeListenerEntry.model;
+      var listener = modelGuiChangeListenerEntry.registeredListener;
+      if(model && listener){
+        model.removeListener('change', listener);
+      }
     }
 
     iModelGui.remove();

@@ -171,6 +171,12 @@ V15Tools.prototype.createModel = function(iAmorce){
   return newModel;
 };
 
+V15Tools.prototype.forgetModel = function(iModel){  
+  _models = _models.filter(function(current){
+    return current.vid != iModel.vid;
+  });  
+};
+
 V15Tools.prototype.saveModel = function(iModel, iCallback){
   this._factory.write(iModel, iCallback);
 }
