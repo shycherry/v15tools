@@ -25,6 +25,10 @@ exports.calc = function(){
   vt.pushShellTask(shelltask);
 };
 
-exports.ready = function(){
+exports.load = function(){
+  
+}
+
+exports.reload = function(){
   
 }

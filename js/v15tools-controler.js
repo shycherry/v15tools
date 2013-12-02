@@ -4,7 +4,8 @@
   window.encodeHTML = global.encodeHTML = encodeHTML;
 
   var fs = require('fs');
-  var _tools = [];  
+  var _tools = [];
+  var _currentTool;
 
   function templateShellTooltip(iShell){
     return function(){
@@ -58,6 +59,7 @@
 
   function makeShellWindow(iShellModel){
     var shellHistory = [];
+    var lastKeydown = 0;
     if(vt.getConfig().baseAutoComplete){
       shellHistory = vt.getConfig().baseAutoComplete;
     }
@@ -135,13 +137,15 @@
       relayoutShellWindow();
     });
 
-    newShellInputText.keydown(function(event){
+    newShellInputText.keydown(function(event){      
       if(event.which == 13){ //enter key      
         pushCommandCallback();
       }
-      if(event.which == 38){ //up arrow key
+      if(event.which == 38 && (lastKeydown != 38)){ //up arrow key
         newShellInputText.autocomplete('search', '');
       }
+      lastKeydown = event.which;
+      return false;
     });
 
     newShellEnqueueBtn.click(pushCommandCallback);
@@ -194,10 +198,26 @@
     }
   }
 
-  function switchTool(iTool, iCallback){
-    $('#vt-main').load(iTool.pathToDir+'/layout.html', function(){
-      iCallback(null);
-    });
+  function switchTool(iOldTool, iNewTool, iCallback){
+    
+    var oldToolDOM = $('#vt-main').contents();
+    if(iOldTool && oldToolDOM){
+      iOldTool.cachedDOM = oldToolDOM.detach();
+    }
+
+    if(iNewTool.cachedDOM){
+      iNewTool.cachedDOM.appendTo($('#vt-main'));
+      _currentTool = iNewTool;
+      require(iNewTool.pathToDir+'/script.js').reload();
+      iCallback(null, 'reattached');
+    }else{
+      $('#vt-main').load(iNewTool.pathToDir+'/layout.html', function(){
+        iNewTool.cachedDOM = $('#vt-main').contents();
+        _currentTool = iNewTool;
+        require(iNewTool.pathToDir+'/script.js').load();
+        iCallback(null, 'loaded');
+      });
+    }    
   }
 
   function bindToolsGui(){
@@ -213,8 +233,8 @@
           $('.v15tool').removeClass('active');
           $(this).addClass('active');
           var tool = vt.findModelInArray({vid:$(this).attr('id')}, _tools);
-          switchTool(tool, function(err, data){
-            console.log(tool.name+' loaded');
+          switchTool(_currentTool, tool, function(err, data){
+            console.log(tool.name+' '+data);
           });
         });
       }

@@ -2,7 +2,7 @@ function isODTKo(iLine){
 	return (/ : KO, rc =.*/.test(iLine)) || (/.*:.*failed code.*/.test(iLine));
 }
 
-exports.ready = function(){
+exports.load = function(){
   $('#rwf_filter_btn').button().click(function(){
   	var lines=[];
   	var total_output='';
@@ -18,4 +18,8 @@ exports.ready = function(){
 
   	$('#rwf_output').val(total_output);
   });
+}
+
+exports.reload = function(){
+  
 }

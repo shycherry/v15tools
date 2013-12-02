@@ -117,6 +117,7 @@
   }
 
   function removeModelGui(iModelGui){
+    console.log('remove');
     var modelGuiGID = iModelGui.attr('gid');
     var modelGuiChangeListenerEntry = _changeListenersMap[modelGuiGID];
     if(modelGuiChangeListenerEntry){

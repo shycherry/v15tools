@@ -115,6 +115,10 @@ function bindGui(){
   });
 }
 
-exports.ready = function(){  
+exports.load = function(){  
   bindGui();  
+}
+
+exports.reload = function(){
+  
 }

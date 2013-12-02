@@ -1,10 +1,13 @@
 var _dropZone;
 
-function makeWSList(){  
-  var models = vt.findModels(null, vt.Types.ItemPath);
-  if(models && _dropZone){
-    _dropZone.addSharedItems(models);  
-  }
+function makeWSList(){
+  if(_dropZone){
+    _dropZone.clearSharedItems();
+    var models = vt.findModels(null, vt.Types.ItemPath);
+    if(models){
+      _dropZone.addSharedItems(models);  
+    }  
+  }  
 }
 
 
@@ -42,7 +45,11 @@ function bindGui(){
    _dropZone = makeMultiDroppableZone($('#ws-list'));
 }
 
-exports.ready = function(){
+exports.load = function(){
   bindGui();
+  exports.reload();
+}
+
+exports.reload = function(){
   makeWSList();
 }

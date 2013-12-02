@@ -38,11 +38,11 @@ exports.get = function(iTCKLevel){
   var tck_level = (iTCKLevel)?iTCKLevel : 'R217';
 
   //try to get cgmtools first (switched tools)
-  var newShellTask = getWithCGMToolsTaskIfp(iTCKLevel);  
+  var newShellTask = getWithCGMToolsTaskIfp(tck_level);  
   
   //else do the good old way...
   if(!newShellTask){
-    newShellTask = getGoodOldWayTask(iTCKLevel);
+    newShellTask = getGoodOldWayTask(tck_level);
   }
   
   return newShellTask;
