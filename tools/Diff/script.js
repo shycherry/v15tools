@@ -115,6 +115,6 @@ function bindGui(){
   });
 }
 
-exports.init = function(){  
+exports.ready = function(){  
   bindGui();  
 }

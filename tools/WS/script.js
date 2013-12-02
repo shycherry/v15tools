@@ -42,7 +42,7 @@ function bindGui(){
    _dropZone = makeMultiDroppableZone($('#ws-list'));
 }
 
-exports.init = function(){
+exports.ready = function(){
   bindGui();
   makeWSList();
 }

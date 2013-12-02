@@ -24,3 +24,7 @@ exports.calc = function(){
 
   vt.pushShellTask(shelltask);
 };
+
+exports.ready = function(){
+  
+}
