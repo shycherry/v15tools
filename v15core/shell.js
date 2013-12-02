@@ -59,7 +59,7 @@ function Shell(){
 Shell.prototype.enqueue = function(iShellTask){
   if(iShellTask){
     if(iShellTask.lockId){
-      this._lockId = lockId;
+      this._lockId = iShellTask.lockId;
       this.emit('locked');
     }
     iShellTask.setStatus('enqueued');

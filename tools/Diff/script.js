@@ -1,11 +1,10 @@
 var Path = require('path');
-var _wsZone;
-var _filesZone;
+var _selectedResults = [];
 
 
 function createResultsTable(iWorkspaces, iFiles){
 
-    var globHashIndice = 1;
+    var globHashIndice = 1;    
     var hashMap = {};
 
     function getChecksumCallbackFor(iModel, iModelGui){
@@ -57,11 +56,12 @@ function createResultsTable(iWorkspaces, iFiles){
           path:(Path.join(currentWS.path,currentFile.path))
         });
         var newFullPathGui = makeModelGui(newModel);
+        newFullPathGui.addClass('diff-fullpath');
         newFullPathGui.addClass('vt-working');
-
-        newModel.computeChecksum(getChecksumCallbackFor(newModel, newFullPathGui));
         currentCol.append(newFullPathGui);
         currentRow.append(currentCol);
+
+        newModel.computeChecksum(getChecksumCallbackFor(newModel, newFullPathGui));
       }
 
       resultsTable.append(currentRow);
@@ -78,6 +78,39 @@ function bindGui(){
 
     createResultsTable(workspaces, files);
     
+  });
+
+  $('#diff-windiff-btn').button().click(function(){
+    var selectedFullpathes = $('#diff-results-table').find('.diff-fullpath.selected');
+    if(selectedFullpathes.length < 2){
+      console.log('2 fullpathes have to be selected');
+      return;
+    }
+    if(selectedFullpathes.length > 2){
+      console.log('too many fullpathes selected');
+      return;
+    }
+
+    var fullpathGui1 = $(selectedFullpathes[0]);
+    if(! fullpathGui1 ) return;
+    
+    var fullpathGui2 = $(selectedFullpathes[1]);
+    if(! fullpathGui2 ) return;
+
+    var fullpathModel1 = vt.findModel({vid:fullpathGui1.attr('vid')});
+    var fullpathModel2 = vt.findModel({vid:fullpathGui2.attr('vid')});
+
+    var tck_task = require('../../shelltasks/tck_init_profile').get();
+    tck_task.lockId = '1';
+    vt.pushShellTask(tck_task);
+    
+    var windiff_task = new vt.ShellTask({
+      command: 'windiff '+fullpathModel1.path+' '+fullpathModel2.path
+    });
+    windiff_task.lockId = '1';
+
+    vt.pushShellTask(windiff_task);
+
   });
 }
 

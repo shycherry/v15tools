@@ -1,9 +1,9 @@
-var TCK_INIT_PROFILE_SCMV5_TASK = require('./tck_init_profile_scmv5');
+var TCK_INIT_PROFILE_TASK = require('./tck_init_profile');
 
 
 exports.get = function(iWSName){
 
-  var tck_init_task = TCK_INIT_PROFILE_SCMV5_TASK.get();
+  var tck_init_task = TCK_INIT_PROFILE_TASK.get();
   
   var adl_ds_ws_task = new vt.ShellTask({
     command : 'adl_ds_ws '+iWSName,
