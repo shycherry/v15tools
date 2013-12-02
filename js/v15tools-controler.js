@@ -236,8 +236,8 @@
       console.log(shell.vid+' locked');
     });
 
-    vt.on('shell_released', function(shell){
-      console.log(shell.vid+' released');
+    vt.on('shell_unlocked', function(shell){
+      console.log(shell.vid+' unlocked');
     });
     
   }

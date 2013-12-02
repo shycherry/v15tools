@@ -3,7 +3,7 @@ var Shell = require('./shell').Shell;
 var ShellTask = require('./shelltask').ShellTask;
 
 /*
-* events : shell_created, shell_locked, shell_released
+* events : shell_created, shell_locked, shell_unlocked
 */
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
@@ -22,10 +22,8 @@ ShellManager.prototype.getShells = function(){
 ShellManager.prototype.getShellFor = function(iShellTask){
   var self = this;
 
-  //TODO : named shell + lockId case ... how to handle if lockid is already in another shell ?
-
   //explicitly named shell
-  if(iShellTask.requiredShellVID){
+  if(iShellTask && iShellTask.requiredShellVID){
     for(var idx in this._shells){
       var shell = this._shells[idx];
       if(shell.vid == iShellTask.requiredShellVID){
@@ -35,14 +33,14 @@ ShellManager.prototype.getShellFor = function(iShellTask){
   }
 
   //shell by lockId
-  if(iShellTask.lockId){
-    for(var idx in this._shells){
-      var shell = this._shells[idx];
-      if(shell.getLockId() == iShellTask.lockId){
-        return shell;
-      }
-    }
-  }
+  // if(iShellTask.lockId){
+  //   for(var idx in this._shells){
+  //     var shell = this._shells[idx];
+  //     if(shell.getLockId() == iShellTask.lockId){
+  //       return shell;
+  //     }
+  //   }
+  // }
 
   //existing non-saturated shell
   for(var idx in this._shells){
@@ -58,8 +56,8 @@ ShellManager.prototype.getShellFor = function(iShellTask){
     newShell.on('locked', function(){
       self.emit('shell_locked', newShell);
     });
-    newShell.on('released', function(){
-      self.emit('shell_released', newShell);
+    newShell.on('unlocked', function(){
+      self.emit('shell_unlocked', newShell);
     });
     this._shells.push(newShell);
     this.emit('shell_created', newShell);
@@ -69,7 +67,7 @@ ShellManager.prototype.getShellFor = function(iShellTask){
   //existing non locked shell
   for(var idx in this._shells){
     var shell = this._shells[idx];
-    if(!shell.getLockId()){
+    if(!shell.isLocked()){
       return shell;
     }
   }

@@ -100,16 +100,13 @@ function bindGui(){
     var fullpathModel1 = vt.findModel({vid:fullpathGui1.attr('vid')});
     var fullpathModel2 = vt.findModel({vid:fullpathGui2.attr('vid')});
 
-    var tck_task = require('../../shelltasks/tck_init_profile').get();
-    tck_task.lockId = '1';
-    vt.pushShellTask(tck_task);
     
-    var windiff_task = new vt.ShellTask({
+    var shell = vt.getShell();    
+    shell.enqueue(require('../../shelltasks/tck_init_profile').get());
+    shell.enqueue(new vt.ShellTask({
       command: 'windiff '+fullpathModel1.path+' '+fullpathModel2.path
-    });
-    windiff_task.lockId = '1';
-
-    vt.pushShellTask(windiff_task);
+    }));
+    
 
   });
 }

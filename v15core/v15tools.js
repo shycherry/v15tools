@@ -14,7 +14,7 @@ util.inherits(V15Tools, EventEmitter);
 
 
 /*
-* events : shell_created, shell_locked, shell_released
+* events : shell_created, shell_locked, shell_unlocked
 */
 function _init(){
   EventEmitter.prototype.constructor.call(this);
@@ -26,8 +26,8 @@ function _init(){
   this._shellManager.on('shell_created', function(shell){
     self.emit('shell_created', shell);
   });
-  this._shellManager.on('shell_released', function(shell){
-    self.emit('shell_released', shell);
+  this._shellManager.on('shell_unlocked', function(shell){
+    self.emit('shell_unlocked', shell);
   });
   this._shellManager.on('shell_locked', function(shell){
     self.emit('shell_locked', shell);
@@ -60,6 +60,10 @@ V15Tools.prototype.BatchTask = BatchTask;
 V15Tools.prototype.pushShellTask = function (iShellTask){
   this._shellManager.enqueue(iShellTask);
 };
+
+V15Tools.prototype.getShell = function(iShellTask){
+  return this._shellManager.getShellFor(iShellTask);
+}
 
 V15Tools.prototype.getShells = function (){
   return this._shellManager.getShells();

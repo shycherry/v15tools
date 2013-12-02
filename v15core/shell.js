@@ -3,9 +3,10 @@ var async = require('async');
 var _StartTransactionMarker = 'echo V15TStart_';
 var _EndTransactionMarker = 'echo V15TEnd_';
 var _TransactionMarker = '_Trans_';
+
 /*
 * events: stdout_data, stderr_data, data, 
-* released, locked, 
+* locked, unlocked, 
 * drain, saturated,
 * shelltask_enqueued (shelltask), shelltask_consumed(shelltask),
 * working, idle
@@ -68,8 +69,18 @@ Shell.prototype.enqueue = function(iShellTask){
   }
 };
 
-Shell.prototype.getLockId = function(){
-  return this._lockId;
+Shell.prototype.isLocked = function(){
+  return (!!this._lockId);
+};
+
+Shell.prototype.lock = function(){
+  this._lockId = 1;
+  this.emit('locked');
+};
+
+Shell.prototype.unlock = function(){
+  delete this._lockId;
+  this.emit('unlocked');
 };
 
 Shell.prototype.isSaturated = function(){
@@ -110,7 +121,7 @@ Shell.prototype.doTask = function(iShellTask, iCallback){
         var oldLockId = self._lockId;
         delete self._lockId;
         if(oldLockId){
-          self.emit('released');
+          self.emit('unlocked');
         }
       }
       
