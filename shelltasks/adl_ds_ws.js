@@ -3,12 +3,9 @@ var TCK_INIT_PROFILE_TASK = require('./tck_init_profile');
 
 exports.get = function(iWSName){
 
-  var tck_init_task = TCK_INIT_PROFILE_TASK.get('scmv5');
-  
   var adl_ds_ws_task = new vt.ShellTask({
     command : 'adl_ds_ws '+iWSName,
-    completeCallback : function(err, data){
-      console.log(data);
+    completeCallback : function(err, data){      
       if(newBatchTask.userCallback){
         if(err){
           newBatchTask.userCallback(err);
@@ -23,6 +20,8 @@ exports.get = function(iWSName){
       }
     }
   });
+
+  var tck_init_task = TCK_INIT_PROFILE_TASK.get('scmv5');
 
   var newBatchTask = new vt.BatchTask();
 

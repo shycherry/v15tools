@@ -42,10 +42,10 @@ ShellManager.prototype.getShellFor = function(iShellTask){
   //   }
   // }
 
-  //existing non-saturated shell
+  //existing non-saturated, non-locked shell
   for(var idx in this._shells){
     var shell = this._shells[idx];
-    if(!shell.isSaturated()){
+    if(!shell.isSaturated() && !shell.isLocked()){
       return shell;
     }
   }

@@ -1,6 +1,5 @@
 var Path = require('path');
-var _selectedResults = [];
-
+var _lockedShell;
 
 function createResultsTable(iWorkspaces, iFiles){
 
@@ -100,17 +99,22 @@ function bindGui(){
     var fullpathModel1 = vt.findModel({vid:fullpathGui1.attr('vid')});
     var fullpathModel2 = vt.findModel({vid:fullpathGui2.attr('vid')});
 
+    if(!_lockedShell){
+      _lockedShell = vt.getShell();
+      _lockedShell.lock();
+      _lockedShell.enqueue(require('../../shelltasks/tck_init_profile').get());
+    }
     
-    var shell = vt.getShell();    
-    shell.enqueue(require('../../shelltasks/tck_init_profile').get());
-    shell.enqueue(new vt.ShellTask({
+    _lockedShell.enqueue(new vt.ShellTask({
       command: 'windiff '+fullpathModel1.path+' '+fullpathModel2.path
     }));
+
+    //TODO : unlock :)
     
 
   });
 }
 
-exports.init = function(){
+exports.init = function(){  
   bindGui();  
 }
