@@ -69,7 +69,7 @@ input{
 }
 
 #vt-logo{
-  display: inline-block;
+  display: none;
   vertical-align: top;
   width: 30px;
   height: 30px;

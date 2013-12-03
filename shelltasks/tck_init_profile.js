@@ -11,14 +11,15 @@ function getWithCGMToolsTaskIfp(iTCKLevel){
   var remoteCGMToolsPath = '\\\\techno\\home\\'+cgmToolsDirName;
   if(!Fs.existsSync(remoteCGMToolsPath)) return; //...not async, block execution
 
-  return new vt.ShellTask({
+  var newShellTask = new vt.ShellTask({
     command : 'ROBOCOPY '+remoteCGMToolsPath+' E:\\'+cgmToolsDirName+' /MIR /NP >nul & CALL ',
     completeCallback : function(err, data){
       if(newShellTask.userCallback){
         newShellTask.userCallback(err, data);
       }
     }
-  });
+  })
+  return newShellTask;
 
 }
 
@@ -38,7 +39,7 @@ exports.get = function(iTCKLevel){
   var tck_level = (iTCKLevel)?iTCKLevel : 'R217';
 
   //try to get cgmtools first (switched tools)
-  var newShellTask = getWithCGMToolsTaskIfp(tck_level);  
+  var newShellTask = null; //getWithCGMToolsTaskIfp(tck_level);  
   
   //else do the good old way...
   if(!newShellTask){

@@ -144,8 +144,7 @@
       if(event.which == 38 && (lastKeydown != 38)){ //up arrow key
         newShellInputText.autocomplete('search', '');
       }
-      lastKeydown = event.which;
-      return false;
+      lastKeydown = event.which;      
     });
 
     newShellEnqueueBtn.click(pushCommandCallback);
