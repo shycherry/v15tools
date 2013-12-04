@@ -155,30 +155,30 @@
   function makeMultiDroppableZone(iJQueryObject, iRestrictedToClass){
     var newGui = (iJQueryObject)?iJQueryObject : $('<div></div>');
     newGui.addClass('vt-multidroppablezone');
-    var _sharedItems = [];
+    var _models = [];
 
-    newGui.addSharedItem = function addSharedItem(model){
+    newGui.addModel = function addModel(model){
 
       if(iRestrictedToClass && !(model instanceof iRestrictedToClass)){
         return;
       }
 
-      if(_sharedItems.indexOf(model) == -1){
+      if(_models.indexOf(model) == -1){
         newGui.append(makeModelGui(model));
-        _sharedItems.push(model);
+        _models.push(model);
       }
     }
 
-    newGui.addSharedItems = function addSharedItems(models){
+    newGui.addModels = function addModels(models){
       for(var idx in models){
         var model = models[idx];
-        newGui.addSharedItem(model);        
+        newGui.addModel(model);        
       }
     }
 
-    newGui.removeSharedItem = function removeSharedItem(model){
-      if(_sharedItems.indexOf(model) != -1){
-        _sharedItems = _sharedItems.filter(function(current){
+    newGui.removeModel = function removeModel(model){
+      if(_models.indexOf(model) != -1){
+        _models = _models.filter(function(current){
           return current.vid != model.vid;
         });
         var modelGui = newGui.find('.vt-model[vid="'+model.vid+'"]');
@@ -188,19 +188,19 @@
       }
     }
 
-    newGui.removeSharedItems = function removeSharedItems(models){
+    newGui.removeModels = function removeModels(models){
       for(var idx in models){
         var model = models[idx];
-        newGui.removeSharedItem(model);
+        newGui.removeModel(model);
       }
     }
 
-    newGui.clearSharedItems = function clearSharedItems(){
-      newGui.removeSharedItems(_sharedItems);
+    newGui.clearModels = function clearModels(){
+      newGui.removeModels(_models);
     }
 
     newGui.getModels = function getModels(){
-      return _sharedItems.slice(0);
+      return _models.slice(0);
     }
 
     newGui.contextmenu({
@@ -208,7 +208,7 @@
         {
           title:'clear',
           action: function(){
-            newGui.clearSharedItems();
+            newGui.clearModels();
           }
         },
         {
@@ -223,7 +223,7 @@
               if(!vid) return;
 
               var currentModel = vt.findModel({'vid':vid});
-              newGui.removeSharedItem(currentModel);
+              newGui.removeModel(currentModel);
             }
           }
         }
@@ -243,7 +243,7 @@
 
         var selectedOthers = getOthersSelectedBrosModelsOf(draggedModelGui);
         if(selectedOthers.length){
-          newGui.addSharedItems(selectedOthers);
+          newGui.addModels(selectedOthers);
         }
 
         var vid = draggedModelGui.attr('vid');
@@ -252,7 +252,7 @@
         var model = vt.findModel({'vid': vid});
         if(!model) return;
 
-        newGui.addSharedItem(model);
+        newGui.addModel(model);
       }
     });
 

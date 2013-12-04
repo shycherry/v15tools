@@ -2,10 +2,10 @@ var _dropZone;
 
 function makeWSList(){
   if(_dropZone){
-    _dropZone.clearSharedItems();
+    _dropZone.clearModels();
     var models = vt.findModels(null, vt.Types.ItemPath);
     if(models){
-      _dropZone.addSharedItems(models);  
+      _dropZone.addModels(models);  
     }  
   }  
 }
@@ -25,7 +25,7 @@ function bindGui(){
           }
           var model = vt.createModel(amorceModel);
           if(model && _dropZone){
-            _dropZone.addSharedItem(model);
+            _dropZone.addModel(model);
           }
         }
       });
@@ -37,7 +37,7 @@ function bindGui(){
     if(wsName.length != 0){
       var model = vt.createModel({type:vt.Types.WS.name ,name:wsName});
       if(model && _dropZone){
-        _dropZone.addSharedItem(model);
+        _dropZone.addModel(model);
       }
     }
   });

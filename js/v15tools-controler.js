@@ -226,6 +226,7 @@
         for(var idx in iTools){
           var iTool = iTools[idx];
           $('#vt-tabs').append('<span class="v15tool" id="'+iTool.vid+'"><p>'+iTool.name+'</p></span>');
+          relayout();
         }
         
         $('.v15tool').click(function(){
@@ -262,8 +263,6 @@
   }
 
   $(document).ready(function() {
-    relayout();
-    
     $(window).resize(function(){
       relayout();
     });
@@ -271,8 +270,8 @@
     bindToolsGui();
     bindShareGui();
     bindShellsGui();
-
     vt.loadSavedModels();
+
   });
 
 })();
