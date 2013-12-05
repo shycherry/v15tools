@@ -59,10 +59,10 @@ function Shell(){
 
 Shell.prototype.enqueue = function(iShellTask){
   if(iShellTask){
-    if(iShellTask.lockId){
-      this._lockId = iShellTask.lockId;
-      this.emit('locked');
-    }
+    // if(iShellTask.lockId){
+    //   this._lockId = iShellTask.lockId;
+    //   this.emit('locked');
+    // }
     iShellTask.setStatus('enqueued');
     this.emit('shelltask_enqueued', iShellTask);
     this._queue.push(iShellTask, iShellTask.completeCallback);
@@ -117,13 +117,13 @@ Shell.prototype.doTask = function(iShellTask, iCallback){
       iShellTask.setStatus('executed');
       self.emit('shelltask_consumed', iShellTask);
       
-      if(iShellTask.releaseAtEnd){
-        var oldLockId = self._lockId;
-        delete self._lockId;
-        if(oldLockId){
-          self.emit('unlocked');
-        }
-      }
+      // if(iShellTask.releaseAtEnd){
+      //   var oldLockId = self._lockId;
+      //   delete self._lockId;
+      //   if(oldLockId){
+      //     self.emit('unlocked');
+      //   }
+      // }
       
       self.removeListener('stdout_data', stdoutCallback);
       self.removeListener('stderr_data', stderrCallback);

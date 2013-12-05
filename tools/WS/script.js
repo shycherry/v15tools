@@ -3,7 +3,9 @@ var _dropZone;
 function makeWSList(){
   if(_dropZone){
     _dropZone.clearModels();
-    var models = vt.findModels(null, vt.Types.ItemPath);
+    var models = vt.findModels(function(iModel){
+      return (iModel instanceof vt.Types.WS);
+    });
     if(models){
       _dropZone.addModels(models);  
     }  

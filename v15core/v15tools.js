@@ -123,44 +123,62 @@ V15Tools.prototype.loadSavedModels = function(iCallback) {
   });
 };
 
-V15Tools.prototype.findModelInArray = function(iModel, iArray){
-  for(var idxModel in iArray){
-    var model = iArray[idxModel];
-    for(var prop in iModel){
-      if(model.hasOwnProperty(prop) && model[prop] == iModel[prop]){
-        return model;
+V15Tools.prototype.findModelInArray = function(iFilter, iArray){
+
+  if(typeof iFilter === 'object'){
+
+  
+    for(var idxModel in iArray){
+      var model = iArray[idxModel];
+      for(var prop in iFilter){
+        if(model.hasOwnProperty(prop) && model[prop] == iFilter[prop]){
+          return model;
+        }
       }
+    }
+
+  }else if(typeof iFilter === 'function'){
+    for(var idxModel in iArray){
+      var model = iArray[idxModel];      
+      if(iFilter(model)){
+        return model;
+      }      
     }
   }
 };
 
-V15Tools.prototype.findModelsInArray = function(iModel, iArray, iFConstructor){
+V15Tools.prototype.findModelsInArray = function(iFilter, iArray){
   var results = [];  
-  for(var idxModel in iArray){
-    var model = iArray[idxModel];
-    if(!iModel){
-      if(!iFConstructor||(iFConstructor && model instanceof iFConstructor) ){
-        results.push(model);  
-      }      
-    }else{
-      for(var prop in iModel){
-        if(model.hasOwnProperty(prop) && model[prop] == iModel[prop]){
-          if(!iFConstructor||(iFConstructor && model instanceof iFConstructor) ){
-            results.push(model);
-          }
+  if(typeof iFilter === 'object'){
+
+    for(var idxModel in iArray){
+      var model = iArray[idxModel];    
+      for(var prop in iFilter){
+        if(model.hasOwnProperty(prop) && model[prop] == iFilter[prop]){          
+          results.push(model);          
         }
-      }
-    }    
+      }       
+    }
+
+  }else if(typeof iFilter === 'function'){
+    for(var idxModel in iArray){
+      var model = iArray[idxModel];
+      if(iFilter(model)){
+        results.push(model);          
+      }             
+    }
+
   }
+
   return results;
 };
 
-V15Tools.prototype.findModel = function(iModel, iFConstructor){
-  return this.findModelInArray(iModel, _models, iFConstructor);
+V15Tools.prototype.findModel = function(iFilter){
+  return this.findModelInArray(iFilter, _models);
 };
 
-V15Tools.prototype.findModels = function(iModel, iFConstructor){
-  return this.findModelsInArray(iModel, _models, iFConstructor);
+V15Tools.prototype.findModels = function(iFilter){
+  return this.findModelsInArray(iFilter, _models);
 };
 
 V15Tools.prototype.createModel = function(iAmorce){
