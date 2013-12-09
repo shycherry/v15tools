@@ -41,7 +41,7 @@ function V15Tools(){
 
 V15Tools.prototype.getConfig = function(){
   return this._config;
-}
+};
 
 V15Tools.prototype.setConfig = function (iConfig){
   if(!this._config)
@@ -63,13 +63,13 @@ V15Tools.prototype.pushShellTask = function (iShellTask){
 
 V15Tools.prototype.getShell = function(iShellTask){
   return this._shellManager.getShellFor(iShellTask);
-}
+};
 
 V15Tools.prototype.getShells = function (){
   return this._shellManager.getShells();
 };
 
-V15Tools.prototype.getWSPath = function(iWSName, iCallback){  
+V15Tools.prototype.getWSPath = function(iWSName, iCallback){
   var shellTask = ADL_DS_WS_Task.get(iWSName);
   shellTask.userCallback = iCallback;
   this.pushShellTask(shellTask);
@@ -115,7 +115,7 @@ V15Tools.prototype.loadSavedModels = function(iCallback) {
       var rawItem = JSON.parse(fs.readFileSync(models_dir+'/'+currentFile));
       var newItem = self.createModel(rawItem);
       if(newItem){
-        loadedModels.push(newItem);        
+        loadedModels.push(newItem);
       }
     }
     if(iCallback)
@@ -123,51 +123,46 @@ V15Tools.prototype.loadSavedModels = function(iCallback) {
   });
 };
 
-V15Tools.prototype.findModelInArray = function(iFilter, iArray){
-
-  if(typeof iFilter === 'object'){
-
-  
-    for(var idxModel in iArray){
-      var model = iArray[idxModel];
-      for(var prop in iFilter){
-        if(model.hasOwnProperty(prop) && model[prop] == iFilter[prop]){
-          return model;
-        }
+function getObjectFilter(iAmorce){
+  return function(iModel){
+    var isSame = true;
+    for(var prop in iAmorce){
+      if( (!iModel.hasOwnProperty(prop)) || (iModel[prop] != iAmorce[prop]) ){
+        isSame = false;
       }
     }
+    return isSame;
+  };
+}
 
-  }else if(typeof iFilter === 'function'){
-    for(var idxModel in iArray){
-      var model = iArray[idxModel];      
-      if(iFilter(model)){
-        return model;
-      }      
+V15Tools.prototype.findModelInArray = function(iFilter, iArray){
+
+  var filter = iFilter;
+  if(typeof filter !== 'function'){
+    filter = getObjectFilter(iFilter);
+  }
+
+  for(var idxModel in iArray){
+    var model = iArray[idxModel];
+    if(filter(model)){
+      return model;
     }
   }
 };
 
 V15Tools.prototype.findModelsInArray = function(iFilter, iArray){
-  var results = [];  
-  if(typeof iFilter === 'object'){
+  var results = [];
 
-    for(var idxModel in iArray){
-      var model = iArray[idxModel];    
-      for(var prop in iFilter){
-        if(model.hasOwnProperty(prop) && model[prop] == iFilter[prop]){          
-          results.push(model);          
-        }
-      }       
+  var filter = iFilter;
+  if(typeof filter !== 'function'){
+    filter = getObjectFilter(iFilter);
+  }
+
+  for(var idxModel in iArray){
+    var model = iArray[idxModel];
+    if(filter(model)){
+      results.push(model);
     }
-
-  }else if(typeof iFilter === 'function'){
-    for(var idxModel in iArray){
-      var model = iArray[idxModel];
-      if(iFilter(model)){
-        results.push(model);          
-      }             
-    }
-
   }
 
   return results;
@@ -189,15 +184,15 @@ V15Tools.prototype.createModel = function(iAmorce){
   return newModel;
 };
 
-V15Tools.prototype.forgetModel = function(iModel){  
+V15Tools.prototype.forgetModel = function(iModel){
   _models = _models.filter(function(current){
     return current.vid != iModel.vid;
-  });  
+  });
 };
 
 V15Tools.prototype.saveModel = function(iModel, iCallback){
   this._factory.write(iModel, iCallback);
-}
+};
 
 V15Tools.prototype.saveModels = function(iModels, iCallback){
   if(!iModels){
@@ -208,7 +203,7 @@ V15Tools.prototype.saveModels = function(iModels, iCallback){
   async.each(iModels, V15Tools.prototype.saveModel.bind(this), function(err){
     iCallback(err);
   });
-}
+};
 
 var _models = [];
 exports.V15Tools = new V15Tools();
