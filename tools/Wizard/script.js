@@ -58,7 +58,7 @@ function magicGetModelsFromText(iText){
 }
 
 function magicGetModelsFromText2(iText){
-  var regexPathWithExt = /.:[\w\/\\.]+\.[\w]+|[\w\/\\.]+\.[\w]+/gim;
+  var regexPathWithExt = /.:[\w\/\\.]+\.[\w]+|[\w\/\\.]+\.[\w]+[\w\/\\.]*[\\][\w\/\\]*|.:[\w\/\\.]*[\\][\w\/\\]*/gim;
   var models = [];
   
   var matchs;
@@ -183,7 +183,7 @@ function magicGetModelsFromPath(iPath){
       models.push(newModel);
     }    
   }else{
-    var path = Path.normalize(filePathTab.join('\\'));
+    var path = Path.normalize(workingPath);
     newModel = vt.createModel({
       type:vt.Types.FullPath.name,
       path:path,
