@@ -30,6 +30,10 @@ input{
   vertical-align: middle;
 }
 
+.ui-tooltip{
+  max-width: inherit;
+}
+
 @-webkit-keyframes working
 {
   from {-webkit-filter : opacity(0);}

@@ -26,9 +26,10 @@ exports.calc = function(){
 };
 
 exports.load = function(){
-  
+  exports.reload();
 }
 
 exports.reload = function(){
-  
+  exports.dir();
+  exports.ping();
 }
