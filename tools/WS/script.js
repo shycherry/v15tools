@@ -2,7 +2,7 @@ var _dropZone;
 
 function makeWSList(){
   if(_dropZone){
-    _dropZone.clearModels();
+    _dropZone.removeAllModels();
     var models = vt.findModels(function(iModel){
       return (iModel instanceof vt.Types.WS);
     });

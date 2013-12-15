@@ -195,8 +195,16 @@
       }
     }
 
-    newGui.clearModels = function clearModels(){
+    newGui.removeAllModels = function removeAllModels(){
       newGui.removeModels(_models);
+    }
+
+    newGui.unselectAll = function unselectAll(){
+      newGui.find('.vt-model.selected').removeClass('selected');
+    }
+
+    newGui.selectAll = function selectAll(){
+      newGui.find('.vt-model').addClass('selected');
     }
 
     newGui.getModels = function getModels(){
@@ -206,9 +214,15 @@
     newGui.contextmenu({
       menu:[
         {
-          title:'clear',
+          title:'select all',
           action: function(){
-            newGui.clearModels();
+            newGui.selectAll();
+          }
+        },
+        {
+          title:'unselect all',
+          action: function(){
+            newGui.unselectAll();
           }
         },
         {
@@ -226,7 +240,13 @@
               newGui.removeModel(currentModel);
             }
           }
-        }
+        },
+        {
+          title:'remove all',
+          action: function(){
+            newGui.removeAllModels();
+          }
+        }        
       ]
     });
 
