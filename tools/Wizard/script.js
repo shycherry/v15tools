@@ -1,13 +1,16 @@
 var Path = require('path');
-var _dropZone;
+var _dropZonesModels=[];
 
 function makeModelsList(iModels){
-  if(_dropZone){
-    _dropZone.removeAllModels();
-    if(iModels){
-      _dropZone.addModels(iModels);
+  for(var idx = 0; idx <= _dropZonesModels.length;  idx++){
+    var currentDropZone = _dropZonesModels[idx];
+    if(currentDropZone){
+      currentDropZone.removeAllModels();
+      if(iModels){
+        currentDropZone.addModels(iModels);
+      }
     }
-  }
+  }  
 }
 
 function magicGetModelsFromText(iText){
@@ -158,8 +161,11 @@ function bindGui(){
     var models = magicGetModelsFromText(total_input);
     makeModelsList(models);
   });
-  
-   _dropZone = makeMultiDroppableZone($('#wizz_models_list'));
+   
+   _dropZonesModels.push(makeMultiDroppableZone($('#wizz_fws_list'), vt.Types.FW));
+   _dropZonesModels.push(makeMultiDroppableZone($('#wizz_mods_list'), vt.Types.MOD));
+   _dropZonesModels.push(makeMultiDroppableZone($('#wizz_files_list'), vt.Types.FILE));
+   _dropZonesModels.push(makeMultiDroppableZone($('#wizz_fullpathes_list'), vt.Types.FullPath));
 }
 
 exports.load = function(){
