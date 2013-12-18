@@ -11,12 +11,13 @@ function makeModelsList(iModels){
 }
 
 function magicGetModelsFromText(iText){
-  var regexPathWithExt = /.:[\w\/\\.]+\.[\w]+|[\w\/\\.]+\.[\w]+[\w\/\\.]*[\\][\w\/\\.]*|.:[\w\/\\.]*[\\][\w\/\\.]*/gim;
+  var workingText = iText.replace('/', '\\');
+  var regexPathWithExt = /.:[\w\\.]+\.[\w]+|[\w\\.]+[\w\\.]*[\\][\w\\.]*|.:[\w\\.]*[\\][\w\\.]*/gim;
   var models = [];
   
   var matchs;
   do{    
-    matchs = regexPathWithExt.exec(iText);
+    matchs = regexPathWithExt.exec(workingText);
     if(matchs){
       var currentModels = magicGetModelsFromPath(matchs[0]);
       for(var idx in currentModels){
