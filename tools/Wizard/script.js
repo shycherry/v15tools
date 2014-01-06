@@ -14,7 +14,7 @@ function makeModelsList(iModels){
   }
 
   //show only dropzones with at least 1 item
-  for(var idx = 0; idx <= _dropZonesModels.length;  idx++){
+  for(var idx = 0; idx < _dropZonesModels.length;  idx++){
     var currentDropZone = _dropZonesModels[idx];
     if(currentDropZone.getModels().length >= 1){
       currentDropZone.show();
