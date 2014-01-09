@@ -3,6 +3,8 @@
   window.removeModelGui = global.removeModelGui = removeModelGui;
   window.makeMultiDroppableZone = global.makeMultiDroppableZone = makeMultiDroppableZone;
 
+  var nwGui = require('nw.gui');
+
   var _globGID = 0;
   var _changeListenersMap = {};
 
@@ -19,6 +21,22 @@
       return temp.html();
     };
   } 
+
+  function templateFullPathGui(iModel){
+    var gui = templateDefaultGui(iModel);
+    gui.addClass('vt-itempath vt-fullpath');
+    gui.contextmenu({
+      menu:[        
+        {
+          title:'open',
+          action: function(){
+            nwGui.Shell.openItem(iModel.path);
+          }
+        }        
+      ]
+    });
+    return gui;
+  }
 
   function templateFILEGui(iModel){
     var gui = templateDefaultGui(iModel);
@@ -59,6 +77,10 @@
       case 'WS':
         newModelGui = templateWSGui(iModel);
         break;        
+      case 'FullPath':
+        newModelGui = templateFullPathGui(iModel);
+        break;
+
       default:
         newModelGui = templateDefaultGui(iModel);
     }
