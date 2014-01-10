@@ -21,6 +21,7 @@ function Shell(){
   EventEmitter.prototype.constructor.call(this);
   var self = this;
   this.vid = 'Shell_'+globId;
+  this.name = this.vid;
   globId++;
   
   this._queue = new async.queue(Shell.prototype.doTask.bind(this), 1);
@@ -59,10 +60,6 @@ function Shell(){
 
 Shell.prototype.enqueue = function(iShellTask){
   if(iShellTask){
-    // if(iShellTask.lockId){
-    //   this._lockId = iShellTask.lockId;
-    //   this.emit('locked');
-    // }
     iShellTask.setStatus('enqueued');
     this.emit('shelltask_enqueued', iShellTask);
     this._queue.push(iShellTask, iShellTask.completeCallback);
@@ -116,15 +113,6 @@ Shell.prototype.doTask = function(iShellTask, iCallback){
       self.emit('idle');
       iShellTask.setStatus('executed');
       self.emit('shelltask_consumed', iShellTask);
-      
-      // if(iShellTask.releaseAtEnd){
-      //   var oldLockId = self._lockId;
-      //   delete self._lockId;
-      //   if(oldLockId){
-      //     self.emit('unlocked');
-      //   }
-      // }
-      
       self.removeListener('stdout_data', stdoutCallback);
       self.removeListener('stderr_data', stderrCallback);
       self.globTransactionId++;

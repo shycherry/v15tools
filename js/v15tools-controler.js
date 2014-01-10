@@ -9,7 +9,7 @@
 
   function templateShellTooltip(iShell){
     return function(){
-      var eData = encodeHTML(iShell.vid);
+      var eData = encodeHTML(iShell.name);
       return '<div class="v15shell-tooltip"> ShellName: '+eData+'</div>';
     };
   }  
