@@ -7,6 +7,7 @@
 
   var _globGID = 0;
   var _changeListenersMap = {};
+  var _contextMenuLockAvailable = true;
 
   function templateModelTooltip(iModel){
     return function(){      
@@ -26,6 +27,16 @@
     var gui = templateDefaultGui(iModel);
     gui.addClass('vt-itempath vt-fullpath');
     gui.contextmenu({
+      beforeOpen: function(event, ui){        
+        if(_contextMenuLockAvailable){
+          _contextMenuLockAvailable = false;
+          return true;
+        }
+        return false;
+      },
+      close: function(event){
+        _contextMenuLockAvailable = true;
+      },      
       menu:[        
         {
           title:'open',
@@ -233,7 +244,17 @@
       return _models.slice(0);
     }
 
-    newGui.contextmenu({
+    newGui.contextmenu({      
+      beforeOpen: function(event, ui){   
+        if(_contextMenuLockAvailable){
+          _contextMenuLockAvailable = false;
+          return true;
+        }
+        return false;
+      },
+      close: function(event){
+        _contextMenuLockAvailable = true;
+      },      
       menu:[
         {
           title:'select all',
