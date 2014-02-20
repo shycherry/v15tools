@@ -89,8 +89,8 @@ function createResultsTable(iWorkspaces, iFiles){
 }
 
 function bindGui(){
-  _wsZone = makeMultiDroppableZone($('#diff-ws-zone'), vt.Types.WS);
-  _filesZone = makeMultiDroppableZone($('#diff-files-zone'), vt.Types.FILE); 
+  var _wsZone = makeMultiDroppableZone($('#diff-ws-zone'), vt.Types.WS);
+  var _filesZone = makeMultiDroppableZone($('#diff-files-zone'), vt.Types.FILE); 
   
   $('#diff-diff-btn').button().click(function(){
     var workspaces = _wsZone.getModels();

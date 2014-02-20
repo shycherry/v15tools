@@ -1,0 +1,33 @@
+var TCK_INIT_PROFILE_TASK = require('./tck_init_profile');
+
+
+exports.get = function(iWSName){
+
+  var adl_ch_ws_task = new vt.ShellTask({
+    command : 'adl_ch_ws '+iWSName,
+    completeCallback : function(err, data){      
+      if(newBatchTask.userCallback){
+        if(err){
+          newBatchTask.userCallback(err);
+        }else{
+          var winImagePathMatch = /WINDOWS.+(\\\\.+)/.exec(data);
+          if(!winImagePathMatch){
+            newBatchTask.userCallback('no match', null);
+            return;
+          }
+          newBatchTask.userCallback(null, winImagePathMatch[1]);
+        }
+      }
+    }
+  });
+
+  var tck_init_task = TCK_INIT_PROFILE_TASK.get('scm');
+
+  var newBatchTask = new vt.BatchTask();
+
+  newBatchTask.pushTask(tck_init_task);
+  newBatchTask.pushTask(adl_ch_ws_task);
+
+  return newBatchTask;
+};
+  
