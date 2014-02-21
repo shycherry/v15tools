@@ -6,17 +6,8 @@ exports.get = function(iWSName){
   var adl_ch_ws_task = new vt.ShellTask({
     command : 'adl_ch_ws '+iWSName,
     completeCallback : function(err, data){      
-      if(newBatchTask.userCallback){
-        if(err){
-          newBatchTask.userCallback(err);
-        }else{
-          var winImagePathMatch = /WINDOWS.+(\\\\.+)/.exec(data);
-          if(!winImagePathMatch){
-            newBatchTask.userCallback('no match', null);
-            return;
-          }
-          newBatchTask.userCallback(null, winImagePathMatch[1]);
-        }
+      if(newBatchTask.userCallback){        
+        newBatchTask.userCallback(err, data);
       }
     }
   });
