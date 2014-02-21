@@ -8,6 +8,7 @@
   var _globGID = 0;
   var _changeListenersMap = {};
   var _contextMenuLockAvailable = true;
+  var _tooltipLockAvailable = true;
 
   function templateModelTooltip(iModel){
     return function(){      
@@ -125,12 +126,29 @@
       distance:10
     });
 
-    newModelGui.tooltip({
-      content:templateModelTooltip(iModel),
-      items:'.vt-model',
-      show:1000,
-      hide:100
-    });
+    newModelGui.bind( "mouseleave", function( event ) {
+        if(_tooltipLockAvailable){
+          _tooltipLockAvailable = false;
+          event.stopImmediatePropagation();        
+          var fixed = setTimeout(function(){
+            newModelGui.tooltip('close');
+            _tooltipLockAvailable = true;
+          }, 500);
+          
+          $(".ui-tooltip").hover(
+              function(){clearTimeout (fixed);},
+              function(){
+                newModelGui.tooltip("close");
+                _tooltipLockAvailable = true;
+              }
+          );
+        }
+        
+      }).tooltip({
+        content:templateModelTooltip(iModel),
+        items:'.vt-model',
+        show:{effect:'fade', delay:500},        
+      });
 
     newModelGui.click(function(){
       //todo : restreindre ce comportement aux zones de selection

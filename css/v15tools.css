@@ -31,7 +31,10 @@ input{
 }
 
 .ui-tooltip{
-  max-width: inherit;
+  max-width: inherit;  
+}
+.ui-tooltip > * {
+  -webkit-user-select: auto;
 }
 
 @-webkit-keyframes working
