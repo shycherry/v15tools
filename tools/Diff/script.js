@@ -127,7 +127,7 @@ function bindGui(){
     }
     
     _lockedShell.enqueue(new vt.ShellTask({
-      command: 'windiff '+fullpathModel1.path+' '+fullpathModel2.path
+      command: '%ADL_MERGER% '+fullpathModel1.path+' '+fullpathModel2.path
     }));
 
     //TODO : unlock :)
