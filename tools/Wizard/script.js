@@ -25,7 +25,7 @@ function makeModelsList(iModels){
 }
 
 function magicGetModelsFromText(iText){
-  var workingText = iText.replace('/', '\\');
+  var workingText = iText.replace(/\//g, '\\');
   var regexPathWithExt = /.:[\w\\.]+\.[\w]+|[\w\\.]+[\w\\.]*[\\][\w\\.]*|.:[\w\\.]*[\\][\w\\.]*/gim;
   var models = [];
   
@@ -77,7 +77,7 @@ function findIdCardIndex(iTab){
 }
 
 function magicGetModelsFromPath(iPath){
-  var workingPath = iPath.replace('/', '\\');
+  var workingPath = iPath.replace(/\//g, '\\');
   var tabPath = workingPath.split('\\');
   
   var wsIndex = -1;
