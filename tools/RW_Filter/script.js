@@ -2,6 +2,10 @@ function isODTKo(iLine){
 	return (/ : KO, rc =.*/.test(iLine)) || (/.*:.*failed code.*/.test(iLine));
 }
 
+function getMKODTCompliantLine(iLine){
+  return iLine.replace(/ : KO,.*/g, '').replace(/## /g, '').replace(/   /g, ' TestCases ');
+}
+
 exports.load = function(){
   $('#rwf_filter_btn').button().click(function(){
   	var lines=[];
@@ -12,7 +16,8 @@ exports.load = function(){
 
   	for(var i in lines){
   		if(isODTKo(lines[i])){
-  			total_output+=lines[i]+'\n';
+        var lineToAdd = getMKODTCompliantLine(lines[i]);
+  			total_output+=lineToAdd+'\n';
   		}
   	}
 
