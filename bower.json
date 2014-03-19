@@ -1,0 +1,19 @@
+{
+  "name": "v15tools",
+  "version": "0.0.1",
+  "homepage": "https://github.com/shycherry/v15tools",
+  "authors": [
+    "shycherry <vinpowful@free.fr>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "latest"
+  }
+}
