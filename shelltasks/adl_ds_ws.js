@@ -10,7 +10,7 @@ exports.get = function(iWSName){
         if(err){
           newBatchTask.userCallback(err);
         }else{
-          var winImagePathMatch = /WINDOWS.+(\\\\.+)/.exec(data);
+          var winImagePathMatch = /WINDOWS.+(\\\\.+)/i.exec(data);
           if(!winImagePathMatch){
             newBatchTask.userCallback('no match', null);
             return;
