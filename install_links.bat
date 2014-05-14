@@ -1,0 +1,1 @@
+mklink /D .\bower_components\shy-elt-colorpicker ..\..\shy-elt-colorpicker
