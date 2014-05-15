@@ -10,6 +10,7 @@
   "dependencies": {
     "async": ">=0.2.9",
     "uuid":"*",
-    "collections": ">=0.2.1"
+    "collections": ">=0.2.1",
+    "underscore":"*"
   }
 }
