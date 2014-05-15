@@ -15,6 +15,7 @@
   ],
   "dependencies": {
     "polymer": "latest",
-    "shy-elt-colorpicker": "shycherry/shy-elt-colorpicker#latest"
+    "shy-elt-colorpicker": "shycherry/shy-elt-colorpicker#latest",
+    "vt-core-elements": "shycherry/vt-core-elements#latest"
   }
 }

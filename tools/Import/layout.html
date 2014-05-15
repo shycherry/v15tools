@@ -1,15 +1,9 @@
 <html>  
   <link rel="stylesheet" type="text/css" href="./tools/Diff/style.css">  
   <link rel="import" href="./bower_components/shy-elt-colorpicker/shy-elt-colorpicker.html">
-  <link rel="import" href="./bower_components/vt-shelltask/vt-shelltask.html">
-  <link rel="import" href="./bower_components/vt-factory/vt-factory.html">
-  <p>WS:</p>
-  <div id="diff-ws-zone"></div>
-  <p>Files:</p>
-  <div id="diff-files-zone"></div>
-  <button id="diff-diff-btn">Calculate HashTable</button>
-  <table id="diff-results-table"></table>
-  <button id="diff-windiff-btn">Windiff</button>
+  <link rel="import" href="./bower_components/vt-core-elements/vt-shelltask.html">
+  <link rel="import" href="./bower_components/vt-core-elements/vt-factory.html">
+  
   <shy-elt-colorpicker unresolved></shy-elt-colorpicker>
   <vt-factory></vt-factory>
   <vt-shelltask unresolved command="dir"></vt-shelltask>
