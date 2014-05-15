@@ -1,10 +1,12 @@
 var _ = require('underscore');
 
+var EXECNAME = "_Execname";
+
 function getAttributeNames(iLine){
   var result = [];
   var currentMatch = null;
-  var attributeNamesRegex = /[^"]*-([^" ]+)[^"]/g;
-  result.push('_ExecName');
+  var attributeNamesRegex = / -(\D\w+)/g;
+  result.push(EXECNAME);
 
   do{
     currentMatch = attributeNamesRegex.exec(iLine);
@@ -23,24 +25,41 @@ function isAttributeSet(iLine, iAttributeName){
     return true;
 }
 
-function getAttributeValue(iLine, iAttributeName){
-  var attributeRegex = RegExp('-'+iAttributeName+' ([^-]+)'); // more restrictive
-  attributeRegex.global = true;
+function formatValue(iRawValue){
+  return iRawValue.trim().replace(/^"/, '').replace(/"$/, '');
+}
 
+function getAttributeValue(iLine, iAttributeName){
+  var endlineAttributeRegex = RegExp('-'+iAttributeName+' (.+)');
+  var stddAttributeRegex = RegExp('-'+iAttributeName+' (.+?) ');
+  var execnameAttributeRegex = RegExp('(^[^# ]+) ');
+
+  var regex = null;
   var match = null;
 
   //execname case
-  if(iAttributeName === '_ExecName')
+  if(iAttributeName === EXECNAME)
   {
-    attributeRegex = /(^[^# ]+) /g;    
-    match = attributeRegex.exec(iLine);
+    regex = execnameAttributeRegex;
+    
+    match = regex.exec(iLine);
     if(match && match[1]){
-      return match[1].replace(/"/g, '');
+      return formatValue(match[1]);
     }
+
   }else{
-    match = attributeRegex.exec(iLine);
+    regex = stddAttributeRegex;
+
+    match = regex.exec(iLine);
     if(match && match[1]){
-      return match[1].replace(/"/g, '');
+      return formatValue(match[1]);
+    }
+
+    regex = endlineAttributeRegex;
+
+    match = regex.exec(iLine);
+    if(match && match[1]){
+      return formatValue(match[1]);
     }
   }
   
