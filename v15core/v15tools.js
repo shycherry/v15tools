@@ -12,6 +12,8 @@ var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 util.inherits(V15Tools, EventEmitter);
 
+var Gui = global.window.nwDispatcher.requireNwGui();
+
 
 /*
 * events : shell_created, shell_locked, shell_unlocked
@@ -37,6 +39,8 @@ function _init(){
 function V15Tools(){
   var config = require('../config.cfg').config;
   this.setConfig(config);
+
+  Gui.Window.get().title += " for "+process.env.USERNAME;
 }
 
 V15Tools.prototype.getConfig = function(){

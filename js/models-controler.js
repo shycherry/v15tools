@@ -59,6 +59,26 @@
   function templateWSGui(iModel){
     var gui = templateDefaultGui(iModel);
     gui.addClass('vt-itempath vt-ws');
+    gui.contextmenu({
+      beforeOpen: function(event, ui){        
+        if(_contextMenuLockAvailable){
+          _contextMenuLockAvailable = false;
+          return true;
+        }
+        return false;
+      },
+      close: function(event){
+        _contextMenuLockAvailable = true;
+      },      
+      menu:[        
+        {
+          title:'save',
+          action: function(){
+            vt.saveModel(iModel, function(){console.log(iModel.name+" saved ! ");});
+          }
+        }        
+      ]
+    });
     return gui;
   }
   
