@@ -5,7 +5,7 @@ var EXECNAME = "_Execname";
 function getAttributeNames(iLine){
   var result = [];
   var currentMatch = null;
-  var attributeNamesRegex = / -(\D\w+)/g;
+  var attributeNamesRegex = / -(\D\w*)/g;
   result.push(EXECNAME);
 
   do{
@@ -26,12 +26,12 @@ function isAttributeSet(iLine, iAttributeName){
 }
 
 function formatValue(iRawValue){
-  return iRawValue.trim().replace(/^"/, '').replace(/"$/, '');
+  return iRawValue.trim().replace(/"/g, '').replace(/,/g, ' ');
 }
 
 function getAttributeValue(iLine, iAttributeName){
-  var endlineAttributeRegex = RegExp('-'+iAttributeName+' (.+)');
-  var stddAttributeRegex = RegExp('-'+iAttributeName+' (.+?) ');
+  var endlineAttributeRegex = RegExp('-'+iAttributeName+' (.*)$');
+  var stddAttributeRegex = RegExp('-'+iAttributeName+' (".*?")(?= -)+');
   var execnameAttributeRegex = RegExp('(^[^# ]+) ');
 
   var regex = null;
@@ -54,6 +54,14 @@ function getAttributeValue(iLine, iAttributeName){
     if(match && match[1]){
       return formatValue(match[1]);
     }
+    var followingAttribute = '';
+    var splitOnAttribute = iLine.split('-'+iAttributeName+' ');
+    if(splitOnAttribute && splitOnAttribute.length == 2)
+      followingAttribute = splitOnAttribute[1].trim();
+
+    var nextAttributes = getAttributeNames(followingAttribute);
+    if(nextAttributes && nextAttributes.length-1 >= 1) // -1 cause of EXECNAME
+      return null;
 
     regex = endlineAttributeRegex;
 
@@ -81,6 +89,8 @@ exports.load = function(){
     var total_output='';
     var total_input = $('#obc_input').val();
 
+    total_input = total_input.replace(/ +/g, ' ');
+
     lines = total_input.split('\n');
 
     var colNames=getAllColumnsNames(lines);
@@ -96,6 +106,11 @@ exports.load = function(){
     //next rows
     for(var i = 0; i < lines.length; i++){      
       var currentLine = lines[i];
+
+      //skip #
+      if(currentLine && currentLine[0] === '#')
+        continue;
+
       var lineToAdd = '';
 
       for(var j = 0;  j < colNames.length; j++){
@@ -105,7 +120,7 @@ exports.load = function(){
          lineToAdd+=value;
         }else{
           if(isAttributeSet(currentLine, currentAttributeName))
-            lineToAdd+='--set-no-value--'          
+            lineToAdd+='--set-without-value--'          
         }
         if(j < (colNames.length-1))
           lineToAdd+=',';
