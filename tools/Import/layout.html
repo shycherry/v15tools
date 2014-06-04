@@ -14,30 +14,38 @@
       width: 500px;
       height: 500px;
     }
+    .red {
+      background-color: red;      
+    }
+    .blue {
+      background-color: blue;      
+    }
+    .yellow {
+      background-color: yellow;      
+    }
   </style>
   <div id="test">
     <shy-elt-freewall>
-      <vt-shell unresolved>
+      <vt-shell>
         <vt-shelltask command="ls"></vt-shelltask>
       </vt-shell>
-      <vt-shell unresolved>
+      <!-- <vt-shell>
         <vt-shelltask command="dir"></vt-shelltask>
       </vt-shell>
-      <vt-shell unresolved>
+      <vt-shell>
         <vt-shelltask command="dir"></vt-shelltask>
-      </vt-shell>
-      <vt-shell unresolved>
-        <vt-shelltask command="dir"></vt-shelltask>
-      </vt-shell>
-      <vt-shell unresolved>
-        <vt-shelltask command="dir"></vt-shelltask>
-      </vt-shell>
-      <vt-shell unresolved>
-        <vt-shelltask command="dir"></vt-shelltask>
-      </vt-shell>
-      <vt-shell unresolved>
-        <vt-shelltask command="dir"></vt-shelltask>
-      </vt-shell>
+      </vt-shell> -->
+      <div>
+      <shy-elt-freewall>
+        <vt-shell>
+          <vt-shelltask command="dir"></vt-shelltask>
+        </vt-shell>
+        <vt-shell>
+          <vt-shelltask command="dir"></vt-shelltask>
+        </vt-shell>
+          <shy-elt-colorpicker unresolved></shy-elt-colorpicker>
+      </shy-elt-freewall>
+      </div>
     </shy-elt-freewall>
   </div>
   
