@@ -6,6 +6,7 @@
   var fs = require('fs');
   var _tools = [];
   var _currentTool;
+  var gui = require('nw.gui');
 
   function templateShellTooltip(iShell){
     return function(){
@@ -179,6 +180,7 @@
 
   function relayout(){
     $('#vt-central').height($(window).height() - ($('#vt-status').height() + $('#vt-tabs').height()));
+    $('#vt-central').width($(window).width());
   }
 
   function encodeHTML(iText){
@@ -197,37 +199,37 @@
     }
   }
 
-  function switchTool(iOldTool, iNewTool, iCallback){
+  function openTool(iTool, iCallback){
     var hiddenZone = $('#vt-hidden');
     var mainZone = $('#vt-main');
 
-    var newToolDOM = null;
-
-    var newToolHiddenDOM = hiddenZone.find('#'+iNewTool.vid)[0];
-    if(newToolHiddenDOM){
-      newToolDOM = newToolHiddenDOM;
-    }
-
-    if(!newToolDOM){
-      newToolDOM = $('<div id='+iNewTool.vid+'></div>');
-      newToolDOM.load(iNewTool.pathToDir+'/layout.html', function(){
-        iNewTool.cachedDOM = $('#vt-main').contents();
-        _currentTool = iNewTool;
-        require(iNewTool.pathToDir+'/script.js').load();
+    var newToolHiddenDOM = hiddenZone.find('#'+iTool.vid)[0];
+    if(newToolHiddenDOM){      
+      newToolHiddenDOM = $(newToolHiddenDOM).detach();
+      mainZone.append(newToolHiddenDOM);
+      require(iTool.pathToDir+'/script.js').reload();
+      iCallback(null, 'reattached');
+    }else{
+      var newToolDOM = $('<div id='+iTool.vid+'></div>');
+      mainZone.append(newToolDOM);
+      newToolDOM.load(iTool.pathToDir+'/layout.html', function(){
+        iTool.cachedDOM = $('#vt-main').contents();        
+        require(iTool.pathToDir+'/script.js').load();
         iCallback(null, 'loaded');
       });
     }
+  }
 
-    if(iOldTool){
-      var oldToolDOM = mainZone.find('#'+iOldTool.vid)[0];
-      if(oldToolDOM){
-        hiddenZone.append(oldToolDOM);
-      }
-    }
+  function closeTool(iTool, iCallback){
+    var hiddenZone = $('#vt-hidden');
+    var mainZone = $('#vt-main');
 
-    if(newToolDOM){
-      mainZone.append(newToolDOM);
+    var toolToCloseDOM = mainZone.find('#'+iTool.vid)[0];
+    if(toolToCloseDOM){
+      toolToCloseDOM = $(toolToCloseDOM).detach();
+      hiddenZone.append(toolToCloseDOM);      
     }
+    iCallback(null, 'closed');
   }
 
   function switchTool_old(iOldTool, iNewTool, iCallback){
@@ -262,13 +264,22 @@
           relayout();
         }
         
-        $('.v15tool').click(function(){
-          $('.v15tool').removeClass('active');
-          $(this).addClass('active');
+        $('.v15tool').click(function(){          
           var tool = vt.findModelInArray({vid:$(this).attr('id')}, _tools);
-          switchTool(_currentTool, tool, function(err, data){
-            console.log(tool.name+' '+data);
-          });
+          $self = $(this);
+          if (tool.isOpened){
+            closeTool(tool, function(err, data){
+              $self.removeClass('active');
+              tool.isOpened = false;
+              console.log(tool.name+' '+data);
+            });
+          }else{
+            openTool(tool, function(err, data){
+              $self.addClass('active');
+              tool.isOpened = true;
+              console.log(tool.name+' '+data);
+            });  
+          }
         });
       }
       });
@@ -299,7 +310,13 @@
     $(window).resize(function(){
       relayout();
     });
-
+    $('#vt-logo').click(function(){
+      var Window = gui.Window.get();
+      if(!Window.isDevToolsOpen())
+        Window.showDevTools();
+      else
+        Window.closeDevTools();
+    });
     bindToolsGui();
     bindShareGui();
     bindShellsGui();

@@ -76,7 +76,7 @@ input{
 }
 
 #vt-logo{
-  display: none;
+  display: inline-block;
   vertical-align: top;
   width: 30px;
   height: 30px;
@@ -99,8 +99,7 @@ input{
   display: inline-block;
   vertical-align: top;
   height: 100%;
-  width: 100%;  
-  overflow: auto;
+  width: 100%;
 }
 
 /*#vt-share{

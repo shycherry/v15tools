@@ -143,7 +143,8 @@
         
       },
       containment: 'window',
-      distance:10
+      distance:10,
+      appendTo:'#vt-central'
     });
 
     newModelGui.bind( "mouseleave", function( event ) {
