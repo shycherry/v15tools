@@ -90,7 +90,8 @@ input{
   overflow: auto;
 }
 
-#vt-central{  
+#vt-hidden{
+  display: none;
 }
 
 #vt-main{
@@ -98,16 +99,16 @@ input{
   display: inline-block;
   vertical-align: top;
   height: 100%;
-  width: 80%;  
+  width: 100%;  
   overflow: auto;
 }
 
-#vt-share{
+/*#vt-share{
   height: 100%;
   width: 20%;
   background-color: rgba(64,64,64,0.5);
 }
-
+*/
 #vt-status{  
   background-color: rgba(128,128,128,0.5);
   height: 30px;

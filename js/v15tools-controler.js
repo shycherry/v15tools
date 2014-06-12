@@ -198,6 +198,39 @@
   }
 
   function switchTool(iOldTool, iNewTool, iCallback){
+    var hiddenZone = $('#vt-hidden');
+    var mainZone = $('#vt-main');
+
+    var newToolDOM = null;
+
+    var newToolHiddenDOM = hiddenZone.find('#'+iNewTool.vid)[0];
+    if(newToolHiddenDOM){
+      newToolDOM = newToolHiddenDOM;
+    }
+
+    if(!newToolDOM){
+      newToolDOM = $('<div id='+iNewTool.vid+'></div>');
+      newToolDOM.load(iNewTool.pathToDir+'/layout.html', function(){
+        iNewTool.cachedDOM = $('#vt-main').contents();
+        _currentTool = iNewTool;
+        require(iNewTool.pathToDir+'/script.js').load();
+        iCallback(null, 'loaded');
+      });
+    }
+
+    if(iOldTool){
+      var oldToolDOM = mainZone.find('#'+iOldTool.vid)[0];
+      if(oldToolDOM){
+        hiddenZone.append(oldToolDOM);
+      }
+    }
+
+    if(newToolDOM){
+      mainZone.append(newToolDOM);
+    }
+  }
+
+  function switchTool_old(iOldTool, iNewTool, iCallback){
     
     var oldToolDOM = $('#vt-main').contents();
     if(iOldTool && oldToolDOM){
