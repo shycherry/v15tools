@@ -37,13 +37,37 @@ function _init(){
   });
 }
 
-function V15Tools(){  
-  var userV15ToolsPath = path.resolve(process.env.LOCALAPPDATA+'/v15tools');
-  var config = require('../config.cfg').config;
-  this.setConfig(config);
-
-  Gui.Window.get().title = process.env.USERNAME+Gui.Window.get().title;
+function V15Tools(){
+  this.loadConfig();
+  Gui.Window.get().title = this.getConfig().username+Gui.Window.get().title;
 }
+
+V15Tools.prototype.loadConfig = function(){
+  //set user path at runtime
+  var userV15ToolsPath = path.resolve(process.env.LOCALAPPDATA+'/v15tools');
+  var username = process.env.USERNAME;
+  this.setConfig({
+    'userV15ToolsPath' : userV15ToolsPath,
+    'username' : username
+  });
+
+  //load global config first
+  var globalConfig = require('../config.cfg').config;
+  this.setConfig(globalConfig);
+
+  //then load user config (may erase global config entries)
+  var userConfigPath = path.resolve(userV15ToolsPath+'/config.cfg');
+  var userConfig  = null;
+  if(fs.existsSync(userConfigPath)){
+    userConfig = require(userConfigPath).config;
+  }
+  if(userConfig){
+    this.setConfig(userConfig);
+  }
+  
+  _init.call(this);
+};
+
 
 V15Tools.prototype.getConfig = function(){
   return this._config;
@@ -56,7 +80,7 @@ V15Tools.prototype.setConfig = function (iConfig){
   for(var idx in iConfig){
     this._config[idx] = iConfig[idx];
   }
-  _init.call(this);
+
 };
 
 V15Tools.prototype.Types = Types;
