@@ -213,7 +213,6 @@
       var newToolDOM = $('<div id='+iTool.vid+'></div>');
       mainZone.append(newToolDOM);
       newToolDOM.load(iTool.pathToDir+'/layout.html', function(){
-        iTool.cachedDOM = $('#vt-main').contents();        
         require(iTool.pathToDir+'/script.js').load();
         iCallback(null, 'loaded');
       });
