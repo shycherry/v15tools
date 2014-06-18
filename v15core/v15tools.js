@@ -40,7 +40,7 @@ function V15Tools(){
   var config = require('../config.cfg').config;
   this.setConfig(config);
 
-  Gui.Window.get().title += " for "+process.env.USERNAME;
+  Gui.Window.get().title = process.env.USERNAME+Gui.Window.get().title;
 }
 
 V15Tools.prototype.getConfig = function(){
