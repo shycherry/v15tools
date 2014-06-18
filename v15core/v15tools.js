@@ -1,3 +1,4 @@
+var path = require('path');
 var fs = require('fs');
 var async = require('async');
 var ShellManager = require('./shellmanager').ShellManager;
@@ -36,7 +37,8 @@ function _init(){
   });
 }
 
-function V15Tools(){
+function V15Tools(){  
+  var userV15ToolsPath = path.resolve(process.env.LOCALAPPDATA+'/v15tools');
   var config = require('../config.cfg').config;
   this.setConfig(config);
 

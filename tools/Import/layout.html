@@ -21,33 +21,33 @@
       background-color: yellow;      
     }
   </style>
-  <div id="test">
-    <shy-elt-freewall transitionDuration="250">
-      <!-- <div class="red"></div>
-      <div class="blue"></div>
-      <div class="yellow"></div> -->
+  
+  <shy-elt-freewall id="test" transitionDuration="250">
+    <!-- <div class="red"></div>
+    <div class="blue"></div>
+    <div class="yellow"></div> -->
+    <vt-shell>
+      <vt-shelltask command="ls"></vt-shelltask>
+    </vt-shell>
+    
+    <!-- <div> -->
+    
+    <!-- <shy-elt-freewall transitionDuration="1s"> -->
+      <shy-elt-colorpicker></shy-elt-colorpicker>
       <vt-shell>
-        <vt-shelltask command="ls"></vt-shelltask>
+        <vt-shelltask command="dir"></vt-shelltask>
       </vt-shell>
-      
-      <!-- <div> -->
-      
-      <!-- <shy-elt-freewall transitionDuration="1s"> -->
-        <shy-elt-colorpicker></shy-elt-colorpicker>
-        <vt-shell>
-          <vt-shelltask command="dir"></vt-shelltask>
-        </vt-shell>
-        <vt-shell>
-          <vt-shelltask command="dir"></vt-shelltask>
-        </vt-shell>        
-        <vt-shell>
-          <vt-shelltask command="dir"></vt-shelltask>
-        </vt-shell>        
-      <!-- </shy-elt-freewall> -->
-      
-      <!-- </div> -->
+      <vt-shell>
+        <vt-shelltask command="dir"></vt-shelltask>
+      </vt-shell>        
+      <vt-shell>
+        <vt-shelltask command="dir"></vt-shelltask>
+      </vt-shell>        
+    <!-- </shy-elt-freewall> -->
+    
+    <!-- </div> -->
 
-    </shy-elt-freewall>
-  </div>
+  </shy-elt-freewall>
+  
   
 </html>
