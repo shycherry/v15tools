@@ -37,6 +37,24 @@ function _init(){
   });
 }
 
+function _regexFilterObjectParams(iObj, iRegex){
+  var result = {};
+  for(i in iObj){
+    if(iRegex.test(i)){
+      result[i] = iObj[i];
+    }
+  }
+  return result;
+}
+
+function _objToArray(iObj){
+  var result = []
+  for(i in iObj){
+    result.push(iObj[i]);
+  }
+  return result;
+}
+
 function V15Tools(){
   this.loadConfig();
   Gui.Window.get().title = this.getConfig().username+Gui.Window.get().title;
@@ -106,15 +124,10 @@ V15Tools.prototype.getWSPath = function(iWSName, iCallback){
 };
 
 V15Tools.prototype.loadTools = function(iCallback){  
-  var tools_dirs = [];
-  var main_tools_dir = this._config['tools_dir'];
-  var user_tools_dir = this._config['user_tools_dir'];
-  if(main_tools_dir)
-    tools_dirs.push(main_tools_dir);
-  if(user_tools_dir)
-    tools_dirs.push(user_tools_dir);
+  var config_tools_dirs = _regexFilterObjectParams(this._config, /.*tools_dir$/);
+  var array_tools_dir = _objToArray(config_tools_dirs);
   
-  async.mapSeries(tools_dirs, V15Tools.prototype.loadToolDir.bind(this), function(err, toolsLists){
+  async.mapSeries(array_tools_dir, V15Tools.prototype.loadToolDir.bind(this), function(err, toolsLists){
     if(err){
       if(iCallback) iCallback(err);
     }else{
