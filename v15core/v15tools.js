@@ -114,7 +114,7 @@ V15Tools.prototype.loadTools = function(iCallback){
   if(user_tools_dir)
     tools_dirs.push(user_tools_dir);
   
-  async.map(tools_dirs, V15Tools.prototype.loadToolDir.bind(this), function(err, toolsLists){
+  async.mapSeries(tools_dirs, V15Tools.prototype.loadToolDir.bind(this), function(err, toolsLists){
     if(err){
       if(iCallback) iCallback(err);
     }else{
