@@ -203,18 +203,28 @@
   function openTool(iTool, iCallback){
     var hiddenZone = $('#vt-hidden');
     var mainZone = $('#vt-main');
-
     var newToolHiddenDOM = hiddenZone.find('#'+iTool.vid)[0];
+
+    var cssPath = iTool.pathToDir+'/style.css';
+    var jsPath = iTool.pathToDir+'/script.js';
+    
     if(newToolHiddenDOM){      
       newToolHiddenDOM = $(newToolHiddenDOM).detach();
       mainZone.append(newToolHiddenDOM);
-      require(path.resolve(iTool.pathToDir+'/script.js')).reload();
+      if(fs.existsSync(path.resolve(jsPath))){
+        require(path.resolve(jsPath)).reload();
+      }
       iCallback(null, 'reattached');
     }else{
       var newToolDOM = $('<div id='+iTool.vid+'></div>');
       mainZone.append(newToolDOM);
       newToolDOM.load(iTool.pathToDir+'/layout.html', function(){
-        require(path.resolve(iTool.pathToDir+'/script.js')).load();
+        if(fs.existsSync(path.resolve(cssPath))){
+          newToolDOM.prepend('<link rel="stylesheet" type="text/css" href="'+cssPath+'">');
+        }
+        if(fs.existsSync(path.resolve(jsPath))){
+          require(path.resolve(jsPath)).load();
+        }
         iCallback(null, 'loaded');
       });
     }
