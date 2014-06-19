@@ -291,6 +291,8 @@
             });  
           }
         });
+      }else{
+        console.log(err);
       }
       });
   }
