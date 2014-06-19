@@ -1,6 +1,7 @@
 (function(){
   global.$ = window.$;
-  window.vt = global.vt = require('./v15core/v15tools.js').V15Tools;
+  var path = require('path');
+  window.vt = global.vt = require(path.resolve('./v15core/v15tools.js')).V15Tools;
   window.encodeHTML = global.encodeHTML = encodeHTML;
 
   var fs = require('fs');
@@ -207,13 +208,13 @@
     if(newToolHiddenDOM){      
       newToolHiddenDOM = $(newToolHiddenDOM).detach();
       mainZone.append(newToolHiddenDOM);
-      require(iTool.pathToDir+'/script.js').reload();
+      require(path.resolve(iTool.pathToDir+'/script.js')).reload();
       iCallback(null, 'reattached');
     }else{
       var newToolDOM = $('<div id='+iTool.vid+'></div>');
       mainZone.append(newToolDOM);
       newToolDOM.load(iTool.pathToDir+'/layout.html', function(){
-        require(iTool.pathToDir+'/script.js').load();
+        require(path.resolve(iTool.pathToDir+'/script.js')).load();
         iCallback(null, 'loaded');
       });
     }
