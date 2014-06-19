@@ -1,0 +1,7 @@
+table,td{
+  border: 1px solid black;
+}
+
+#diff-ws-zone, #diff-files-zone{
+  max-height: 100px;
+}
