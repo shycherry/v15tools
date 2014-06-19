@@ -105,9 +105,35 @@ V15Tools.prototype.getWSPath = function(iWSName, iCallback){
   this.pushShellTask(shellTask);
 };
 
-V15Tools.prototype.loadTools = function(iCallback){
-  var tools_dir = this._config['tools_dir'];
-  fs.readdir(tools_dir, function(err, files){
+V15Tools.prototype.loadTools = function(iCallback){  
+  var tools_dirs = [];
+  var main_tools_dir = this._config['tools_dir'];
+  var user_tools_dir = this._config['user_tools_dir'];
+  if(main_tools_dir)
+    tools_dirs.push(main_tools_dir);
+  if(user_tools_dir)
+    tools_dirs.push(user_tools_dir);
+  
+  async.map(tools_dirs, V15Tools.prototype.loadToolDir.bind(this), function(err, toolsLists){
+    if(err){
+      if(iCallback) iCallback(err);
+    }else{
+      var tools = [];
+      for(var iToolList = 0; iToolList< toolsLists.length ; iToolList++){
+        tools = tools.concat(toolsLists[iToolList]);
+      }
+      if(iCallback) iCallback(null, tools);
+    }
+  });
+};
+
+V15Tools.prototype.loadToolDir = function(iToolDir, iCallback){
+  if(!iToolDir){
+    if(iCallback) iCallback('bad tool dir');
+    return;
+  }
+  
+  fs.readdir(iToolDir, function(err, files){
     if(err){
       if(iCallback)
         iCallback(err, null);
@@ -116,9 +142,9 @@ V15Tools.prototype.loadTools = function(iCallback){
     var tools = [];
     for(var idx in files){
       var currentToolName = files[idx];
-      if(fs.existsSync(tools_dir+'/'+currentToolName+'/layout.html')){
+      if(fs.existsSync(iToolDir+'/'+currentToolName+'/layout.html')){
         var newTool = new Tool({
-          'pathToDir': tools_dir+'/'+currentToolName,
+          'pathToDir': iToolDir+'/'+currentToolName,
           'name': currentToolName
         });
         tools.push(newTool);
