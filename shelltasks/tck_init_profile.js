@@ -36,7 +36,7 @@ function getGoodOldWayTask(iTCKLevel){
 }
 
 exports.get = function(iTCKLevel){
-  var tck_level = (iTCKLevel)?iTCKLevel : 'R217';
+  var tck_level = (iTCKLevel)?iTCKLevel : 'SCMV5';
 
   //try to get cgmtools first (switched tools)
   var newShellTask = null; //getWithCGMToolsTaskIfp(tck_level);  
