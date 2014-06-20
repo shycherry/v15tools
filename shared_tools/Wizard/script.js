@@ -17,9 +17,9 @@ function makeModelsList(iModels){
   for(var idx = 0; idx < _dropZonesModels.length;  idx++){
     var currentDropZone = _dropZonesModels[idx];
     if(currentDropZone.getModels().length >= 1){
-      currentDropZone.show();
+      currentDropZone.appendTo($('#wizz_freewall'));
     }else{
-      currentDropZone.hide();
+      currentDropZone.detach();
     }
   }
 }

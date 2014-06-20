@@ -4,10 +4,12 @@ textarea{
   height: 40%;
 }
 
-#wizz_fws_list,
-#wizz_mods_list,
-#wizz_files_list,
-#wizz_fullpathes_list{
+#wizz_get_models{
+  height: 5%;
+  min-height: 1.5em;
+}
+
+#wizz_freewall{
   width: 100%;
-  height: 10%;
+  height: 55%;
 }

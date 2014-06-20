@@ -1,5 +1,6 @@
 <html>
-  <textarea cols=50 rows=35 wrap='off' id="wizz_input">
+  <link rel="import" href="./bower_components/shy-elt-freewall/shy-elt-freewall.html">
+  <textarea cols=50 rows=35 wrap='off' id="wizz_input" class="vt-boxshadow">
   	e:\path\to\WS\FW\PrivateInterfaces\file.h
   	e:\path\to\WS\FW\ProtectedInterfaces\file.h
   	e:\path\to\WS\FW\PublicInterfaces\file.h
@@ -19,9 +20,11 @@
     MechanicalModeler\PrivateInterfaces\CATBRepAccessFactory.h has been modified
     MechanicalModelerBase.tst\FunctionTests\InputData\CATMmrBrepDomainAccess_Batch.txt has been modified
   </textarea>
-  <button id="wizz_get_models">Get Models</button><br/>  
-  <div id="wizz_fws_list"></div>
-  <div id="wizz_mods_list"></div>
-  <div id="wizz_files_list"></div>
-  <div id="wizz_fullpathes_list"></div>
+  <button id="wizz_get_models">Get Models</button><br/>
+  <shy-elt-freewall id="wizz_freewall">
+    <div id="wizz_fws_list"></div>
+    <div id="wizz_mods_list"></div>
+    <div id="wizz_files_list"></div>
+    <div id="wizz_fullpathes_list"></div>
+  </shy-elt-freewall>
 </html>
