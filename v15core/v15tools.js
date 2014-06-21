@@ -142,7 +142,7 @@ V15Tools.prototype.loadTools = function(iCallback){
 
 V15Tools.prototype.loadToolDir = function(iToolDir, iCallback){
   if(!iToolDir){
-    if(iCallback) iCallback('bad tool dir');
+    if(iCallback) iCallback(null,[]);
     return;
   }
   
