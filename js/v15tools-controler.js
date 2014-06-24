@@ -216,9 +216,9 @@
       }
       iCallback(null, 'reattached');
     }else{
-      var newToolDOM = $('<div id='+iTool.vid+'></div>');
-      mainZone.append(newToolDOM);
+      var newToolDOM = $('<div id='+iTool.vid+'></div>');      
       newToolDOM.load(iTool.pathToDir+'/layout.html', function(){
+        mainZone.append(newToolDOM);
         if(fs.existsSync(path.resolve(cssPath))){
           newToolDOM.prepend('<link rel="stylesheet" type="text/css" href="'+cssPath+'">');
         }
