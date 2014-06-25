@@ -84,7 +84,7 @@ V15Tools.prototype.loadConfig = function(){
     var parentConfigs = [userConfig];
     var currentConfig = userConfig;
     
-    while(currentConfig['parentConfigPath']){
+    while(currentConfig && currentConfig['parentConfigPath']){
       currentConfig = this.loadConfigFile(currentConfig['parentConfigPath']);
       if(currentConfig){
         parentConfigs.unshift(currentConfig);
