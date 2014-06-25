@@ -73,7 +73,13 @@
         {
           title:'save',
           action: function(){
-            vt.saveModel(iModel, function(){console.log(iModel.name+" saved ! ");});
+            vt.saveModel(iModel, function(err){
+              if(err){
+                console.log("error save : "+err);
+              }else{
+                console.log(iModel.name+" saved ! ");
+              }
+            });
           }
         }        
       ]

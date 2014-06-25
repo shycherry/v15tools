@@ -144,7 +144,7 @@ Factory.prototype.create = function(arg){
 }
 
 Factory.prototype.write = function(iModel, iCallback){
-  if(! this._config || !this._config.savedModels_dir || !this._config.max_parallel_fs_writes){
+  if(! this._config || !this._config.userSavedModelsPath || !this._config.max_parallel_fs_writes){
     iCallback('error : invalid config for writting files...');
     return;
   }
@@ -169,7 +169,11 @@ Factory.prototype.write = function(iModel, iCallback){
     return;
   }
 
-  Fs.writeFile(this._config.savedModels_dir+'/'+modelSaveName, jsonData, function(err){    
+  if( ! Fs.existsSync(this._config.userSavedModelsPath)){
+    Fs.mkdirSync(this._config.userSavedModelsPath);
+  }
+
+  Fs.writeFile(this._config.userSavedModelsPath+'/'+modelSaveName, jsonData, function(err){
     iCallback(err);
   });
 }

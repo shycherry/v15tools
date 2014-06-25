@@ -63,15 +63,17 @@ function V15Tools(){
 V15Tools.prototype.loadConfig = function(){
   //set user path at runtime
   var userV15ToolsPath = path.resolve(process.env.LOCALAPPDATA+'/v15tools');
+  var userSavedModelsPath = path.resolve(userV15ToolsPath+'/savedModels');
   var username = process.env.USERNAME;
-  this.setConfig({
+  this.mergeConfig({
     'userV15ToolsPath' : userV15ToolsPath,
+    'userSavedModelsPath' : userSavedModelsPath,
     'username' : username
   });
 
   //load global config first
   var globalConfig = require('../config.cfg').config;
-  this.setConfig(globalConfig);
+  this.mergeConfig(globalConfig);
 
   //then load user config (may erase global config entries)
   var userConfigPath = path.resolve(userV15ToolsPath+'/config.cfg');
@@ -80,18 +82,17 @@ V15Tools.prototype.loadConfig = function(){
     userConfig = require(userConfigPath).config;
   }
   if(userConfig){
-    this.setConfig(userConfig);
+    this.mergeConfig(userConfig);
   }
   
   _init.call(this);
 };
 
-
 V15Tools.prototype.getConfig = function(){
   return this._config;
 };
 
-V15Tools.prototype.setConfig = function (iConfig){
+V15Tools.prototype.mergeConfig = function (iConfig){
   if(!this._config)
     this._config = {};
 
@@ -170,9 +171,36 @@ V15Tools.prototype.loadToolDir = function(iToolDir, iCallback){
 };
 
 V15Tools.prototype.loadSavedModels = function(iCallback) {
+
+  var config_models_dirs = _regexFilterObjectParams(this._config, /.*models_dir$/);
+  var array_models_dir = _objToArray(config_models_dirs);
+  
+  if(this._config.userSavedModelsPath){
+    array_models_dir.push(this._config.userSavedModelsPath);
+  }
+  
+  async.mapSeries(array_models_dir, V15Tools.prototype.loadSavedModelsDir.bind(this), function(err, modelsLists){
+    if(err){
+      if(iCallback) iCallback(err);
+    }else{
+      var models = [];
+      for(var iModelList = 0; iModelList< modelsLists.length ; iModelList++){
+        models = models.concat(modelsLists[iModelList]);
+      }
+      if(iCallback) iCallback(null, models);
+    }
+  });
+
+}
+
+V15Tools.prototype.loadSavedModelsDir = function(iModelsDir, iCallback) {
+  if(!iModelsDir){
+    if(iCallback) iCallback(null,[]);
+    return;
+  }
+
   var self = this;
-  var models_dir = this._config['savedModels_dir'];
-  fs.readdir(models_dir, function(err, files){
+  fs.readdir(iModelsDir, function(err, files){
     if(err){
       if(iCallback)
         iCallback(err, null);
@@ -181,7 +209,7 @@ V15Tools.prototype.loadSavedModels = function(iCallback) {
     var loadedModels = [];
     for (var idx in files) {
       var currentFile = files[idx];
-      var rawItem = JSON.parse(fs.readFileSync(models_dir+'/'+currentFile));
+      var rawItem = JSON.parse(fs.readFileSync(iModelsDir+'/'+currentFile));
       var newItem = self.createModel(rawItem);
       if(newItem){
         loadedModels.push(newItem);
