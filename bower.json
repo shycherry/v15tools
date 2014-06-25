@@ -20,5 +20,8 @@
     "shy-elt-colorpicker": "shycherry/shy-elt-colorpicker#latest",
     "vt-core-elements": "shycherry/vt-core-elements#latest",
     "shy-elt-freewall": "shycherry/shy-elt-freewall#latest"
+  },
+  "resolutions": {
+    "jquery": ">=1.7"
   }
 }

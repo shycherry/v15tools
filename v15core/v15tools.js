@@ -71,22 +71,45 @@ V15Tools.prototype.loadConfig = function(){
     'username' : username
   });
 
-  //load global config first
-  var globalConfig = require('../config.cfg').config;
-  this.mergeConfig(globalConfig);
+  //load master config first
+  var masterConfig = this.loadConfigFile(path.resolve('./config.cfg'));
+  if(masterConfig){
+    this.mergeConfig(masterConfig);
+  }
 
   //then load user config (may erase global config entries)
-  var userConfigPath = path.resolve(userV15ToolsPath+'/config.cfg');
-  var userConfig  = null;
-  if(fs.existsSync(userConfigPath)){
-    userConfig = require(userConfigPath).config;
-  }
+  var userConfig = this.loadConfigFile(path.resolve(userV15ToolsPath+'/config.cfg'));
   if(userConfig){
-    this.mergeConfig(userConfig);
+    
+    var parentConfigs = [userConfig];
+    var currentConfig = userConfig;
+    
+    while(currentConfig['parentConfigPath']){
+      currentConfig = this.loadConfigFile(currentConfig['parentConfigPath']);
+      if(currentConfig){
+        parentConfigs.unshift(currentConfig);
+      }
+    }
+    
+    for(var i in parentConfigs){
+      this.mergeConfig(parentConfigs[i]);
+    }
+    
   }
-  
+
   _init.call(this);
 };
+
+V15Tools.prototype.loadConfigFile = function(iConfigPath){  
+  console.log('loading config file from '+path.resolve(iConfigPath)+'...');
+  
+  var config  = null;
+  if(fs.existsSync(iConfigPath)){
+    config = require(iConfigPath).config;
+  }
+
+  return config;  
+}
 
 V15Tools.prototype.getConfig = function(){
   return this._config;
@@ -97,6 +120,9 @@ V15Tools.prototype.mergeConfig = function (iConfig){
     this._config = {};
 
   for(var idx in iConfig){
+    if(this._config.hasOwnProperty(idx)){
+      console.log('override old config.'+idx+' value : '+this._config[idx]+' by '+iConfig[idx]);
+    }
     this._config[idx] = iConfig[idx];
   }
 
