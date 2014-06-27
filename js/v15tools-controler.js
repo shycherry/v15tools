@@ -202,7 +202,7 @@
 
   function openTool(iTool, iCallback){
     var hiddenZone = $('#vt-hidden');
-    var mainZone = $('#vt-main');
+    var mainZone = $('#vt-main');    
     var newToolHiddenDOM = hiddenZone.find('#'+iTool.vid)[0];
 
     var cssPath = iTool.pathToDir+'/style.css';
@@ -216,7 +216,9 @@
       }
       iCallback(null, 'reattached');
     }else{
-      var newToolDOM = $('<div id='+iTool.vid+'></div>');      
+      var newToolDOM = $('<div id='+iTool.vid+'></div>');
+      styleColorBoxShadow(newToolDOM[0], iTool.color);
+
       newToolDOM.load(iTool.pathToDir+'/layout.html', function(){
         mainZone.append(newToolDOM);
         if(fs.existsSync(path.resolve(cssPath))){
@@ -228,8 +230,20 @@
         iCallback(null, 'loaded');
       });
     }
-  }
 
+    var tabsZone = $('#vt-tabs');
+    var tabTool = tabsZone.find('#'+iTool.vid)[0];
+    styleColorBoxShadow(tabTool, iTool.color);
+  }
+  
+  function styleColorBoxShadow(iElement, iColor){    
+    iElement.style['-webkit-box-shadow'] = iColor+' 0px 0px 6px inset';
+  }
+  
+  function unstyleColorBoxShadow(iElement){    
+    iElement.style['-webkit-box-shadow'] = '';
+  }
+  
   function closeTool(iTool, iCallback){
     var hiddenZone = $('#vt-hidden');
     var mainZone = $('#vt-main');
@@ -237,8 +251,13 @@
     var toolToCloseDOM = mainZone.find('#'+iTool.vid)[0];
     if(toolToCloseDOM){
       toolToCloseDOM = $(toolToCloseDOM).detach();
-      hiddenZone.append(toolToCloseDOM);      
+      hiddenZone.append(toolToCloseDOM);
     }
+    
+    var tabsZone = $('#vt-tabs');
+    var tabTool = tabsZone.find('#'+iTool.vid)[0];
+    unstyleColorBoxShadow(tabTool);
+
     iCallback(null, 'closed');
   }
 

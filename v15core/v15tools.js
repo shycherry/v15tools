@@ -167,6 +167,7 @@ V15Tools.prototype.loadTools = function(iCallback){
   });
 };
 
+var globalToolsColors = require('./css_colors.js').colorsList;
 V15Tools.prototype.loadToolDir = function(iToolDir, iCallback){
   if(!iToolDir){
     if(iCallback) iCallback(null,[]);
@@ -183,9 +184,14 @@ V15Tools.prototype.loadToolDir = function(iToolDir, iCallback){
     for(var idx in files){
       var currentToolName = files[idx];
       if(fs.existsSync(iToolDir+'/'+currentToolName+'/layout.html')){
+        
+        var randIdx = Math.floor((Math.random() * globalToolsColors.length));
+        var color = globalToolsColors [randIdx];        
+
         var newTool = new Tool({
           'pathToDir': iToolDir+'/'+currentToolName,
-          'name': currentToolName
+          'name': currentToolName,
+          'color': color || 'rgba(0,0,0,0.5)'
         });
         tools.push(newTool);
         _models.push(newTool);

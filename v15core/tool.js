@@ -10,6 +10,7 @@ function Tool(iInfos){
   globId++;
   this.pathToDir = iInfos['pathToDir'];
   this.name = iInfos['name'];
+  this.color = iInfos['color'];
 }
 
 exports.Tool = Tool;
