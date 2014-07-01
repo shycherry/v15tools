@@ -216,13 +216,16 @@
       }
       iCallback(null, 'reattached');
     }else{
-      var newToolDOM = $('<div id='+iTool.vid+'></div>');
+      var newToolDOM = $('<div class="tool" id="'+iTool.vid+'"></div>');
+      mainZone.append(newToolDOM);
       styleColorBoxShadow(newToolDOM[0], iTool.color);
+      
+      var newInnerToolDOM = $('<div class="innerTool"></div>');
 
-      newToolDOM.load(iTool.pathToDir+'/layout.html', function(){
-        mainZone.append(newToolDOM);
+      newInnerToolDOM.load(iTool.pathToDir+'/layout.html', function(){
+        newToolDOM.append(newInnerToolDOM);
         if(fs.existsSync(path.resolve(cssPath))){
-          newToolDOM.prepend('<link rel="stylesheet" type="text/css" href="'+cssPath+'">');
+          newInnerToolDOM.prepend('<link rel="stylesheet" type="text/css" href="'+cssPath+'">');
         }
         if(fs.existsSync(path.resolve(jsPath))){
           require(path.resolve(jsPath)).load();
