@@ -77,12 +77,6 @@ input{
   /*-webkit-filter: invert(100%);  */
 }
 
-.innerTool{
-  /*width: 100%;*/
-  height: 100%;
-  margin: 6px;
-}
-
 .v15tool:hover{
   background-color: rgba(240,240,240,0.5);
   -webkit-filter: invert(100%);
