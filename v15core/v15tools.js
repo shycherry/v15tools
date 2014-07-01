@@ -186,7 +186,8 @@ V15Tools.prototype.loadToolDir = function(iToolDir, iCallback){
       if(fs.existsSync(iToolDir+'/'+currentToolName+'/layout.html')){
         
         var randIdx = Math.floor((Math.random() * globalToolsColors.length));
-        var color = globalToolsColors [randIdx];        
+        var color = globalToolsColors [randIdx];
+        globalToolsColors.splice(randIdx,1);
 
         var newTool = new Tool({
           'pathToDir': iToolDir+'/'+currentToolName,

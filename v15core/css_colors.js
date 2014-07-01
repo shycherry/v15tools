@@ -4,7 +4,5 @@ exports.colorsList = [
   'blue',
   'red',
   'fuchsia',
-  'chartreuse',
-  'aqua',
-  'mediumvioletred'
+  'aqua'
 ];
