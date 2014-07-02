@@ -349,7 +349,7 @@
         Window.closeDevTools();
     });
     bindToolsGui();
-    bindShareGui();
+    // bindShareGui();
     bindShellsGui();
     vt.loadSavedModels();
 
