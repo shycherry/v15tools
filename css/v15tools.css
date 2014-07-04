@@ -1,19 +1,19 @@
-::-webkit-scrollbar {
+::-webkit-scrollbar, *::shadow ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
 }
  
-::-webkit-scrollbar-track {
+::-webkit-scrollbar-track, *::shadow ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
     border-radius: 10px;
 }
  
-::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb, *::shadow ::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }
 
-*{
+*, *::shadow{
   font-family: "Lucida Console", Monospace;
   font-size: small;
   -webkit-user-select: none;
@@ -30,10 +30,10 @@ input{
   vertical-align: middle;
 }
 
-.ui-tooltip{
+.ui-tooltip, *::shadow .ui-tooltip{
   max-width: inherit;  
 }
-.ui-tooltip > * {
+.ui-tooltip > *, *::shadow .ui-tooltip > *{
   -webkit-user-select: auto;
 }
 
@@ -44,11 +44,11 @@ input{
 }
 
 
-.vt-working{
+.vt-working, *::shadow .vt-working{
   -webkit-animation: working 1s infinite;
 }
 
-.v15tool{
+.v15tool, *::shadow .v15tool{
   cursor: pointer;
   display: inline-block;
   vertical-align: top;
@@ -57,32 +57,32 @@ input{
   margin-right: 10px;
 }
 
-.v15tool p{
+.v15tool p, *::shadow .v15tool p{
   margin-top: 5px;
 }
 
-.v15tool.active p{
+.v15tool.active p, *::shadow .v15tool.active p{
   margin-top: 10px;
 }
 
-.vt-boxshadow{
+.vt-boxshadow, *::shadow .vt-boxshadow{
   margin: 0px;
   padding: 0px;
   border: 0px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 1px inset;
 }
 
-.v15tool.active{
+.v15tool.active, *::shadow .v15tool.active{
   /*background-color: rgba(240,240,240,0.5);*/
   /*-webkit-filter: invert(100%);  */
 }
 
-.v15tool:hover{
+.v15tool:hover, *::shadow .v15tool:hover{
   background-color: rgba(240,240,240,0.5);
   -webkit-filter: invert(100%);
 }
 
-#vt-logo{
+#vt-logo {
   display: inline-block;
   vertical-align: top;
   width: 30px;
