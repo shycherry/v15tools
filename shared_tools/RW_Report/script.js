@@ -102,7 +102,7 @@ exports.load = function(){
     total_output+='<th><b>ODT Name</b></th>';
     total_output+='<th><b>Status</b></th>';
     total_output+='<th><b>RC Replay</b></th>';
-    total_output+='<th><b>RC Preq</b></th>';
+    total_output+='<th><b>RC PreqOnly</b></th>';
     total_output+='</tr>';
 
     if(new_ko_list.length >= 1){
@@ -217,19 +217,19 @@ exports.load = function(){
         
         if(currentPreqODT){
           total_output+=prefix+currentPreqODT['rc'];
-          if(previousPreqODT && previousPreqODT['rc'] != currentPreqODT['rc']){
-            total_output+=' <b>(last: '+previousPreqODT['rc']+')</b>';
-          }
-          total_output+=postfix;  
-        }else{
-          total_output+=prefix+'0';
           if(previousPreqODT){
             if(previousPreqODT['rc'] != currentPreqODT['rc']){
               total_output+=' <b>(last: '+previousPreqODT['rc']+')</b>';
             }
           }else{
             total_output+=' <b>(last: 0)</b>';
-          }          
+          }
+          total_output+=postfix;  
+        }else{
+          total_output+=prefix+'0';
+          if(previousPreqODT){
+            total_output+=' <b>(last: '+previousPreqODT['rc']+')</b>';
+          }
           total_output+=postfix;  
         }
 
