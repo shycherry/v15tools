@@ -1,0 +1,30 @@
+textarea{
+  overflow: auto;
+  display: inline;
+  width: 90%;
+}
+
+#rwr_report_table{
+  border-spacing: 10px 0;
+}
+
+#rwr_output,#rwr_output *{
+  -webkit-user-select :all; 
+}
+
+.rwr_new_ko_replay_only{
+  color: red;
+}
+
+.rwr_new_ko_preqs_too{
+  color: orange;
+}
+
+.rwr_still_ko_too{
+  color: blue;
+}
+
+.rwr_nomore_ko{
+  color: green;
+}
+
