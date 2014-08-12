@@ -1,9 +1,5 @@
 function isODTKo(iLine){
-  return (/ : KO, rc =.*/.test(iLine)) || (/.*:.*failed code.*/.test(iLine));
-}
-
-function getMKODTCompliantLine(iLine){
-  return iLine.replace(/ : KO,.*/g, '').replace(/## /g, '').replace(/   /g, ' TestCases ');
+  return (/ : KO, rc =.*/.test(iLine)) || (/.*:.*failed code.*/.test(iLine)) || (/ : Killed in max-time/.test(iLine));
 }
 
 function getODTFw(iLine){
@@ -16,9 +12,15 @@ function getODTName(iLine){
   return resultArray? resultArray[1] : '';
 }
 
-function getODTRCode(iLine){
-  var resultArray = /KO, rc = (\w+)/.exec(iLine);
-  return resultArray? resultArray[1] : '';
+function getODTRCode(iLine){  
+  if(/ : KO, rc =.*/.test(iLine)){
+    var resultArray;
+    resultArray = /KO, rc = (\w+)/.exec(iLine);
+    return resultArray? resultArray[1] : '';
+  }else if(/ : Killed in max-time/.test(iLine)){
+    return 'MAX_TIME';
+  }
+  
 }
 
 function getODTObject(iLine){
