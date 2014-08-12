@@ -31,6 +31,15 @@ function getODTObject(iLine){
   }
 }
 
+function cloneODT(iOdt){
+  return {
+    'name': iOdt['name'],
+    'fw': iOdt['fw'],
+    'rc': iOdt['rc']
+  }
+}
+
+
 function isODTInArray(iODTObj, iArray){
   for(var i in iArray){
     var currentObj = iArray[i];
@@ -86,6 +95,14 @@ function getODTFromNameInArray(iName, iArray){
   return null;
 }
 
+function cloneArrayOfObjects(iArray){
+  result = [];
+  iArray.forEach(function(iOdt){
+    result.push(cloneODT(iOdt));
+  });
+  return result;
+}
+
 exports.load = function(){
   $('#rwr_report_btn').button().click(function(){
     var previous_ko_list=getKOListFromSelector('#rwr_old_input');
@@ -97,14 +114,19 @@ exports.load = function(){
     var new_ko_list = getSecondListNotInFirstList_ODTList(previous_ko_list, current_ko_list);
     var still_ko_list = getSecondListInFirstList_ODTList(previous_ko_list, current_ko_list);
     var nomore_ko_list = getSecondListNotInFirstList_ODTList(current_ko_list, previous_ko_list);
+    
+    nomore_ko_list = cloneArrayOfObjects(nomore_ko_list);
+    nomore_ko_list.forEach(function(iOdt){
+      iOdt['rc'] = '0';
+    })
 
     total_output+='<table id="rwr_report_table">';
     total_output+='<tr>';
     total_output+='<th><b>Framework</b></th>';
     total_output+='<th><b>ODT Name</b></th>';
     total_output+='<th><b>Status</b></th>';
-    total_output+='<th><b>RC Replay</b></th>';
-    total_output+='<th><b>RC PreqOnly</b></th>';
+    total_output+='<th><b>RC(Replay)</b></th>';
+    total_output+='<th><b>RC(PreqOnly)</b></th>';
     total_output+='</tr>';
 
     if(new_ko_list.length >= 1){
@@ -156,6 +178,7 @@ exports.load = function(){
         var currentODT = nomore_ko_list[i];
         var currentPreqODT = getODTFromNameInArray(currentODT['name'], current_ko_preqs_list);
         var previousODT = getODTFromNameInArray(currentODT['name'], previous_ko_list);
+        console.log(previousODT)
         var previousPreqODT = getODTFromNameInArray(currentODT['name'], previous_ko_preqs_list);
 
         var koClass = 'rwr_nomore_ko';
@@ -169,7 +192,7 @@ exports.load = function(){
 
         total_output+=prefix+currentODT['rc'];
         if(previousODT && previousODT['rc'] != currentODT['rc']){
-          total_output+=' <b>(last: '+previousODT+')</b>';
+          total_output+=' <b>(last: '+previousODT['rc']+')</b>';
         }
         total_output+=postfix;
         
