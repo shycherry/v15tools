@@ -149,21 +149,21 @@ exports.load = function(){
       }
     }
 
-    if(still_ko_list.length >= 1){
-      for(var i in still_ko_list){
-        var currentODT = still_ko_list[i];
+    if(nomore_ko_list.length >= 1){
+      for(var i in nomore_ko_list){
+        var currentODT = nomore_ko_list[i];
         var currentPreqODT = getODTFromNameInArray(currentODT['name'], current_ko_preqs_list);
         var previousODT = getODTFromNameInArray(currentODT['name'], previous_ko_list);
         var previousPreqODT = getODTFromNameInArray(currentODT['name'], previous_ko_preqs_list);
 
-        var koClass = 'rwr_still_ko_too';
+        var koClass = 'rwr_nomore_ko';
         total_output+='<tr>';
         var prefix = '<td><div class="'+koClass+'">';
         var postfix = '</div></td>';
 
         total_output+=prefix+currentODT['fw']+postfix;
         total_output+=prefix+currentODT['name']+postfix;
-        total_output+=prefix+'STILL_KO'+postfix;
+        total_output+=prefix+'OK'+postfix;
 
         total_output+=prefix+currentODT['rc'];
         if(previousODT && previousODT['rc'] != currentODT['rc']){
@@ -193,25 +193,25 @@ exports.load = function(){
       }
     }
 
-    if(nomore_ko_list.length >= 1){
-      for(var i in nomore_ko_list){
-        var currentODT = nomore_ko_list[i];
+    if(still_ko_list.length >= 1){
+      for(var i in still_ko_list){
+        var currentODT = still_ko_list[i];
         var currentPreqODT = getODTFromNameInArray(currentODT['name'], current_ko_preqs_list);
         var previousODT = getODTFromNameInArray(currentODT['name'], previous_ko_list);
         var previousPreqODT = getODTFromNameInArray(currentODT['name'], previous_ko_preqs_list);
 
-        var koClass = 'rwr_nomore_ko';
+        var koClass = 'rwr_still_ko_too';
         total_output+='<tr>';
         var prefix = '<td><div class="'+koClass+'">';
         var postfix = '</div></td>';
 
         total_output+=prefix+currentODT['fw']+postfix;
         total_output+=prefix+currentODT['name']+postfix;
-        total_output+=prefix+'NO_MORE_KO'+postfix;
+        total_output+=prefix+'STILL_KO'+postfix;
 
         total_output+=prefix+currentODT['rc'];
         if(previousODT && previousODT['rc'] != currentODT['rc']){
-          total_output+=' <b>(last: '+previousODT+')</b>';
+          total_output+=' <b>(last: '+previousODT['rc']+')</b>';
         }
         total_output+=postfix;
         
