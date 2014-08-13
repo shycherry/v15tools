@@ -2,10 +2,13 @@
   overflow: auto;
   display: inline;
   width: 90%;
+  height: 10%;
 }
 
-#rwr_report_table{
+#rwr_report_table, td{
   border-spacing: 10px 0;
+  border: 0;
+  text-align: left;
 }
 
 #rwr_output,#rwr_output *{
