@@ -8,7 +8,7 @@ function getODTFw(iLine){
 }
 
 function getODTName(iLine){
-  var resultArray = /\w+\.tst\s+(\w+)/.exec(iLine);
+  var resultArray = /\w+\.tst\s+(\S+)/.exec(iLine);
   return resultArray? resultArray[1] : '';
 }
 
