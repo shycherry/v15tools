@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var Path = require('path');
 var _lockedShell;
 var _createdModelsGuis = [];
@@ -92,13 +93,17 @@ function bindGui(){
   var _wsZone = makeMultiDroppableZone($('#diff-ws-zone'), vt.Types.WS);
   var _filesZone = makeMultiDroppableZone($('#diff-files-zone'), vt.Types.FILE); 
   
-  $('#diff-diff-btn').button().click(function(){
+  function updateResultsTable(){
+    console.log('updateResultsTable');
     var workspaces = _wsZone.getModels();
     var files = _filesZone.getModels();
 
     createResultsTable(workspaces, files);
     
-  });
+  }
+  
+  _wsZone.on('models_changed', _.debounce(updateResultsTable));
+  _filesZone.on('models_changed', _.debounce(updateResultsTable));
 
   $('#diff-windiff-btn').button().click(function(){
     var selectedFullpathes = $('#diff-results-table').find('.diff-fullpath.selected');

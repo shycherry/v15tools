@@ -224,6 +224,7 @@
       if(_models.indexOf(model) == -1){
         newGui.append(makeModelGui(model));
         _models.push(model);
+        newGui.trigger('models_changed');
       }
     }
 
@@ -242,6 +243,7 @@
         var modelGui = newGui.find('.vt-model[vid="'+model.vid+'"]');
         if(modelGui){
           removeModelGui(modelGui);
+          newGui.trigger('models_changed');
         }        
       }
     }
