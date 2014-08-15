@@ -103,7 +103,54 @@ function cloneArrayOfObjects(iArray){
   return result;
 }
 
-function updateReport(){
+function createReportList(iODTList, iODTCurrentPreqsList, iODTPreviousList, iODTPreviousPreqsList, iClass, iStatus){
+  var output = '';
+  if(iODTList.length >= 1){
+    for(var i in iODTList){
+      var currentODT = iODTList[i];
+      var currentPreqODT = getODTFromNameInArray(currentODT['name'], iODTCurrentPreqsList);
+      var previousODT = getODTFromNameInArray(currentODT['name'], iODTPreviousList);
+      var previousPreqODT = getODTFromNameInArray(currentODT['name'], iODTPreviousPreqsList);
+
+      output +='<tr>';
+      var prefix = '<td><div class="'+iClass+'">';
+      var postfix = '</div></td>';
+
+      output+=prefix+currentODT['fw']+postfix;
+      output+=prefix+currentODT['name']+postfix;
+      output+=prefix+iStatus+postfix;
+
+      output+=prefix+currentODT['rc'];
+      if(previousODT && previousODT['rc'] != currentODT['rc']){
+        output+=' <b>(last: '+previousODT['rc']+')</b>';
+      }
+      output+=postfix;
+      
+      if(currentPreqODT){
+        output+=prefix+currentPreqODT['rc'];
+        if(previousPreqODT){
+          if(previousPreqODT['rc'] != currentPreqODT['rc']){
+            output+=' <b>(last: '+previousPreqODT['rc']+')</b>';
+          }
+        }else{
+          output+=' <b>(last: 0)</b>';
+        }
+        output+=postfix;  
+      }else{
+        output+=prefix+'0';
+        if(previousPreqODT){
+          output+=' <b>(last: '+previousPreqODT['rc']+')</b>';
+        }
+        output+=postfix;  
+      }
+
+      output+='</tr>';
+    }
+  }
+  return output;
+}
+
+function createReport(){
     var previous_ko_list=getKOListFromSelector('#rwr_old_input');
     var previous_ko_preqs_list=getKOListFromSelector('#rwr_old_preqs_input');
     var current_ko_list=getKOListFromSelector('#rwr_new_input');
@@ -111,6 +158,8 @@ function updateReport(){
     var total_output='';
     
     var new_ko_list = getSecondListNotInFirstList_ODTList(previous_ko_list, current_ko_list);
+    var new_ko_replay_only_list = getSecondListNotInFirstList_ODTList(current_ko_preqs_list, new_ko_list);
+    var new_ko_preqs_too_list = getSecondListInFirstList_ODTList(current_ko_preqs_list, new_ko_list);
     var still_ko_list = getSecondListInFirstList_ODTList(previous_ko_list, current_ko_list);
     var nomore_ko_list = getSecondListNotInFirstList_ODTList(current_ko_list, previous_ko_list);
     
@@ -128,149 +177,21 @@ function updateReport(){
     total_output+='<th><b>RC(PreqOnly)</b></th>';
     total_output+='</tr>';
 
-    if(new_ko_list.length >= 1){
-      for(var i in new_ko_list){
-        var currentODT = new_ko_list[i];
-        var currentPreqODT = getODTFromNameInArray(currentODT['name'], current_ko_preqs_list);
-        var previousODT = getODTFromNameInArray(currentODT['name'], previous_ko_list);
-        var previousPreqODT = getODTFromNameInArray(currentODT['name'], previous_ko_preqs_list);
+    total_output += createReportList(new_ko_replay_only_list, current_ko_preqs_list, previous_ko_list, previous_ko_preqs_list, 'rwr_new_ko_replay_only', 'NEW_KO');
+    total_output += createReportList(new_ko_preqs_too_list, current_ko_preqs_list, previous_ko_list, previous_ko_preqs_list, 'rwr_new_ko_preqs_too', 'NEW_KO');
+    total_output += createReportList(nomore_ko_list, current_ko_preqs_list, previous_ko_list, previous_ko_preqs_list, 'rwr_nomore_ko', 'OK');
+    total_output += createReportList(still_ko_list, current_ko_preqs_list, previous_ko_list, previous_ko_preqs_list, 'rwr_still_ko_too', 'STILL_KO');
 
-        var koClass = currentPreqODT ? 'rwr_new_ko_preqs_too' : 'rwr_new_ko_replay_only';
-        total_output+='<tr>';
-        var prefix = '<td><div class="'+koClass+'">';
-        var postfix = '</div></td>';
-
-        total_output+=prefix+currentODT['fw']+postfix;
-        total_output+=prefix+currentODT['name']+postfix;
-        total_output+=prefix+'NEW_KO'+postfix;
-
-        total_output+=prefix+currentODT['rc'];
-        if(previousODT && previousODT['rc'] != currentODT['rc']){
-          total_output+=' <b>(last: '+previousODT+')</b>';
-        }
-        total_output+=postfix;
-        
-        if(currentPreqODT){
-          total_output+=prefix+currentPreqODT['rc'];
-          if(previousPreqODT){
-            if(previousPreqODT['rc'] != currentPreqODT['rc']){
-              total_output+=' <b>(last: '+previousPreqODT['rc']+')</b>';
-            }
-          }else{
-            total_output+=' <b>(last: 0)</b>';
-          }
-          total_output+=postfix;  
-        }else{
-          total_output+=prefix+'0';
-          if(previousPreqODT){
-            total_output+=' <b>(last: '+previousPreqODT['rc']+')</b>';
-          }
-          total_output+=postfix;  
-        }
-
-        total_output+='</tr>';
-      }
-    }
-
-    if(nomore_ko_list.length >= 1){
-      for(var i in nomore_ko_list){
-        var currentODT = nomore_ko_list[i];
-        var currentPreqODT = getODTFromNameInArray(currentODT['name'], current_ko_preqs_list);
-        var previousODT = getODTFromNameInArray(currentODT['name'], previous_ko_list);
-        console.log(previousODT)
-        var previousPreqODT = getODTFromNameInArray(currentODT['name'], previous_ko_preqs_list);
-
-        var koClass = 'rwr_nomore_ko';
-        total_output+='<tr>';
-        var prefix = '<td><div class="'+koClass+'">';
-        var postfix = '</div></td>';
-
-        total_output+=prefix+currentODT['fw']+postfix;
-        total_output+=prefix+currentODT['name']+postfix;
-        total_output+=prefix+'OK'+postfix;
-
-        total_output+=prefix+currentODT['rc'];
-        if(previousODT && previousODT['rc'] != currentODT['rc']){
-          total_output+=' <b>(last: '+previousODT['rc']+')</b>';
-        }
-        total_output+=postfix;
-        
-        if(currentPreqODT){
-          total_output+=prefix+currentPreqODT['rc'];
-          if(previousPreqODT){
-            if(previousPreqODT['rc'] != currentPreqODT['rc']){
-              total_output+=' <b>(last: '+previousPreqODT['rc']+')</b>';
-            }
-          }else{
-            total_output+=' <b>(last: 0)</b>';
-          }
-          total_output+=postfix;  
-        }else{
-          total_output+=prefix+'0';
-          if(previousPreqODT){
-            total_output+=' <b>(last: '+previousPreqODT['rc']+')</b>';
-          }
-          total_output+=postfix;  
-        }
-
-        total_output+='</tr>';
-      }
-    }
-
-    if(still_ko_list.length >= 1){
-      for(var i in still_ko_list){
-        var currentODT = still_ko_list[i];
-        var currentPreqODT = getODTFromNameInArray(currentODT['name'], current_ko_preqs_list);
-        var previousODT = getODTFromNameInArray(currentODT['name'], previous_ko_list);
-        var previousPreqODT = getODTFromNameInArray(currentODT['name'], previous_ko_preqs_list);
-
-        var koClass = 'rwr_still_ko_too';
-        total_output+='<tr>';
-        var prefix = '<td><div class="'+koClass+'">';
-        var postfix = '</div></td>';
-
-        total_output+=prefix+currentODT['fw']+postfix;
-        total_output+=prefix+currentODT['name']+postfix;
-        total_output+=prefix+'STILL_KO'+postfix;
-
-        total_output+=prefix+currentODT['rc'];
-        if(previousODT && previousODT['rc'] != currentODT['rc']){
-          total_output+=' <b>(last: '+previousODT['rc']+')</b>';
-        }
-        total_output+=postfix;
-        
-        if(currentPreqODT){
-          total_output+=prefix+currentPreqODT['rc'];
-          if(previousPreqODT){
-            if(previousPreqODT['rc'] != currentPreqODT['rc']){
-              total_output+=' <b>(last: '+previousPreqODT['rc']+')</b>';
-            }
-          }else{
-            total_output+=' <b>(last: 0)</b>';
-          }
-          total_output+=postfix;  
-        }else{
-          total_output+=prefix+'0';
-          if(previousPreqODT){
-            total_output+=' <b>(last: '+previousPreqODT['rc']+')</b>';
-          }
-          total_output+=postfix;  
-        }
-
-        total_output+='</tr>';
-      }
-    }
-    
     total_output+='</table>'
 
     $('#rwr_output').html(total_output);
   }
 
 exports.load = function(){
-  $('#rwr_old_input').on('change', updateReport);
-  $('#rwr_old_preqs_input').on('change', updateReport);
-  $('#rwr_new_input').on('change', updateReport);
-  $('#rwr_new_preqs_input').on('change', updateReport);
+  $('#rwr_old_input').on('change', createReport);
+  $('#rwr_old_preqs_input').on('change', createReport);
+  $('#rwr_new_input').on('change', createReport);
+  $('#rwr_new_preqs_input').on('change', createReport);
 }
 
 exports.reload = function(){
