@@ -103,8 +103,7 @@ function cloneArrayOfObjects(iArray){
   return result;
 }
 
-exports.load = function(){
-  $('#rwr_report_btn').button().click(function(){
+function updateReport(){
     var previous_ko_list=getKOListFromSelector('#rwr_old_input');
     var previous_ko_preqs_list=getKOListFromSelector('#rwr_old_preqs_input');
     var current_ko_list=getKOListFromSelector('#rwr_new_input');
@@ -265,7 +264,13 @@ exports.load = function(){
     total_output+='</table>'
 
     $('#rwr_output').html(total_output);
-  });
+  }
+
+exports.load = function(){
+  $('#rwr_old_input').on('change', updateReport);
+  $('#rwr_old_preqs_input').on('change', updateReport);
+  $('#rwr_new_input').on('change', updateReport);
+  $('#rwr_new_preqs_input').on('change', updateReport);
 }
 
 exports.reload = function(){
