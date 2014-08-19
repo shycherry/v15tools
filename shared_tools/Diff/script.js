@@ -104,6 +104,7 @@ function bindGui(){
   
   _wsZone.on('models_changed', _.debounce(updateResultsTable));
   _filesZone.on('models_changed', _.debounce(updateResultsTable));
+  $('#diff-refresh-btn').button().click(updateResultsTable);
 
   $('#diff-windiff-btn').button().click(function(){
     var selectedFullpathes = $('#diff-results-table').find('.diff-fullpath.selected');
