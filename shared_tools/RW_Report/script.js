@@ -160,7 +160,9 @@ function createReport(){
     var new_ko_list = getSecondListNotInFirstList_ODTList(previous_ko_list, current_ko_list);
     var new_ko_replay_only_list = getSecondListNotInFirstList_ODTList(current_ko_preqs_list, new_ko_list);
     var new_ko_preqs_too_list = getSecondListInFirstList_ODTList(current_ko_preqs_list, new_ko_list);
-    var still_ko_list = getSecondListInFirstList_ODTList(previous_ko_list, current_ko_list);
+    var still_ko_raw_list = getSecondListInFirstList_ODTList(previous_ko_list, current_ko_list);
+    var still_ko_to_check_list = getSecondListNotInFirstList_ODTList(current_ko_preqs_list, still_ko_raw_list);
+    var still_ko_list = getSecondListNotInFirstList_ODTList(still_ko_to_check_list, still_ko_raw_list);
     var nomore_ko_list = getSecondListNotInFirstList_ODTList(current_ko_list, previous_ko_list);
     
     nomore_ko_list = cloneArrayOfObjects(nomore_ko_list);
@@ -180,7 +182,8 @@ function createReport(){
     total_output += createReportList(new_ko_replay_only_list, current_ko_preqs_list, previous_ko_list, previous_ko_preqs_list, 'rwr_new_ko_replay_only', 'NEW_KO');
     total_output += createReportList(new_ko_preqs_too_list, current_ko_preqs_list, previous_ko_list, previous_ko_preqs_list, 'rwr_new_ko_preqs_too', 'NEW_KO');
     total_output += createReportList(nomore_ko_list, current_ko_preqs_list, previous_ko_list, previous_ko_preqs_list, 'rwr_nomore_ko', 'OK');
-    total_output += createReportList(still_ko_list, current_ko_preqs_list, previous_ko_list, previous_ko_preqs_list, 'rwr_still_ko_too', 'STILL_KO');
+    total_output += createReportList(still_ko_to_check_list, current_ko_preqs_list, previous_ko_list, previous_ko_preqs_list, 'rwr_still_ko_to_check', 'STILL_KO_TO_CHECK');
+    total_output += createReportList(still_ko_list, current_ko_preqs_list, previous_ko_list, previous_ko_preqs_list, 'rwr_still_ko', 'STILL_KO');
 
     total_output+='</table>'
 

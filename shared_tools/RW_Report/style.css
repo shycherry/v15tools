@@ -23,9 +23,14 @@
   color: orange;
 }
 
-.rwr_still_ko_too{
+.rwr_still_ko{
   color: blue;
 }
+
+.rwr_still_ko_to_check{
+  color: violet;
+}
+
 
 .rwr_nomore_ko{
   color: green;
