@@ -1,5 +1,9 @@
-table,td{
+#diff-results-table td{
   border: 1px solid black;
+}
+
+#diff-results-table tr:hover{
+  background-color: lightgray;
 }
 
 #diff-ws-zone, #diff-files-zone{
