@@ -1,6 +1,4 @@
 #rwr_old_input,#rwr_old_preqs_input,#rwr_new_input,#rwr_new_preqs_input{
-  overflow: auto;
-  display: inline;
   width: 90%;
   height: 10%;
 }
