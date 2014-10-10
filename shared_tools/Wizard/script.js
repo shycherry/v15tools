@@ -167,7 +167,7 @@ function magicGetModelsFromPath(iPath){
 
 
 function bindGui(){
-  $('#wizz_get_models').button().click(function(){
+  $('#wizz_get_models').click(function(){
     var total_input = $('#wizz_input').val();
     var models = magicGetModelsFromText(total_input);
     makeModelsList(models);
