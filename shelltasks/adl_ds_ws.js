@@ -4,7 +4,7 @@ var TCK_INIT_PROFILE_TASK = require('./tck_init_profile');
 exports.get = function(iWSName){
 
   var adl_ds_ws_task = new vt.ShellTask({
-    command : 'adl_ds_ws '+iWSName,
+    command : 'adl_ds_ws -short '+iWSName,
     completeCallback : function(err, data){      
       if(newBatchTask.userCallback){
         if(err){
