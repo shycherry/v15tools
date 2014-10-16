@@ -14,7 +14,7 @@ function makeWSList(){
 
 
 function bindGui(){
-  $('#ws-btn-retrieve-from-name').button().click(function(){
+  $('#ws-btn-retrieve-from-name').click(function(){
     var wsName = $('#ws-input-name').val();
     if(wsName.length != 0){
       var wsPath = vt.getWSPath(wsName, function(err, data){
@@ -34,7 +34,7 @@ function bindGui(){
     }
   });
 
-  $('#ws-btn-create-dummy-with-name').button().click(function(){
+  $('#ws-btn-create-dummy-with-name').click(function(){
     var wsName = $('#ws-input-name').val();
     if(wsName.length != 0){
       var model = vt.createModel({type:vt.Types.WS.name ,name:wsName});
