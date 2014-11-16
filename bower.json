@@ -20,7 +20,6 @@
     "shy-elt-colorpicker": "shycherry/shy-elt-colorpicker#latest",
     "vt-core-elements": "shycherry/vt-core-elements#latest",
     "shy-elt-freewall": "shycherry/shy-elt-freewall#latest",
-    "paper-input": "polymer/paper-input#~0.4.2",
-    "paper-button": "polymer/paper-button#~0.4.2"
+    "paper-elements": "polymer/paper-elements#latest"
   }
 }
