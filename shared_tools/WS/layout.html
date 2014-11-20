@@ -1,7 +1,13 @@
 <html>
   <link rel="import" href="./bower_components/paper-button/paper-button.html">
-  <link rel="import" href="./bower_components/paper-input/paper-input.html">
-  <paper-input id="ws-input-name" floatingLabel label="WS Name"></paper-input>
-  <paper-button raised id="ws-btn-retrieve-from-name">Retrieve from name</paper-button>
+  <link rel="import" href="./bower_components/vt-core-elements/vt-shell.html">
+  <link rel="import" href="./bower_components/vt-core-elements/vt-shelltask.html">
+  <vt-shell id="ws-promote-simul-shell" output autostart="false" consumetasks="false">
+    <vt-shelltask command="echo [test]"></vt-shelltask>
+  </vt-shell>
+  <b>WS :</b>
   <div id="ws-list"></div>
+  <paper-button raised id="ws-files-to-promote-btn">Get files to promote</paper-button>
+  <b>Files to promote :</b>
+  <div id="ws-files-to-promote-list"></div>
 </html>
