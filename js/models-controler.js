@@ -210,7 +210,7 @@
     return result;
   }
 
-  function makeMultiDroppableZone(iJQueryObject, iRestrictedToClass){
+  function makeMultiDroppableZone(iJQueryObject, iRestrictedToClass, iMaxCount){
     var newGui = (iJQueryObject)?iJQueryObject : $('<div></div>');
     newGui.addClass('vt-multidroppablezone');
     var _models = [];
@@ -218,6 +218,10 @@
     newGui.addModel = function addModel(model){
 
       if(iRestrictedToClass && !(model instanceof iRestrictedToClass)){
+        return;
+      }
+
+      if(iMaxCount && _models.length >= iMaxCount){
         return;
       }
 

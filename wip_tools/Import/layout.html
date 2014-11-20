@@ -1,52 +1,10 @@
 <html>
-  <link rel="import" href="./bower_components/shy-elt-colorpicker/shy-elt-colorpicker.html">
-  <link rel="import" href="./bower_components/vt-core-elements/vt-shelltask.html">
-  <link rel="import" href="./bower_components/vt-core-elements/vt-shell.html">
-  <link rel="import" href="./bower_components/shy-elt-freewall/shy-elt-freewall.html">
-
-  <style>
-    #test {
-      /*background-color: orange;*/
-      width: 100%;
-      height: 100%;
-    }
-    .red {
-      background-color: red;      
-    }
-    .blue {
-      background-color: blue;      
-    }
-    .yellow {
-      background-color: yellow;      
-    }
-  </style>
-  
-  <shy-elt-freewall id="test" transitionDuration="250">
-    <!-- <div class="red"></div>
-    <div class="blue"></div>
-    <div class="yellow"></div> -->
-    <vt-shell commandline output>
-      <vt-shelltask command="ls"></vt-shelltask>
-    </vt-shell>
-    
-    <!-- <div> -->
-    
-    <!-- <shy-elt-freewall transitionDuration="1s"> -->
-      <shy-elt-colorpicker></shy-elt-colorpicker>
-      <vt-shell commandline>
-        <vt-shelltask command="dir"></vt-shelltask>
-      </vt-shell>
-      <vt-shell output>
-        <vt-shelltask command="dir"></vt-shelltask>
-      </vt-shell>        
-      <vt-shell>
-        <vt-shelltask command="dir"></vt-shelltask>
-      </vt-shell>        
-    <!-- </shy-elt-freewall> -->
-    
-    <!-- </div> -->
-
-  </shy-elt-freewall>
-  
-  
+  <link rel="import" href="./bower_components/paper-button/paper-button.html">
+  Import from WS...
+  <div id="import-from-ws-list"></div>
+  To WS...
+  <div id="import-to-ws-list"></div>
+  These files...
+  <div id="import-files-list"></div>
+  <paper-button raised id="import-btn-go">Import !</paper-button>
 </html>

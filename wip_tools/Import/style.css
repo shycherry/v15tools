@@ -2,6 +2,10 @@ table,td{
   border: 1px solid black;
 }
 
-#diff-ws-zone, #diff-files-zone{
+#import-files-list{
   max-height: 100px;
+}
+
+#import-from-ws-list, #import-to-ws-list{
+  max-height: 50px;
 }
