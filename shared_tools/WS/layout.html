@@ -2,11 +2,18 @@
   <link rel="import" href="./bower_components/paper-button/paper-button.html">
   <link rel="import" href="./bower_components/vt-core-elements/vt-shell.html">
   <link rel="import" href="./bower_components/vt-core-elements/vt-shelltask.html">
-  <vt-shell id="ws-promote-simul-shell" output autostart="false" consumetasks="false">
-    <vt-shelltask command="echo [test]"></vt-shelltask>
-  </vt-shell>
+  
+  <script type="text/javascript">
+    function stdoutCallback(ev){
+      console.log("stdout: ",ev);
+    }
+  </script>
+  
   <b>WS :</b>
   <div id="ws-list"></div>
+  <vt-shell id="ws-promote-simul-shell" autostart="false" consumetasks="false">
+    <vt-shelltask id="ws-promote-shelltask" command="echo [test]"></vt-shelltask>
+  </vt-shell>
   <paper-button raised id="ws-files-to-promote-btn">Get files to promote</paper-button>
   <b>Files to promote :</b>
   <div id="ws-files-to-promote-list"></div>
