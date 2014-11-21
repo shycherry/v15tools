@@ -12,7 +12,8 @@
   <b>WS :</b>
   <div id="ws-list"></div>
   <vt-shell id="ws-promote-simul-shell" autostart="false" consumetasks="false">
-    <vt-shelltask id="ws-promote-shelltask" command="echo [test]"></vt-shelltask>
+    <vt-shelltask id="ws-promote-shelltask" command="sleep 10"></vt-shelltask>
+    <vt-shelltask id="ws-promote-shelltask" command="sleep 10 && [test]"></vt-shelltask>
   </vt-shell>
   <paper-button raised id="ws-files-to-promote-btn">Get files to promote</paper-button>
   <b>Files to promote :</b>
