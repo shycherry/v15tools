@@ -1,34 +1,39 @@
 var _wsList;
 var _filesToPromoteList;
+var _filesToPromoteBtn;
 var _promoteShell;
+var _promoteShellTask;
 var _currentWS;
 
-function updateFilesToPromoteList(){
-  if(_filesToPromoteList)
-    _filesToPromoteList.removeAllModels();
-
-  if (_promoteShell){
-    if(_currentWS){
-      _promoteShell.params = {"ws" : _currentWS.name};  
-    }
-    _promoteShell.start();
-  }
+function updateFilesToPromoteList(iModels){
+  _filesToPromoteList.removeAllModels();
+  _filesToPromoteList.addModels(iModels);
 }
-
 
 function bindGui(){
   _wsList = makeMultiDroppableZone($('#ws-list'), vt.Types.WS, 1);
   _filesToPromoteList = makeMultiDroppableZone($('#ws-files-to-promote-list'), vt.Types.FILE);
   _promoteShell = $('#ws-promote-simul-shell')[0];
-  
+  _promoteShellTask = $("#ws-promote-shelltask")[0];
+  _filesToPromoteBtn = $('#ws-files-to-promote-btn')[0];
+
   _wsList.on("models_changed", function(){
     _currentWS = _wsList.getModels()[0];
-    updateFilesToPromoteList();
+    if(_currentWS){
+      _promoteShell.params = {"ws" : _currentWS.name};  
+    }
+    _filesToPromoteList.removeAllModels();
   });
 
-  $('#ws-files-to-promote-btn').click(updateFilesToPromoteList);
-  $("#ws-promote-shelltask")[0].completeCallback = function(err, data){
-    console.log("completeCallback: ",data);
+  _filesToPromoteBtn.onclick = function(){
+      _promoteShell.start();
+      _filesToPromoteBtn.disabled = true;
+  }
+  
+  _promoteShellTask.completeCallback = function(err, data){
+    var models = vt. magicGetModelsFromText(data);
+    updateFilesToPromoteList(models);
+    _filesToPromoteBtn.disabled = false;
   }
 }
 

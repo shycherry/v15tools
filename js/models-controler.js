@@ -152,10 +152,10 @@
       appendTo:'#vt-central'
     });
 
-    newModelGui.tooltip({
-        content:templateModelTooltip(iModel),
-        items:'.vt-model'
-      });
+    // newModelGui.tooltip({
+    //     content:templateModelTooltip(iModel),
+    //     items:'.vt-model'
+    //   });
 
     newModelGui.click(function(){
       //todo : restreindre ce comportement aux zones de selection
