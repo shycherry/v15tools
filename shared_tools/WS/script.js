@@ -9,7 +9,7 @@ function updateFilesToPromoteList(){
 
   if (_promoteShell){
     if(_currentWS){
-      _promoteShell.params = {"test" : _currentWS.name};  
+      _promoteShell.params = {"ws" : _currentWS.name};  
     }
     _promoteShell.start();
   }
