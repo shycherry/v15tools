@@ -1,5 +1,6 @@
 #diff-results-table td{
   border: 1px solid black;
+  overflow: hidden;
 }
 
 #diff-results-table tr:hover{

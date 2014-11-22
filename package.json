@@ -18,6 +18,7 @@
   },
   "scripts": {
     "postinstall": "node_modules/.bin/bower install",
+    "postupdate": "node_modules/.bin/bower update",
     "start": "nodewebkit"
   },
   "devDependencies": {
