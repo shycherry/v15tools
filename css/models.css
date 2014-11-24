@@ -1,17 +1,21 @@
 .vt-file, *::shadow .vt-file{
   background-color: yellow;
+  overflow: hidden;
 }
 
 .vt-mod, *::shadow .vt-mod{
   background-color: rgba(0,153,204,1);
+  overflow: hidden;
 }
 
 .vt-fw, *::shadow .vt-fw{
   background-color: rgba(204,153,0,1);
+  overflow: hidden;
 }
 
 .vt-ws, *::shadow .vt-ws{
   background-color: greenyellow;
+  overflow: hidden;
 }
 
 .vt-multidroppablezone, *::shadow .vt-multidroppablezone{
