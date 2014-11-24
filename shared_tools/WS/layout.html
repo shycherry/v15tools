@@ -5,12 +5,13 @@
   
   <b>WS :</b>
   <div id="ws-list"></div>
+  <b>Files to promote :</b>
+  <div id="ws-files-to-promote-list"></div>
+  <paper-button raised id="ws-files-to-promote-btn">Get files to promote</paper-button>
   <vt-shell id="ws-promote-simul-shell" autostart="false" consumetasks="false">
     <vt-shelltask command="\\dsone\rnd\tools\tck_init && tck_profile SCMV5"></vt-shelltask>
     <vt-shelltask command="adl_ch_ws [ws]"></vt-shelltask>
     <vt-shelltask id="ws-promote-shelltask" command="adl_promote -simul -program"></vt-shelltask>
   </vt-shell>
-  <paper-button raised id="ws-files-to-promote-btn">Get files to promote</paper-button>
-  <b>Files to promote :</b>
-  <div id="ws-files-to-promote-list"></div>
+
 </html>

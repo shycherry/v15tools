@@ -1,5 +1,5 @@
-table,td{
-  border: 1px solid black;
+#import-btn-go{
+	display: block;
 }
 
 #import-files-list{
