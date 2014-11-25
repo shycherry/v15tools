@@ -2,6 +2,7 @@
   <link rel="import" href="./bower_components/shy-elt-colorpicker/shy-elt-colorpicker.html">
   <link rel="import" href="./bower_components/vt-core-elements/vt-shelltask.html">
   <link rel="import" href="./bower_components/vt-core-elements/vt-shell.html">
+  <link rel="import" href="./bower_components/vt-core-elements/vt-shellworker.html">
   <link rel="import" href="./bower_components/shy-elt-freewall/shy-elt-freewall.html">
 
   <style>
@@ -20,7 +21,7 @@
       background-color: yellow;      
     }
   </style>
-  
+  <vt-shellworker id="worker"></vt-shellworker>
   <shy-elt-freewall id="test" transitionDuration="250">
     <!-- <div class="red"></div>
     <div class="blue"></div>
@@ -43,10 +44,20 @@
         <vt-shelltask command="dir"></vt-shelltask>
       </vt-shell>        
     <!-- </shy-elt-freewall> -->
+
+    <vt-shelltask id="workerTestTask" command="worker test [test]"></vt-shelltask>
     
     <!-- </div> -->
 
   </shy-elt-freewall>
+
+  <script type="text/javascript">
+    var workerTestTask = document.querySelector('#workerTestTask');
+    var worker = document.querySelector('#worker');
+    // workerTestTask.setWorker(worker);
+    //   workerTestTask.completeCallback = function(err, result){console.log(result);}
+    //   workerTestTask.doTask();
+  </script>
   
   
 </html>

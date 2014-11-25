@@ -12,7 +12,11 @@
 
   <vt-shell id="import-shell" autostart="false" consumetasks="false">
     <vt-shelltask command="\\dsone\rnd\tools\tck_init && tck_profile SCMV5"></vt-shelltask>
-    <vt-shelltask command="adl_ch_ws [ws_to]"></vt-shelltask>
+    <vt-shelltask command="adl_ch_ws [ws_to]">
+      <vt-shelltask command="subtest task [ws_to]">
+        <vt-shelltask command="subtest task [ws_from]"></vt-shelltask>
+      </vt-shelltask>
+    </vt-shelltask>
   </vt-shell>
 
   <paper-button raised id="import-btn-go">Import !</paper-button>
