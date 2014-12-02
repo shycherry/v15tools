@@ -15,7 +15,6 @@ function bindGui(){
   _filesToPromoteList = makeMultiDroppableZone($('#ws-files-to-promote-list'), vt.Types.FILE);
   _promoteButtonBatch = $('#ws-promote-simul-buttonbatch')[0];
   _promoteShellTask = $("#ws-promote-shelltask")[0];
-  // _filesToPromoteBtn = $('#ws-files-to-promote-btn')[0];
 
   _wsList.on("models_changed", function(){
     _currentWS = _wsList.getModels()[0];
@@ -25,16 +24,12 @@ function bindGui(){
     _filesToPromoteList.removeAllModels();
   });
 
-  // _filesToPromoteBtn.onclick = function(){
-  //     _promoteButtonBatch.start();
-  //     _filesToPromoteBtn.disabled = true;
-  // }
-  
-  _promoteShellTask.completeCallback = function(err, data){
-    var models = vt. magicGetModelsFromText(data);
-    updateFilesToPromoteList(models);
-    // _filesToPromoteBtn.disabled = false;
-  }
+  _promoteButtonBatch.addEventListener('task_finished', function(ev){
+    if(ev.detail.src && ev.detail.src.id == 'ws-promote-shelltask'){
+      var models = vt. magicGetModelsFromText(ev.detail.data);
+      updateFilesToPromoteList(models);
+    }
+  });
 }
 
 exports.load = function(){
