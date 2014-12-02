@@ -2,6 +2,7 @@
   <link rel="import" href="./bower_components/paper-button/paper-button.html">
   <link rel="import" href="./bower_components/vt-core-elements/vt-shell.html">
   <link rel="import" href="./bower_components/vt-core-elements/vt-shelltask.html">
+  <link rel="import" href="./bower_components/vt-core-elements/vt-shellbatch.html">
   <link rel="import" href="./bower_components/vt-core-elements/vt-buttonbatch.html">
   
   <b>WS :</b>
@@ -9,8 +10,8 @@
   <b>Files to promote :</b>
   <div id="ws-files-to-promote-list"></div>
   <vt-buttonbatch id="ws-promote-simul-buttonbatch" buttonlabel="Get files to promote">
-    <vt-shelltask command="\\dsone\rnd\tools\tck_init && tck_profile SCMV5"></vt-shelltask>
-    <vt-shelltask command="adl_ch_ws [ws]"></vt-shelltask>
-    <vt-shelltask id="ws-promote-shelltask" command="adl_promote -simul -program"></vt-shelltask>
+      <vt-shelltask id="ws-init-shelltask" command="\\dsone\rnd\tools\tck_init && tck_profile SCMV5"></vt-shelltask>
+      <vt-shelltask id="ws-ch-ws-shelltask" command="adl_ch_ws [ws]"></vt-shelltask>
+      <vt-shelltask id="ws-promote-shelltask" command="adl_promote -simul -program"></vt-shelltask>
   </vt-buttonbatch>
 </html>
