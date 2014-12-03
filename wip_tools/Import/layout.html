@@ -1,7 +1,7 @@
 <html>
-  <link rel="import" href="./bower_components/paper-button/paper-button.html">
-  <link rel="import" href="./bower_components/vt-core-elements/vt-shell.html">
   <link rel="import" href="./bower_components/vt-core-elements/vt-shelltask.html">
+  <link rel="import" href="./bower_components/vt-core-elements/vt-shellbatch.html">
+  <link rel="import" href="./bower_components/vt-core-elements/vt-buttonbatch.html">
 
   Import from WS...
   <div id="import-from-ws-list"></div>
@@ -10,14 +10,10 @@
   These files...
   <div id="import-files-list"></div>
 
-  <vt-shell id="import-shell" autostart="false" consumetasks="false">
-    <vt-shelltask command="\\dsone\rnd\tools\tck_init && tck_profile SCMV5"></vt-shelltask>
-    <vt-shelltask command="adl_ch_ws [ws_to]">
-      <vt-shelltask command="subtest task [ws_to]">
-        <vt-shelltask command="subtest task [ws_from]"></vt-shelltask>
-      </vt-shelltask>
-    </vt-shelltask>
-  </vt-shell>
+  <vt-buttonbatch id="import-files-buttonbatch" buttonlabel="Import files">
+    <vt-shelltask id="import-init-shelltask" command="\\dsone\rnd\tools\tck_init && tck_profile SCMV5"></vt-shelltask>
+    <vt-shelltask id="import-ch-ws-shelltask" command="adl_ch_ws [ws_to]"></vt-shelltask>
+    <vt-shellbatch id="import-files-shellbatch" batchname="import files"></vt-shellbatch>
+  </vt-buttonbatch>
 
-  <paper-button raised id="import-btn-go">Import !</paper-button>
 </html>

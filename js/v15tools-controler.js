@@ -1,5 +1,6 @@
 (function(){
   global.$ = window.$;
+  global.document = document;
   var path = require('path');
   window.vt = global.vt = require(path.resolve('./v15core/v15tools.js')).V15Tools;
   window.encodeHTML = global.encodeHTML = encodeHTML;
@@ -14,11 +15,11 @@
       var eData = encodeHTML(iShell.name);
       return '<div class="v15shell-tooltip"> ShellName: '+eData+'</div>';
     };
-  }  
+  }
 
   function makeShellTaskGui(iShellTaskModel){
     var shellTaskGui = $('<div class="vt-interactif vt-shelltask" id="'+iShellTaskModel.vid+'">'+iShellTaskModel.command+'</div>');
-    
+
     shellTaskGui.click(function(){
       if(iShellTaskModel.getStatus() == 'enqueued'){
         iShellTaskModel.setStatus('canceled');
@@ -31,7 +32,7 @@
       switch(iStatus){
         case 'working':
           shellTaskGui.removeClass('vt-shelltask-enqueued');
-          shellTaskGui.removeClass('vt-shelltask-canceled');          
+          shellTaskGui.removeClass('vt-shelltask-canceled');
           shellTaskGui.addClass('vt-working');
         break;
 
@@ -65,7 +66,7 @@
     if(vt.getConfig().baseAutoComplete){
       shellHistory = vt.getConfig().baseAutoComplete;
     }
-    
+
     var relayoutShellWindow = function(){
       newShellInputText.width(newShellInputBar.width() - newShellEnqueueBtn.width() - 15);
       newShellViewport.height(newShellWindow.height() - newShellInputBar.height() - newShellTasksContainer.height());
@@ -111,12 +112,12 @@
     newShellInputText.autocomplete({
       source: shellHistory,
       minLength: 0,
-      delay: 100,      
+      delay: 100,
       position: {my: 'left bottom', at: 'left top'}
     });
 
     newShellEnqueueBtn.button();
-    
+
     iShellModel.on('stdout_data', function(data){
       newShellViewport.append(encodeHTML(data));
       scrollViewportToBottomLeft();
@@ -139,14 +140,14 @@
       relayoutShellWindow();
     });
 
-    newShellInputText.keydown(function(event){      
-      if(event.which == 13){ //enter key      
+    newShellInputText.keydown(function(event){
+      if(event.which == 13){ //enter key
         pushCommandCallback();
       }
       if(event.which == 38 && (lastKeydown != 38)){ //up arrow key
         newShellInputText.autocomplete('search', '');
       }
-      lastKeydown = event.which;      
+      lastKeydown = event.which;
     });
 
     newShellEnqueueBtn.click(pushCommandCallback);
@@ -173,7 +174,7 @@
     })
     iShellModel.on('idle', function(){
       newShellGui.removeClass('vt-working');
-      newShellGui.addClass('vt-shell-idle');    
+      newShellGui.addClass('vt-shell-idle');
     })
 
     return newShellGui;
@@ -202,13 +203,13 @@
 
   function openTool(iTool, iCallback){
     var hiddenZone = $('#vt-hidden');
-    var mainZone = $('#vt-main');    
+    var mainZone = $('#vt-main');
     var newToolHiddenDOM = hiddenZone.find('#'+iTool.vid)[0];
 
     var cssPath = iTool.pathToDir+'/style.css';
     var jsPath = iTool.pathToDir+'/script.js';
-    
-    if(newToolHiddenDOM){      
+
+    if(newToolHiddenDOM){
       newToolHiddenDOM = $(newToolHiddenDOM).detach();
       mainZone.append(newToolHiddenDOM);
       if(fs.existsSync(path.resolve(jsPath))){
@@ -218,7 +219,7 @@
     }else{
       var newToolDOM = $('<vt-tool id="'+iTool.vid+'"></vt-tool>');
       styleColorBoxShadow(newToolDOM[0], iTool.color);
-      
+
       newToolDOM.load(iTool.pathToDir+'/layout.html', function(){
         mainZone.append(newToolDOM);
         if(fs.existsSync(path.resolve(cssPath))){
@@ -235,15 +236,15 @@
     var tabTool = tabsZone.find('#'+iTool.vid)[0];
     styleColorBoxShadow(tabTool, iTool.color);
   }
-  
-  function styleColorBoxShadow(iElement, iColor){    
+
+  function styleColorBoxShadow(iElement, iColor){
     iElement.style['-webkit-box-shadow'] = iColor+' 0px 0px 6px inset';
   }
-  
-  function unstyleColorBoxShadow(iElement){    
+
+  function unstyleColorBoxShadow(iElement){
     iElement.style['-webkit-box-shadow'] = '';
   }
-  
+
   function closeTool(iTool, iCallback){
     var hiddenZone = $('#vt-hidden');
     var mainZone = $('#vt-main');
@@ -253,7 +254,7 @@
       toolToCloseDOM = $(toolToCloseDOM).detach();
       hiddenZone.append(toolToCloseDOM);
     }
-    
+
     var tabsZone = $('#vt-tabs');
     var tabTool = tabsZone.find('#'+iTool.vid)[0];
     unstyleColorBoxShadow(tabTool);
@@ -262,7 +263,7 @@
   }
 
   function switchTool_old(iOldTool, iNewTool, iCallback){
-    
+
     var oldToolDOM = $('#vt-main').contents();
     if(iOldTool && oldToolDOM){
       iOldTool.cachedDOM = oldToolDOM.detach();
@@ -280,7 +281,7 @@
         require(iNewTool.pathToDir+'/script.js').load();
         iCallback(null, 'loaded');
       });
-    }    
+    }
   }
 
   function bindToolsGui(){
@@ -292,8 +293,8 @@
           $('#vt-tabs').append('<span class="v15tool" id="'+iTool.vid+'"><p>'+iTool.name+'</p></span>');
           relayout();
         }
-        
-        $('.v15tool').click(function(){          
+
+        $('.v15tool').click(function(){
           var tool = vt.findModelInArray({vid:$(this).attr('id')}, _tools);
           $self = $(this);
           if (tool.isOpened){
@@ -307,7 +308,7 @@
               $self.addClass('active');
               tool.isOpened = true;
               console.log(tool.name+' '+data);
-            });  
+            });
           }
         });
       }else{
@@ -334,7 +335,7 @@
     vt.on('shell_unlocked', function(shell){
       console.log(shell.vid+' unlocked');
     });
-    
+
   }
 
   $(document).ready(function() {
