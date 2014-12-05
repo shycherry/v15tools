@@ -29,9 +29,9 @@ function bindGui(){
   });
 
   _promoteButtonBatch.addEventListener('task_finished', function(ev){
-    if(!ev.detail.src && ev.detail.src.id)
+    if(!ev.detail.src || !ev.detail.src.id)
       return;
-    
+
     var sourceId = ev.detail.src.id;
 
     if(sourceId == 'ws-promote-shelltask'){

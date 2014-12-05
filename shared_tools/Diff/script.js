@@ -3,13 +3,18 @@ var Path = require('path');
 var _lockedShell;
 var _createdModelsGuis = [];
 var _createdModels = [];
+var _diffButtonBatch;
+var _wsZone;
+var _filesZone;
+var _diffInitShellTask;
+var _diffTable;
 
-function clearResultsTable(){  
+function clearResultsTable(){
   for(var idx in _createdModelsGuis){
     removeModelGui(_createdModelsGuis[idx]);
   }
   _createdModelsGuis = [];
-  $('#diff-results-table').contents().remove();
+  _diffTable.contents().remove();
 
   for(var idx in _createdModels){
     vt.forgetModel(_createdModels[idx]);
@@ -19,7 +24,7 @@ function clearResultsTable(){
 
 function createResultsTable(iWorkspaces, iFiles){
 
-    var globHashIndice = 1;    
+    var globHashIndice = 1;
     var hashMap = {};
 
     function getChecksumCallbackFor(iModel, iModelGui){
@@ -37,14 +42,13 @@ function createResultsTable(iWorkspaces, iFiles){
         iModel.notify('name');
       }
     }
-    
-    var resultsTable = $('#diff-results-table');
+
     clearResultsTable();
 
     //first row is for workspaces
     var firstRow = $('<tr></tr>');
     firstRow.append('<td>-</td>');
-    
+
     for(var wsIdx in iWorkspaces){
       var currentWS = iWorkspaces[wsIdx];
       var currentCol = $('<td></td>');
@@ -52,7 +56,7 @@ function createResultsTable(iWorkspaces, iFiles){
       _createdModelsGuis.push(currentWSGui);
       currentCol.append(currentWSGui);
       firstRow.append(currentCol);
-      resultsTable.append(firstRow);
+      _diffTable.append(firstRow);
     }
 
     for(var fileIdx in iFiles){
@@ -85,67 +89,81 @@ function createResultsTable(iWorkspaces, iFiles){
         newModel.computeChecksum(getChecksumCallbackFor(newModel, newFullPathGui));
       }
 
-      resultsTable.append(currentRow);
+      _diffTable.append(currentRow);
     }
+}
+
+function updateResultsTable(){
+  var workspaces = _wsZone.getModels();
+  var files = _filesZone.getModels();
+
+  createResultsTable(workspaces, files);
+}
+
+function updateSelection(){
+  var selectedFullpathes = _diffTable.find('.diff-fullpath.selected');
+  if(selectedFullpathes.length < 2){
+    console.log('2 fullpathes have to be selected');
+    return;
+  }
+  if(selectedFullpathes.length > 2){
+    console.log('too many fullpathes selected');
+    return;
+  }
+
+  var fullpathGui1 = $(selectedFullpathes[0]);
+  if(! fullpathGui1 ) return;
+
+  var fullpathGui2 = $(selectedFullpathes[1]);
+  if(! fullpathGui2 ) return;
+
+  var fullpathModel1 = vt.findModel({vid:fullpathGui1.attr('vid')});
+  var fullpathModel2 = vt.findModel({vid:fullpathGui2.attr('vid')});
+
+  _diffButtonBatch.params = {
+    'filePath1': fullpathModel1.path,
+    'filePath2': fullpathModel2.path
+  };
 }
 
 function bindGui(){
-  var _wsZone = makeMultiDroppableZone($('#diff-ws-zone'), vt.Types.WS);
-  var _filesZone = makeMultiDroppableZone($('#diff-files-zone'), vt.Types.FILE); 
-  
-  function updateResultsTable(){
-    console.log('updateResultsTable');
-    var workspaces = _wsZone.getModels();
-    var files = _filesZone.getModels();
+  _wsZone = makeMultiDroppableZone($('#diff-ws-zone'), vt.Types.WS);
+  _filesZone = makeMultiDroppableZone($('#diff-files-zone'), vt.Types.FILE);
+  _diffButtonBatch = document.querySelector('#diff-buttonbatch');
+  _diffInitShellTask = document.querySelector('#diff-init-shelltask');
+  _diffTable = $('#diff-results-table');
 
-    createResultsTable(workspaces, files);
-    
-  }
-  
-  _wsZone.on('models_changed', _.debounce(updateResultsTable));
-  _filesZone.on('models_changed', _.debounce(updateResultsTable));
   $('#diff-refresh-btn').click(updateResultsTable);
 
-  $('#diff-windiff-btn').click(function(){
-    var selectedFullpathes = $('#diff-results-table').find('.diff-fullpath.selected');
-    if(selectedFullpathes.length < 2){
-      console.log('2 fullpathes have to be selected');
+  _diffButtonBatch.addEventListener('task_finished', function(ev){
+    if(!ev.detail.src || !ev.detail.src.id)
       return;
+
+    var sourceId = ev.detail.src.id;
+
+    if(sourceId == _diffInitShellTask.id){
+      _diffInitShellTask.activated = false;
     }
-    if(selectedFullpathes.length > 2){
-      console.log('too many fullpathes selected');
-      return;
-    }
-
-    var fullpathGui1 = $(selectedFullpathes[0]);
-    if(! fullpathGui1 ) return;
-    
-    var fullpathGui2 = $(selectedFullpathes[1]);
-    if(! fullpathGui2 ) return;
-
-    var fullpathModel1 = vt.findModel({vid:fullpathGui1.attr('vid')});
-    var fullpathModel2 = vt.findModel({vid:fullpathGui2.attr('vid')});
-
-    if(!_lockedShell){
-      _lockedShell = vt.getShell();
-      _lockedShell.lock();
-      _lockedShell.enqueue(require('../../shelltasks/tck_init_profile').get());
-    }
-    
-    _lockedShell.enqueue(new vt.ShellTask({
-      command: '%ADL_MERGER% '+fullpathModel1.path+' '+fullpathModel2.path
-    }));
-
-    //TODO : unlock :)
-    
-
   });
+
+  _diffButtonBatch.addEventListener('go', function(ev){
+    if(!ev.detail.src || !ev.detail.src.id)
+      return;
+    var sourceId = ev.detail.src.id;
+
+    if(sourceId == _diffButtonBatch.id){
+      updateSelection();
+    }
+  });
+
+  _wsZone.on('models_changed', _.debounce(updateResultsTable));
+  _filesZone.on('models_changed', _.debounce(updateResultsTable));
 }
 
-exports.load = function(){  
-  bindGui();  
+exports.load = function(){
+  bindGui();
 }
 
 exports.reload = function(){
-  
+
 }

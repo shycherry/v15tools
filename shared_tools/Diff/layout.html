@@ -1,5 +1,10 @@
 <html>
   <link rel="import" href="./bower_components/paper-button/paper-button.html">
+  <link rel="import" href="./bower_components/vt-core-elements/vt-shelltask.html">
+  <link rel="import" href="./bower_components/vt-core-elements/vt-shellbatch.html">
+  <link rel="import" href="./bower_components/vt-core-elements/vt-buttonbatch.html">
+
+
   <b>WS:</b><br>
   <div id="diff-ws-zone"></div>
   <b>Files:</b><br>
@@ -7,5 +12,10 @@
   <paper-button raised id="diff-refresh-btn">Refresh</paper-button><br>
   <b>HashTable:</b><br>
   <table id="diff-results-table"></table><br>
-  <paper-button raised id="diff-windiff-btn">Windiff</paper-button>
+  <!-- <paper-button raised id="diff-windiff-btn">Windiff</paper-button> -->
+  <vt-buttonbatch id="diff-buttonbatch" buttonlabel="Launch Diff">
+    <vt-shelltask id="diff-init-shelltask" command="\\dsone\rnd\tools\tck_init && tck_profile SCMV5"></vt-shelltask>
+    <vt-shelltask id="diff-launch-diff-shelltask" command="%ADL_MERGER% [filePath1] [filePath2]"></vt-shelltask>
+  </vt-buttonbatch>
+
 </html>
