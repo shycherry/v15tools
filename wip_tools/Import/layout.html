@@ -10,7 +10,7 @@
   These files...
   <div id="import-files-list"></div>
 
-  <vt-buttonbatch id="import-files-buttonbatch" buttonlabel="Import files">
+  <vt-buttonbatch id="import-files-buttonbatch" buttonlabel="Import files from [ws_from] to [ws_to]">
     <vt-shelltask id="import-init-shelltask" command="\\dsone\rnd\tools\tck_init && tck_profile SCMV5"></vt-shelltask>
     <vt-shelltask id="import-ch-ws-shelltask" command="adl_ch_ws [ws_to]"></vt-shelltask>
     <vt-shellbatch id="import-files-shellbatch" batchname="import files"></vt-shellbatch>

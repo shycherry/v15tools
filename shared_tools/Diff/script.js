@@ -146,7 +146,7 @@ function bindGui(){
     }
   });
 
-  _diffButtonBatch.addEventListener('go', function(ev){
+  _diffButtonBatch.addEventListener('click', function(ev){
     if(!ev.detail.src || !ev.detail.src.id)
       return;
     var sourceId = ev.detail.src.id;
