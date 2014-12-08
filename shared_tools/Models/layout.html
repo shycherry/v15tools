@@ -1,10 +1,14 @@
 <html>
-  <link rel="import" href="./bower_components/paper-button/paper-button.html">
+  <link rel="import" href="./bower_components/vt-core-elements/vt-shelltask.html">
+  <link rel="import" href="./bower_components/vt-core-elements/vt-buttonbatch.html">
   <link rel="import" href="./bower_components/paper-input/paper-input.html">
 
   <div horizontal layout center>
     <paper-input id="models-ws-input-name" floatingLabel label="WS Name"></paper-input>
-    <paper-button raised id="models-ws-btn-retrieve-from-name">Retrieve from name</paper-button>
+    <vt-buttonbatch id="models-ws-btn-retrieve-from-name" buttonlabel="Retrieve WS from name">
+      <vt-shelltask id="models-init-shelltask" command="\\dsone\rnd\tools\tck_init && tck_profile SCMV5"></vt-shelltask>
+      <vt-shelltask id="models-ds-ws-shelltask" command="adl_ds_ws [ws_name]"></vt-shelltask>
+    </vt-buttonbatch>
   </div>
 
   <div id="models-ws-list"></div>
