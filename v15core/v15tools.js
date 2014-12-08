@@ -1,14 +1,9 @@
 var Path = require('path');
 var fs = require('fs');
 var async = require('async');
-var ShellManager = require('./shellmanager').ShellManager;
-var ShellTask = require('./shelltask').ShellTask;
-var BatchTask = require('./batchtask').BatchTask;
 var Tool = require('./tool').Tool;
 var Factory = require('./models').Factory;
 var Types = require('./models').Types;
-var ADL_DS_WS_Task = require('../shelltasks/adl_ds_ws');
-
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 util.inherits(V15Tools, EventEmitter);
@@ -22,19 +17,7 @@ var Gui = global.window.nwDispatcher.requireNwGui();
 function _init(){
   EventEmitter.prototype.constructor.call(this);
   var self = this;
-
   this._factory = new Factory(this._config);
-
-  this._shellManager = new ShellManager(this._config);
-  this._shellManager.on('shell_created', function(shell){
-    self.emit('shell_created', shell);
-  });
-  this._shellManager.on('shell_unlocked', function(shell){
-    self.emit('shell_unlocked', shell);
-  });
-  this._shellManager.on('shell_locked', function(shell){
-    self.emit('shell_locked', shell);
-  });
 }
 
 function _regexFilterObjectParams(iObj, iRegex){
@@ -80,35 +63,35 @@ V15Tools.prototype.loadConfig = function(){
   //then load user config (may erase global config entries)
   var userConfig = this.loadConfigFile(Path.resolve(userV15ToolsPath+'/config.cfg'));
   if(userConfig){
-    
+
     var parentConfigs = [userConfig];
     var currentConfig = userConfig;
-    
+
     while(currentConfig && currentConfig['parentConfigPath']){
       currentConfig = this.loadConfigFile(currentConfig['parentConfigPath']);
       if(currentConfig){
         parentConfigs.unshift(currentConfig);
       }
     }
-    
+
     for(var i in parentConfigs){
       this.mergeConfig(parentConfigs[i]);
     }
-    
+
   }
 
   _init.call(this);
 };
 
-V15Tools.prototype.loadConfigFile = function(iConfigPath){  
+V15Tools.prototype.loadConfigFile = function(iConfigPath){
   console.log('loading config file from '+Path.resolve(iConfigPath)+'...');
-  
+
   var config  = null;
   if(fs.existsSync(iConfigPath)){
     config = require(iConfigPath).config;
   }
 
-  return config;  
+  return config;
 }
 
 V15Tools.prototype.getConfig = function(){
@@ -129,31 +112,11 @@ V15Tools.prototype.mergeConfig = function (iConfig){
 };
 
 V15Tools.prototype.Types = Types;
-V15Tools.prototype.ShellTask = ShellTask;
-V15Tools.prototype.BatchTask = BatchTask;
 
-V15Tools.prototype.pushShellTask = function (iShellTask){
-  this._shellManager.enqueue(iShellTask);
-};
-
-V15Tools.prototype.getShell = function(iShellTask){
-  return this._shellManager.getShellFor(iShellTask);
-};
-
-V15Tools.prototype.getShells = function (){
-  return this._shellManager.getShells();
-};
-
-V15Tools.prototype.getWSPath = function(iWSName, iCallback){
-  var shellTask = ADL_DS_WS_Task.get(iWSName);
-  shellTask.userCallback = iCallback;
-  this.pushShellTask(shellTask);
-};
-
-V15Tools.prototype.loadTools = function(iCallback){  
+V15Tools.prototype.loadTools = function(iCallback){
   var config_tools_dirs = _regexFilterObjectParams(this._config, /.*tools_dir$/);
   var array_tools_dir = _objToArray(config_tools_dirs);
-  
+
   async.mapSeries(array_tools_dir, V15Tools.prototype.loadToolDir.bind(this), function(err, toolsLists){
     if(err){
       if(iCallback) iCallback(err);
@@ -173,7 +136,7 @@ V15Tools.prototype.loadToolDir = function(iToolDir, iCallback){
     if(iCallback) iCallback(null,[]);
     return;
   }
-  
+
   fs.readdir(iToolDir, function(err, files){
     if(err){
       if(iCallback)
@@ -184,7 +147,7 @@ V15Tools.prototype.loadToolDir = function(iToolDir, iCallback){
     for(var idx in files){
       var currentToolName = files[idx];
       if(fs.existsSync(iToolDir+'/'+currentToolName+'/layout.html')){
-        
+
         var randIdx = Math.floor((Math.random() * globalToolsColors.length));
         var color = globalToolsColors [randIdx];
         globalToolsColors.splice(randIdx,1);
@@ -207,11 +170,11 @@ V15Tools.prototype.loadSavedModels = function(iCallback) {
 
   var config_models_dirs = _regexFilterObjectParams(this._config, /.*models_dir$/);
   var array_models_dir = _objToArray(config_models_dirs);
-  
+
   if(this._config.userSavedModelsPath){
     array_models_dir.push(this._config.userSavedModelsPath);
   }
-  
+
   async.mapSeries(array_models_dir, V15Tools.prototype.loadSavedModelsDir.bind(this), function(err, modelsLists){
     if(err){
       if(iCallback) iCallback(err);
@@ -339,9 +302,9 @@ V15Tools.prototype.magicGetModelsFromText = function (iText){
   var workingText = iText.replace(/\//g, '\\');
   var regexPathWithExt = /.:[\w\\.]+\.[\w]+|[\w\\.]+[\w\\.]*[\\][\w\\.]*|.:[\w\\.]*[\\][\w\\.]*/gim;
   var models = [];
-  
+
   var matchs;
-  do{    
+  do{
     matchs = regexPathWithExt.exec(workingText);
     if(matchs){
       var currentModels = magicGetModelsFromPath(matchs[0]);
@@ -363,7 +326,7 @@ function findInTab(iTab, iRegex){
         return idx;
       }
     }
-  }  
+  }
   return -1;
 }
 
@@ -390,7 +353,7 @@ function findIdCardIndex(iTab){
 function magicGetModelsFromPath(iPath){
   var workingPath = iPath.replace(/\//g, '\\');
   var tabPath = workingPath.split('\\');
-  
+
   var wsIndex = -1;
   var modIndex = -1;
   var fwIndex = -1;
@@ -460,7 +423,7 @@ function magicGetModelsFromPath(iPath){
     });
     if(newModel){
       models.push(newModel);
-    }    
+    }
   }else{
     var path = Path.normalize(workingPath);
     newModel = vt.createModel({
@@ -472,7 +435,7 @@ function magicGetModelsFromPath(iPath){
       models.push(newModel);
     }
   }
-  
+
   return models;
 }
 

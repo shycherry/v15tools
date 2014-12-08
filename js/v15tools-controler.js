@@ -181,7 +181,7 @@
   }
 
   function relayout(){
-    $('#vt-central').height($(window).height() - ($('#vt-status').height() + $('#vt-tabs').height()));
+    $('#vt-central').height($(window).height() -  $('#vt-tabs').height());
     $('#vt-central').width($(window).width());
   }
 
@@ -317,27 +317,6 @@
       });
   }
 
-  function bindShareGui () {
-    var $vt_share = $('#vt-share');
-    makeMultiDroppableZone($vt_share);
-  }
-
-  function bindShellsGui(){
-    vt.on('shell_created', function(shell){
-      var newShellGui = makeShellGui(shell);
-      $('#vt-status').append(newShellGui);
-    });
-
-    vt.on('shell_locked', function(shell){
-      console.log(shell.vid+' locked');
-    });
-
-    vt.on('shell_unlocked', function(shell){
-      console.log(shell.vid+' unlocked');
-    });
-
-  }
-
   $(document).ready(function() {
     $(window).resize(function(){
       relayout();
@@ -350,8 +329,6 @@
         Window.closeDevTools();
     });
     bindToolsGui();
-    // bindShareGui();
-    bindShellsGui();
     vt.loadSavedModels();
 
   });
