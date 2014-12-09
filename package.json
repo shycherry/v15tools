@@ -11,10 +11,10 @@
     "toolbar": false
   },
   "dependencies": {
-    "async": ">=0.2.9",
-    "collections": ">=0.2.1",
+    "async": "*",
+    "collections": "^2.0.1",
     "underscore": "*",
-    "nodewebkit": "^0.10.5"
+    "nodewebkit": "^0.11.2"
   },
   "scripts": {
     "postinstall": "node_modules/.bin/bower install",
