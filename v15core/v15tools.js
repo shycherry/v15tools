@@ -122,9 +122,18 @@ V15Tools.prototype.loadTools = function(iCallback){
       if(iCallback) iCallback(err);
     }else{
       var tools = [];
+      var toolbar = document.querySelector('vt-toolbar');
       for(var iToolList = 0; iToolList< toolsLists.length ; iToolList++){
         tools = tools.concat(toolsLists[iToolList]);
       }
+
+      for(var iTool = 0; iTool< tools.length ; iTool++){
+        var currentTool = tools[iTool]
+        var currentToolItem = document.createElement('vt-toolbar-item');
+        currentToolItem.tool = currentTool;
+        toolbar.appendChild(currentToolItem);
+      }
+
       if(iCallback) iCallback(null, tools);
     }
   });

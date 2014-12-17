@@ -1,24 +1,22 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>Tools</title>
-    <link rel="stylesheet" type="text/css" href="css/smoothness/jquery-ui.css">
-    <link rel="stylesheet" type="text/css" href="css/v15tools.css">
-    <link rel="stylesheet" type="text/css" href="css/models.css">
-    <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
-    <script src="bower_components/ui-contextmenu/jquery.ui-contextmenu.min.js"></script>
-    <link rel="import" href="bower_components/shy-elt-freewall/shy-elt-freewall.html">
-    <link rel="import" href="bower_components/vt-core-elements/vt-tool.html">
-    <script src="js/v15tools-controler.js"></script>
-    <script src="js/models-controler.js"></script>
-
+  <title>Tools</title>
+  <link rel="stylesheet" type="text/css" href="css/smoothness/jquery-ui.css">
+  <link rel="stylesheet" type="text/css" href="css/v15tools.css">
+  <link rel="stylesheet" type="text/css" href="css/models.css">
+  <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+  <script src="bower_components/ui-contextmenu/jquery.ui-contextmenu.min.js"></script>
+  <link rel="import" href="bower_components/vt-toolbar/vt-toolbar.html">
+  <link rel="import" href="bower_components/shy-elt-freewall/shy-elt-freewall.html">
+  <link rel="import" href="bower_components/vt-core-elements/vt-tool.html">
+  <script src="js/v15tools-controler.js"></script>
+  <script src="js/models-controler.js"></script>
 </head>
 <body>
-  <div id="vt-tabs">
-      <span id="vt-logo"></span>
-  </div>
+  <vt-toolbar id="vt-tabs"></vt-toolbar>
   <div id="vt-hidden"></div>
   <div id="vt-central">
     <shy-elt-freewall id="vt-main" transitionDuration="100"></shy-elt-freewall>

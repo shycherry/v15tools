@@ -85,10 +85,6 @@ input{
   background-image: url('./logo.png');
 }
 
-#vt-tabs{
-  overflow: auto;
-}
-
 #vt-hidden{
   display: none;
 }

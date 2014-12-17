@@ -15,7 +15,7 @@
     $('#vt-central').width($(window).width());
   }
 
-  function openTool(iTool, iCallback){
+  window.openTool = global.openTool = function openTool(iTool, iCallback){
     var hiddenZone = $('#vt-hidden');
     var mainZone = $('#vt-main');
     var newToolHiddenDOM = hiddenZone.find('#'+iTool.vid)[0];
@@ -45,10 +45,6 @@
         iCallback(null, 'loaded');
       });
     }
-
-    var tabsZone = $('#vt-tabs');
-    var tabTool = tabsZone.find('#'+iTool.vid)[0];
-    styleColorBoxShadow(tabTool, iTool.color);
   }
 
   function styleColorBoxShadow(iElement, iColor){
@@ -59,7 +55,7 @@
     iElement.style['-webkit-box-shadow'] = '';
   }
 
-  function closeTool(iTool, iCallback){
+  window.closeTool = global.closeTool = function closeTool(iTool, iCallback){
     var hiddenZone = $('#vt-hidden');
     var mainZone = $('#vt-main');
 
@@ -69,10 +65,6 @@
       hiddenZone.append(toolToCloseDOM);
     }
 
-    var tabsZone = $('#vt-tabs');
-    var tabTool = tabsZone.find('#'+iTool.vid)[0];
-    unstyleColorBoxShadow(tabTool);
-
     iCallback(null, 'closed');
   }
 
@@ -80,11 +72,7 @@
     vt.loadTools(function(err, iTools){
       if(!err){
         _tools = iTools;
-        for(var idx in iTools){
-          var iTool = iTools[idx];
-          $('#vt-tabs').append('<span class="v15tool" id="'+iTool.vid+'"><p>'+iTool.name+'</p></span>');
-          relayout();
-        }
+        relayout();
 
         $('.v15tool').click(function(){
           var tool = vt.findModelInArray({vid:$(this).attr('id')}, _tools);
