@@ -32,8 +32,6 @@
       iCallback(null, 'reattached');
     }else{
       var newToolDOM = $('<vt-tool id="'+iTool.vid+'"></vt-tool>');
-      // styleColorBoxShadow(newToolDOM[0], iTool.color);
-
       newToolDOM.load(iTool.pathToDir+'/layout.html', function(){
         mainZone.append(newToolDOM);
         if(fs.existsSync(path.resolve(cssPath))){
@@ -45,14 +43,6 @@
         iCallback(null, 'loaded');
       });
     }
-  }
-
-  function styleColorBoxShadow(iElement, iColor){
-    iElement.style['-webkit-box-shadow'] = iColor+' 0px 0px 6px inset';
-  }
-
-  function unstyleColorBoxShadow(iElement){
-    iElement.style['-webkit-box-shadow'] = '';
   }
 
   window.closeTool = global.closeTool = function closeTool(iTool, iCallback){
