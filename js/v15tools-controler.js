@@ -32,7 +32,7 @@
       iCallback(null, 'reattached');
     }else{
       var newToolDOM = $('<vt-tool id="'+iTool.vid+'"></vt-tool>');
-      styleColorBoxShadow(newToolDOM[0], iTool.color);
+      // styleColorBoxShadow(newToolDOM[0], iTool.color);
 
       newToolDOM.load(iTool.pathToDir+'/layout.html', function(){
         mainZone.append(newToolDOM);
