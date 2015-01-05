@@ -32,6 +32,7 @@
       iCallback(null, 'reattached');
     }else{
       var newToolDOM = $('<vt-tool id="'+iTool.vid+'"></vt-tool>');
+      newToolDOM[0].tool = iTool;
       newToolDOM.load(iTool.pathToDir+'/layout.html', function(){
         mainZone.append(newToolDOM);
         if(fs.existsSync(path.resolve(cssPath))){
