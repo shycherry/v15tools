@@ -59,39 +59,8 @@
     iCallback(null, 'closed');
   }
 
-  function bindToolsGui(){
-    vt.loadTools(function(err, iTools){
-      if(!err){
-        _tools = iTools;
-        relayout();
-
-        $('.v15tool').click(function(){
-          var tool = vt.findModelInArray({vid:$(this).attr('id')}, _tools);
-          $self = $(this);
-          if (tool.isOpened){
-            closeTool(tool, function(err, data){
-              $self.removeClass('active');
-              tool.isOpened = false;
-              console.log(tool.name+' '+data);
-            });
-          }else{
-            openTool(tool, function(err, data){
-              $self.addClass('active');
-              tool.isOpened = true;
-              console.log(tool.name+' '+data);
-            });
-          }
-        });
-      }else{
-        console.log(err);
-      }
-      });
-  }
-
   $(document).ready(function() {
-    $(window).resize(function(){
-      relayout();
-    });
+    $(window).resize(relayout);
     $('#vt-logo').click(function(){
       var Window = gui.Window.get();
       if(!Window.isDevToolsOpen())
@@ -99,7 +68,7 @@
       else
         Window.closeDevTools();
     });
-    bindToolsGui();
+    vt.loadTools(relayout);
     vt.loadSavedModels();
 
   });
