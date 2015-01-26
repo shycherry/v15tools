@@ -14,7 +14,7 @@
     "async": "*",
     "collections": "^2.0.1",
     "underscore": "*",
-    "nodewebkit": "^0.11.2"
+    "nw": "^0.12.0-alpha2"
   },
   "scripts": {
     "postinstall": "node_modules/.bin/bower install",
