@@ -5,7 +5,7 @@
 
   <div horizontal layout center>
     <paper-input id="models-ws-input-name" floatingLabel label="WS Name"></paper-input>
-    <vt-buttonbatch id="models-ws-btn-retrieve-from-name" buttonlabel="Retrieve WS from name">
+    <vt-buttonbatch id="models-ws-btn-retrieve-from-name" buttonlabel="Retrieve [ws_name]">
       <vt-shelltask id="models-init-shelltask" command="\\dsone\rnd\tools\tck_init && tck_profile SCMV5"></vt-shelltask>
       <vt-shelltask id="models-ds-ws-shelltask" command="adl_ds_ws [ws_name]"></vt-shelltask>
     </vt-buttonbatch>

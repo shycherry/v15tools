@@ -21,6 +21,12 @@ function bindGui(){
   _retrieveWSFromNameButtonBatch = document.querySelector('#models-ws-btn-retrieve-from-name');
   _modelsInitShellTask = document.querySelector('#models-init-shelltask');
   _modelsDsWSShellTask = document.querySelector('#models-ds-ws-shelltask');
+  _modelsWsInputName = document.querySelector('#models-ws-input-name');
+
+  _modelsWsInputName.addEventListener('keyup', function(){
+    var wsName = _modelsWsInputName.value;
+    _retrieveWSFromNameButtonBatch.params = wsName.length ? {'ws_name' :  wsName} : {};
+  })
 
   _retrieveWSFromNameButtonBatch.addEventListener('task_finished', function(ev){
     if(!ev.detail.src || !ev.detail.src.id)
@@ -52,20 +58,6 @@ function bindGui(){
     }
 
   });
-
-  _retrieveWSFromNameButtonBatch.addEventListener('click', function(ev){
-    if(!ev.detail.src || !ev.detail.src.id)
-      return;
-    var sourceId = ev.detail.src.id;
-    console.log('wesh')
-    if(sourceId == _retrieveWSFromNameButtonBatch.id){
-      console.log('yo')
-      var wsName = $('#models-ws-input-name').val();
-      console.log('pwet ', wsName)
-      _retrieveWSFromNameButtonBatch.params = {'ws_name' : wsName};
-    }
-  });
-
 }
 
 exports.load = function(){
