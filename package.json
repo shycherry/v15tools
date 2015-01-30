@@ -19,7 +19,7 @@
   "scripts": {
     "postinstall": "node_modules/.bin/bower install",
     "postupdate": "node_modules/.bin/bower update",
-    "start": "nodewebkit"
+    "start": "nw"
   },
   "devDependencies": {
     "bower": "^1.3.12"
