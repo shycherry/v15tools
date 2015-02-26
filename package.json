@@ -10,6 +10,7 @@
   "window": {
     "toolbar": false
   },
+  "chromium-args": "--ignore-certificate-errors",
   "dependencies": {
     "async": "*",
     "collections": "^2.0.1",
