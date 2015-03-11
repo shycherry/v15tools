@@ -402,7 +402,11 @@ function magicGetModelsFromPath(iPath){
   }
 
   var newModel;
+  var thereIsAFile = true;
   if(fwIndex != -1){
+    if( (tabPath.length - 1) == fwIndex)
+      thereIsAFile = false;
+
     var fwPathTab = tabPath.slice(fwIndex, fwIndex+1);
     newModel = vt.createModel({
       type:vt.Types.FW.name,
@@ -412,7 +416,11 @@ function magicGetModelsFromPath(iPath){
     if(newModel){
       models.push(newModel);
     }
+
     if(modIndex != -1){
+      if( (tabPath.length - 1) == modIndex)
+        thereIsAFile = false;
+
       var modPathTab = tabPath.slice(fwIndex, modIndex+1);
       newModel = vt.createModel({
         type:vt.Types.MOD.name,
@@ -423,16 +431,21 @@ function magicGetModelsFromPath(iPath){
         models.push(newModel);
       }
     }
-    var filePathTab = tabPath.slice(fwIndex);
-    var path = Path.normalize(filePathTab.join('\\'));
-    newModel = vt.createModel({
-      type:vt.Types.FILE.name,
-      path:path,
-      name:Path.basename(path)
-    });
-    if(newModel){
-      models.push(newModel);
+
+    if(thereIsAFile)
+    {
+      var filePathTab = tabPath.slice(fwIndex);
+      var path = Path.normalize(filePathTab.join('\\'));
+      newModel = vt.createModel({
+        type:vt.Types.FILE.name,
+        path:path,
+        name:Path.basename(path)
+      });
+      if(newModel){
+        models.push(newModel);
+      }
     }
+
   }else{
     var path = Path.normalize(workingPath);
     newModel = vt.createModel({
