@@ -1,0 +1,11 @@
+#wsFilesToPromoteBtn{
+  display: block;
+}
+
+#wsList{
+  max-height: 50px;
+}
+
+#wsFilesToPromoteList{
+  max-height: 300px;
+}
