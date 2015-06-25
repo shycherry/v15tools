@@ -5,12 +5,24 @@
 
   <b>WS :</b>
   <div id="ws-list"></div>
-  <vt-buttonbatch id="ws-promote-simul-buttonbatch" buttonlabel="Get files to promote">
-    <vt-shelltask id="ws-init-shelltask" command="\\dsone\rnd\tools\tck_init && tck_profile SCMV5"></vt-shelltask>
-    <vt-shelltask id="ws-ch-ws-shelltask" command="adl_ch_ws [ws]"></vt-shelltask>
-    <vt-shelltask id="ws-promote-shelltask" command="adl_promote -simul"></vt-shelltask>
+
+  <vt-buttonbatch id="ws-ch-ws-buttonbatch" activewhenresolvable autostartwhenresolvable autoclear buttonlabel="Change to [ws]">
+    <vt-shelltask id="ws-init-shelltask" autodesactive status="edit" command="\\dsone\rnd\tools\tck_init && tck_profile SCMV5"></vt-shelltask>
+    <vt-shelltask id="ws-ch-ws-shelltask" activewhenresolvable autodesactive status="edit" command="adl_ch_ws [ws]"></vt-shelltask>
+  </vt-buttonbatch>
+
+  <vt-buttonbatch id="ws-promote-simul-buttonbatch" activewhenresolvable autoclear buttonlabel="Get files to promote for [ws]">
+    <vt-shelltask id="ws-promote-simul-shelltask" status="edit" command="adl_promote -simul"></vt-shelltask>
   </vt-buttonbatch>
   <b>Files to promote :</b>
   <div id="ws-files-to-promote-list"></div>
+  <!-- <b>File :</b>
+  <div id="ws-file-list"></div>
+  <vt-buttonbatch id="ws-forget-changes-buttonbatch" buttonlabel="Get files to promote">
+    <vt-shelltask id="ws-init-shelltask" command="\\dsone\rnd\tools\tck_init && tck_profile SCMV5"></vt-shelltask>
+    <vt-shelltask id="ws-ch-ws-shelltask" command="adl_ch_ws [ws]"></vt-shelltask>
+    <vt-shelltask id="ws-promote-simul-shelltask" command="adl_promote -simul"></vt-shelltask>
+  </vt-buttonbatch> -->
+
 </html>
 <!-- TO FIX :  GenericNaming\GN0GRAPH.m\src\CATBrpCATBRPELEHTable.cpp%c2 become GenericNaming\GN0GRAPH.m\src\CATBrpCATBRPELEHTable.cpp ...-->
