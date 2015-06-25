@@ -1,6 +1,9 @@
 #ws-list{
   max-height: 50px;
 }
+#ws-file-list{
+  max-height: 50px;
+}
 
 #ws-files-to-promote-list{
   max-height: 300px;
