@@ -20,7 +20,7 @@
   <b>File :</b>
   <div id="ws-file-list"></div>
   <vt-buttonbatch id="ws-forget-changes-buttonbatch" activewhenresolvable buttonlabel="Forget changes for [file] on [ws]">
-    <vt-shelltask id="ws-forget-changes-shelltask" activewhenresolvable autodesactive command="adl_forget_chg -all_chg -local [file.path]"></vt-shelltask>
+    <vt-shelltask id="ws-forget-changes-shelltask" activewhenresolvable autodesactive command="adl_forget_chg -all_chg -local -force [file.path]"></vt-shelltask>
   </vt-buttonbatch>
 
 </html>
