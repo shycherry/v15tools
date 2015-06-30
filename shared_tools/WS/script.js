@@ -15,6 +15,7 @@ function bindGui(){
 
   _chWsButtonBatch = $('#ws-ch-ws-buttonbatch')[0];
   _promoteSimulButtonBatch = $('#ws-promote-simul-buttonbatch')[0];
+  _promoteButtonBatch = $('#ws-promote-buttonbatch')[0];
   _forgetChgButtonBatch = $('#ws-forget-changes-buttonbatch')[0];
   _publishButtonBatch = $('#ws-publish-buttonbatch')[0];
   _syncButtonBatch = $('#ws-sync-buttonbatch')[0];
@@ -28,6 +29,7 @@ function bindGui(){
 
   function dispatchWS(iWS){
     _promoteSimulButtonBatch.params = _.extend({}, _.extend(_promoteSimulButtonBatch.params, {"ws" : iWS? iWS.name : null}));
+    _promoteButtonBatch.params = _.extend({}, _.extend(_promoteButtonBatch.params, {"ws" : iWS? iWS.name : null}));
     _forgetChgButtonBatch.params = _.extend({}, _.extend(_forgetChgButtonBatch.params, {"ws" : iWS? iWS.name : null}));
     _publishButtonBatch.params = _.extend({}, _.extend(_publishButtonBatch.params, {"ws" : iWS? iWS.name : null}));
     _syncButtonBatch.params = _.extend({}, _.extend(_syncButtonBatch.params, {"ws" : iWS? iWS.name : null}));
