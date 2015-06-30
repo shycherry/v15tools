@@ -11,16 +11,31 @@
     <vt-shelltask id="ws-ch-ws-shelltask" activewhenresolvable autodesactive command="adl_ch_ws [ws]"></vt-shelltask>
   </vt-buttonbatch>
 
+  <vt-buttonbatch id="ws-publish-buttonbatch" activewhenresolvable autoclear buttonlabel="Publish [ws]">
+    <vt-shelltask id="ws-publish-shelltask" command="adl_publish"></vt-shelltask>
+  </vt-buttonbatch>
+
+  <vt-buttonbatch id="ws-sync-buttonbatch" activewhenresolvable autoclear buttonlabel="Sync [ws]">
+    <vt-shelltask id="ws-sync-shelltask" command="adl_sync"></vt-shelltask>
+  </vt-buttonbatch>
+
+  <vt-buttonbatch id="ws-solve-merge-buttonbatch" activewhenresolvable autoclear buttonlabel="Solve-merge [ws]">
+    <vt-shelltask id="ws-solve-merge-shelltask" command="adl_solve_merge"></vt-shelltask>
+  </vt-buttonbatch>
+
   <vt-buttonbatch id="ws-promote-simul-buttonbatch" activewhenresolvable autoclear buttonlabel="Get files to promote for [ws]">
     <vt-shelltask id="ws-promote-simul-shelltask" command="adl_promote -simul"></vt-shelltask>
   </vt-buttonbatch>
+
   <b>Files to promote :</b>
   <div id="ws-files-to-promote-list"></div>
+
   <hr/>
+
   <b>File :</b>
   <div id="ws-file-list"></div>
   <vt-buttonbatch id="ws-forget-changes-buttonbatch" activewhenresolvable buttonlabel="Forget changes for [file] on [ws]">
-    <vt-shelltask id="ws-forget-changes-shelltask" activewhenresolvable autodesactive command="adl_forget_chg -all_chg -local -force [file.path]"></vt-shelltask>
+    <vt-shelltask id="ws-forget-changes-shelltask" activewhenresolvable command="adl_forget_chg -all_chg -local -force [file.path]"></vt-shelltask>
   </vt-buttonbatch>
 
 </html>
