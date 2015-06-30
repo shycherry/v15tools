@@ -22,6 +22,7 @@ function bindGui(){
   _solveMergeButtonBatch = $('#ws-solve-merge-buttonbatch')[0];
 
   _promoteSimulButtonBatch.setWorker(_chWsButtonBatch.getWorker());
+  _promoteButtonBatch.setWorker(_chWsButtonBatch.getWorker());
   _forgetChgButtonBatch.setWorker(_chWsButtonBatch.getWorker());
   _publishButtonBatch.setWorker(_chWsButtonBatch.getWorker());
   _syncButtonBatch.setWorker(_chWsButtonBatch.getWorker());
