@@ -11,18 +11,23 @@
     <vt-shelltask id="ws-ch-ws-shelltask" activewhenresolvable autodesactive command="adl_ch_ws [ws]"></vt-shelltask>
   </vt-buttonbatch>
 
-  <vt-buttonbatch id="ws-publish-buttonbatch" activewhenresolvable autoclear buttonlabel="Publish [ws]">
-    <vt-shelltask id="ws-publish-shelltask" command="adl_publish"></vt-shelltask>
-  </vt-buttonbatch>
-
   <vt-buttonbatch id="ws-sync-buttonbatch" activewhenresolvable autoclear buttonlabel="Sync [ws]">
     <vt-shelltask id="ws-sync-shelltask" command="adl_sync"></vt-shelltask>
   </vt-buttonbatch>
 
-  <vt-buttonbatch id="ws-solve-merge-buttonbatch" activewhenresolvable autoclear buttonlabel="Solve-merge [ws]">
-    <vt-shelltask id="ws-solve-merge-shelltask" command="adl_solve_merge"></vt-shelltask>
+  <vt-buttonbatch id="ws-publish-buttonbatch" activewhenresolvable autoclear buttonlabel="Publish [ws]">
+    <vt-shelltask id="ws-publish-shelltask" command="adl_publish"></vt-shelltask>
   </vt-buttonbatch>
 
+  <vt-buttonbatch id="ws-mkmk-buttonbatch" activewhenresolvable autoclear buttonlabel="Build [ws]">
+    <vt-shelltask command="mkmk -aug -jobs 8"></vt-shelltask>
+    <vt-shelltask command="mkrtv"></vt-shelltask>
+  </vt-buttonbatch>
+
+ <!-- <vt-buttonbatch id="ws-solve-merge-buttonbatch" activewhenresolvable autoclear buttonlabel="Solve-merge [ws]">
+    <vt-shelltask id="ws-solve-merge-shelltask" command="adl_solve_merge"></vt-shelltask>
+  </vt-buttonbatch>
+ -->
   <vt-buttonbatch id="ws-promote-simul-buttonbatch" activewhenresolvable autoclear buttonlabel="Get files to promote for [ws]">
     <vt-shelltask id="ws-promote-simul-shelltask" command="adl_promote -simul"></vt-shelltask>
   </vt-buttonbatch>

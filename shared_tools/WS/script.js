@@ -19,14 +19,16 @@ function bindGui(){
   _forgetChgButtonBatch = $('#ws-forget-changes-buttonbatch')[0];
   _publishButtonBatch = $('#ws-publish-buttonbatch')[0];
   _syncButtonBatch = $('#ws-sync-buttonbatch')[0];
-  _solveMergeButtonBatch = $('#ws-solve-merge-buttonbatch')[0];
+  _mkmkButtonBatch = $('#ws-mkmk-buttonbatch')[0];
+  // _solveMergeButtonBatch = $('#ws-solve-merge-buttonbatch')[0];
 
   _promoteSimulButtonBatch.setWorker(_chWsButtonBatch.getWorker());
   _promoteButtonBatch.setWorker(_chWsButtonBatch.getWorker());
   _forgetChgButtonBatch.setWorker(_chWsButtonBatch.getWorker());
   _publishButtonBatch.setWorker(_chWsButtonBatch.getWorker());
   _syncButtonBatch.setWorker(_chWsButtonBatch.getWorker());
-  _solveMergeButtonBatch.setWorker(_chWsButtonBatch.getWorker());
+  _mkmkButtonBatch.setWorker(_chWsButtonBatch.getWorker());
+  // _solveMergeButtonBatch.setWorker(_chWsButtonBatch.getWorker());
 
   function dispatchWS(iWS){
     _promoteSimulButtonBatch.params = _.extend({}, _.extend(_promoteSimulButtonBatch.params, {"ws" : iWS? iWS.name : null}));
@@ -34,7 +36,8 @@ function bindGui(){
     _forgetChgButtonBatch.params = _.extend({}, _.extend(_forgetChgButtonBatch.params, {"ws" : iWS? iWS.name : null}));
     _publishButtonBatch.params = _.extend({}, _.extend(_publishButtonBatch.params, {"ws" : iWS? iWS.name : null}));
     _syncButtonBatch.params = _.extend({}, _.extend(_syncButtonBatch.params, {"ws" : iWS? iWS.name : null}));
-    _solveMergeButtonBatch.params = _.extend({}, _.extend(_solveMergeButtonBatch.params, {"ws" : iWS? iWS.name : null}));
+    _mkmkButtonBatch.params = _.extend({}, _.extend(_mkmkButtonBatch.params, {"ws" : iWS? iWS.name : null}));
+    // _solveMergeButtonBatch.params = _.extend({}, _.extend(_solveMergeButtonBatch.params, {"ws" : iWS? iWS.name : null}));
   }
 
   _wsList.on("models_changed", function(){
