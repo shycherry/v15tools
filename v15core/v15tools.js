@@ -8,7 +8,7 @@ var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 util.inherits(V15Tools, EventEmitter);
 
-var Gui = global.window.nwDispatcher.requireNwGui();
+// var Gui = global.window.nwDispatcher.requireNwGui();
 
 
 /*
@@ -40,7 +40,7 @@ function _objToArray(iObj){
 
 function V15Tools(){
   this.loadConfig();
-  Gui.Window.get().title = this.getConfig().username+Gui.Window.get().title;
+  // Gui.Window.get().title = this.getConfig().username+Gui.Window.get().title;
 }
 
 V15Tools.prototype.loadConfig = function(){

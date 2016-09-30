@@ -7,7 +7,7 @@
   var fs = require('fs');
   var _tools = [];
   var _currentTool;
-  var gui = require('nw.gui');
+  // var gui = require('nw.gui');
 
 
   function relayout(){
@@ -62,11 +62,11 @@
   $(document).ready(function() {
     $(window).resize(relayout);
     $('#vt-logo').click(function(){
-      var Window = gui.Window.get();
-      if(!Window.isDevToolsOpen())
-        Window.showDevTools();
-      else
-        Window.closeDevTools();
+      // var Window = gui.Window.get();
+      // if(!Window.isDevToolsOpen())
+      //   Window.showDevTools();
+      // else
+      //   Window.closeDevTools();
     });
     vt.loadTools(relayout);
     vt.loadSavedModels();

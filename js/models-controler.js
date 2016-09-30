@@ -3,7 +3,7 @@
   window.removeModelGui = global.removeModelGui = removeModelGui;
   window.makeMultiDroppableZone = global.makeMultiDroppableZone = makeMultiDroppableZone;
 
-  var nwGui = require('nw.gui');
+  // var nwGui = require('nw.gui');
 
   var _globGID = 0;
   var _changeListenersMap = {};
@@ -27,7 +27,7 @@
         {
           title:'open',
           action: function(){
-            nwGui.Shell.openItem(iModel.path);
+            // nwGui.Shell.openItem(iModel.path);
           }
         }
       ]
