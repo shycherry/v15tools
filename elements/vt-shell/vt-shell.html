@@ -1,0 +1,108 @@
+<link rel="import" href="../vt-model-element/vt-model-element.html">
+<link rel="import" href="../vt-shellworker/vt-shellworker.html">
+<link rel="import" href="../vt-shellbatch/vt-shellbatch.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-button/paper-button.html">
+
+<!-- events: statusChanged (enqueued, canceled, working, dropped) -->
+<polymer-element name="vt-shell" extends="vt-model-element" attributes="commandline output params autostart consumetasks" autostart="true" consumetasks="true">
+  <template>
+    <link rel="stylesheet" href="vt-shell.css"/>
+    <vt-shellworker id="worker"></vt-shellworker>
+    <div id="shellContainer">
+      <template if="{{output}}">
+        <div id="viewport"></div>
+      </template>
+      <vt-shellbatch batchname="batch" id="shellbatch" status="enqueued" params="{{params}}">
+        <content id="content" select="vt-shelltask"></content>
+      </vt-shellbatch>
+      <template if="{{commandline}}">
+        <div id="inputbar">
+          <paper-input id="commandInput" label="command"></paper-input>
+          <paper-button raised on-click="{{clickEnqueueCallback}}">Enqueue</paper-button>
+        </div>
+      </template>
+    </div>
+  </template>
+  <script type="text/javascript" src="../underscore/underscore.js"></script>
+  <script>
+    var Async = global.require('async');
+    var _StartTransactionMarker = 'echo V15TStart_';
+    var _EndTransactionMarker = 'echo V15TEnd_';
+    var _TransactionMarker = '_Trans_';
+
+    Polymer('vt-shell',{
+      commandline: false,
+      output: false,
+      autostart: true,
+      consumetasks: true,
+      params: {'test' : 'yaw ! test is working !'},
+      created : function(){
+        this.fullOutput = '';
+      },
+      encodeHTML : function(iText){
+        if(! iText){
+          return '';
+        }
+
+        if( !(iText.replace) ){
+          iText = iText.toString();
+        }
+
+        if(iText.replace){
+          return iText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/(\n)/g,'<br/>');
+        }else{
+          return '';
+        }
+      },
+      domReady : function(){
+        var stdoutCallback = function(ev){
+          this.fullOutput += ev.detail;
+          if(this.output){
+            this.$.viewport.innerHTML += this.encodeHTML(ev.detail);
+          }
+          this.fire('stdout_data', ev);
+        }.bind(this);
+
+        var stderrCallback = function(ev){
+          this.fullOutput += ev.detail;
+          if(this.output){
+            this.$.viewport.innerHTML += this.encodeHTML(ev.detail);
+          }
+          this.fire('stderr_data', ev);
+        }.bind(this);
+
+        this.$.worker.addEventListener('stdout_data', stdoutCallback);
+        this.$.worker.addEventListener('stderr_data', stderrCallback);
+
+        if(this.autostart == true)
+          this.start();
+      },
+      addShellTaskElt : function(iShellTaskElt){
+        if(!iShellTaskElt || !iShellTaskElt.command)
+          return;
+
+        iShellTaskElt.setAttribute("status", "enqueued");
+        this.$.shellbatch.appendChild(iShellTaskElt);
+      },
+      addTaskData : function(iTask){
+        var newTaskElt = document.createElement('vt-shelltask');
+        newTaskElt.data = iTask;
+
+        this.addShellTaskElt(newTaskElt);
+      },
+      clickEnqueueCallback : function(){
+        var userCmd = this.$.commandInput.value;
+        if(!userCmd)
+          return;
+
+        this.addTaskData({ command: userCmd });
+        this.start();
+      },
+      start : function(){
+        this.$.shellbatch.status = 'enqueued';
+        this.$.shellbatch.doTask(this.$.worker);
+      }
+    });
+  </script>
+</polymer-element>

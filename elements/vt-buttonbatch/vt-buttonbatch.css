@@ -1,0 +1,31 @@
+@-webkit-keyframes working
+{
+  from {-webkit-filter : opacity(0);}
+  to {-webkit-filter : opacity(1);}
+}
+
+:host{
+  display: block;
+}
+
+:host([status="finished"]){
+  background-color: initial;
+}
+
+:host([status="working"]){
+  background-color: initial;
+  -webkit-animation: initial;
+}
+
+:host([status="working"]) #main{
+  background-color: rgba(255,140,0,0.1);
+  -webkit-animation: working 1s infinite;
+}
+
+:host([details]) #progress{
+  display: none;
+}
+
+:host(:not([details])) #details{
+  display: none;
+}

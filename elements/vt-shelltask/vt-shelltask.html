@@ -1,0 +1,112 @@
+<link rel="import" href="../vt-shellworkable/vt-shellworkable.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+
+<polymer-element name="vt-shelltask" extends="vt-shellworkable" attributes="command">
+  <template>
+    <link rel="stylesheet" href="vt-shelltask.css"/>
+    <div horizontal layout center>
+      <shadow id="parent"></shadow>
+      <div id="taskview" flex>
+        <template if="{{status != 'edit'}}">
+          <div id="showresult" on-click="{{showResultClick}}"><div id="show">[+]</div><div id="hide">[-]</div></div>
+          <template if="{{injected != ''}}">
+            {{injected}}
+          </template>
+          <template if="{{injected == ''}}">
+            <i>{{command}}</i>
+          </template>
+        </template>
+        <template if="{{status == 'edit'}}">
+          <paper-input floatingLabel label="{{injected}}" value="{{command}}"></paper-input>
+        </template>
+        <div id="result"></div>
+      </div>
+    </div>
+  </template>
+  <script>
+    (function(){
+      Polymer('vt-shelltask',{
+        publish: {
+          command : {value : "ls", reflect : true},
+          result : {value : false, reflect : true}
+        },
+        injected : "",
+        hasErrors : false,
+        observe: {
+          command : 'reinjectParams',
+          params : 'reinjectParams'
+        },
+        dataChanged : function(){
+          this.command = this.data.command;
+        },
+        reinjectParams : function(){
+          this.$.injecter.input = this.command;
+          this.$.injecter.params = this.params;
+          this.injected = this.$.injecter.getInjected();
+          if(null != this.activewhenresolvable){
+            this.activated = this.$.injecter.isResolvable();
+          }
+        },
+        showResultClick : function(){
+          this.result = !this.result;
+        },
+        buildResultHTML : function(iResultText){
+          while(this.$.result.firstChild){
+            this.$.result.removeChild(this.$.result.firstChild);
+          }
+          // var resultLines = iResultText.split("\n");
+          // for(var line of resultLines){
+          //   var newDiv = document.createElement("div");
+          //   newDiv.innerText = line;
+          //   this.$.result.appendChild(newDiv);
+          // }
+          var newDiv = document.createElement("div");
+          newDiv.innerText = iResultText;
+          this.$.result.appendChild(newDiv);
+        },
+        doTask : function(iWorker, iCallback){
+          iCallback = (iCallback)? iCallback : _.noop;
+          var shellworker = iWorker;
+
+          if(!shellworker){
+            iCallback('no worker');
+            return;
+          }
+
+          if(this.status != 'enqueued'){
+            iCallback();
+            return;
+          }
+
+          var thisStdoutCallback = function(customEvent){
+            if(this.stdoutCallback){
+              this.stdoutCallback(customEvent);
+            }
+          }.bind(this);
+
+          var thisStderrCallback = function(customEvent){
+            this.hasErrors = true;
+            if(this.stderrCallback){
+              this.stderrCallback(customEvent);
+            }
+          }.bind(this);
+
+          var thisFinishedCallback = function(err, result){
+            this.status = (this.hasErrors)? 'error' : 'finished';
+            this.fire('task_finished', {'src': this, 'data':result});
+            shellworker.removeEventListener('stdout_data', thisStdoutCallback);
+            shellworker.removeEventListener('stderr_data', thisStderrCallback);
+            this.buildResultHTML(result);
+            iCallback(err, result);
+          }.bind(this);
+
+          this.status = 'working';
+          this.hasErrors = false;
+          shellworker.addEventListener('stdout_data', thisStdoutCallback);
+          shellworker.addEventListener('stderr_data', thisStderrCallback);
+          shellworker.doShellTask(this, thisFinishedCallback);
+        }
+      });
+    })();
+  </script>
+</polymer-element>

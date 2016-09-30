@@ -1,0 +1,51 @@
+<link rel="import" href="../vt-model-element/vt-model-element.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<!--
+    TODO(polyup): Inheriting from other custom elements is not yet supported.
+    See: https://www.polymer-project.org/1.0/docs/migration.html#inheritance
+ -->
+<dom-module id="vt-toolbar-item">
+  <link rel="import" type="css" href="vt-toolbar-item.css">
+  <template>
+    <paper-button icon="{{icon}}" raised="{{tool.isOpened}}" on-click="clickTool" style$="{{_computeStyle(tool)}}">
+      <span><iron-icon icon="{{icon}}"></iron-icon>{{tool.name}}</span>
+    </paper-button>
+  </template>
+  <script type="text/javascript" src="../../bower_components/underscore/underscore.js"></script>
+  <script>
+    (function () {
+      Polymer({
+        is: 'vt-toolbar-item',
+        properties: {
+          icon: { notify: true },
+          tool: {
+            type: Object,
+            value: function () {
+              return {};
+            }
+          }
+        },
+        clickTool: function (ev) {
+          var clickedTool = this.tool;
+          this.fire('click_tool', { 'tool': clickedTool });
+          if (clickedTool.isOpened) {
+            closeTool(clickedTool, function (err, data) {
+              clickedTool.isOpened = false;
+            });
+          } else {
+            openTool(clickedTool, function (err, data) {
+              clickedTool.isOpened = true;
+            });
+          }
+        },
+        hostAttributes: { 'icon': 'add' },
+        // extends: 'vt-model-element',
+        _computeStyle: function (tool) {
+          return 'background : ' + tool.isOpened ? tool.color : 'initial';
+        }
+      });
+    }());
+  </script>
+</dom-module>

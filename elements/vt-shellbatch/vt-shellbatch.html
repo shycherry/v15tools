@@ -1,0 +1,100 @@
+<link rel="import" href="../vt-shellworkable/vt-shellworkable.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+
+<polymer-element name="vt-shellbatch" extends="vt-shellworkable" attributes="batchname progress">
+  <template>
+    <link rel="stylesheet" href="vt-shellbatch.css"/>
+      <paper-material z="1">
+        <div horizontal layout center>
+          <template if="{{'' != batchname}}">
+            <b>{{batchname}}</b>
+          </template>
+        </div>
+        <div id="subTasks">
+          <content id="subTasksContent" select="vt-shelltask, vt-shellbatch"></content>
+        </div>
+      </paper-material>
+  </template>
+  <script>
+    (function(){
+      var Async = global.require('async');
+
+      Polymer('vt-shellbatch',{
+        batchname : '',
+        progress : 0,
+        ready : function(){
+          this.onMutation(this, this.childrenUpdated);
+        },
+        childrenUpdated : function(mutations){
+          this.progress = 0;
+          this.updateChildren();
+          this.onMutation(this, this.childrenUpdated);
+        },
+        updateChildren : function(){
+          var subTasksNodes = this.$.subTasksContent.getDistributedNodes();
+          for (var i = 0; i < subTasksNodes.length; i++) {
+            var currentTask = subTasksNodes[i];
+            currentTask.params = (currentTask.params == {})? this.params : currentTask.params;
+            currentTask.activated = this.activated;
+            currentTask.status = (this.status == 'working')? currentTask.status : this.status;
+          }
+        },
+        paramsChanged : function(){
+          var subTasksNodes = this.$.subTasksContent.getDistributedNodes();
+          for (var i = 0; i < subTasksNodes.length; i++) {
+            subTasksNodes[i].params = this.params;
+          }
+        },
+        activatedChanged : function(){
+          var subTasksNodes = this.$.subTasksContent.getDistributedNodes();
+          for (var i = 0; i < subTasksNodes.length; i++) {
+            subTasksNodes[i].activated = this.activated;
+          }
+        },
+        statusChanged : function(){
+          if(this.status == 'working')
+            return;
+
+          var subTasksNodes = this.$.subTasksContent.getDistributedNodes();
+          for (var i = 0; i < subTasksNodes.length; i++) {
+            subTasksNodes[i].status = this.status;
+          }
+        },
+        doTask : function(iWorker, iCallback){
+          iCallback = (iCallback)? iCallback : _.noop;
+          console.log('doShellBatch : ' + this.batchname);
+          var tasks = [];
+          var subTasksNodes = this.$.subTasksContent.getDistributedNodes();
+          for (var i = 0; i < subTasksNodes.length; i++) {
+            var currentTaskNode = subTasksNodes[i];
+            tasks.push(currentTaskNode.doTask.bind(currentTaskNode, iWorker));
+          }
+
+          var thisFinishCallback = function(err, results){
+            console.log('finishShellBatch : ' + this.batchname);
+            this.removeEventListener('task_finished', thisMakeProgress);
+            this.status = 'finished';
+            results = _.flatten(results);
+            results = _.compact(results);
+            results = results.join();
+            this.fire('task_finished', {'src' : this, 'data' : results});
+            iCallback(err, results);
+          }.bind(this);
+
+          this.status = 'working';
+          this.progress = 0;
+          var nbTasksDone = 0;
+
+          var thisMakeProgress = function(ev){
+            nbTasksDone++;
+            this.progress = (nbTasksDone*100)/tasks.length;
+          }.bind(this);
+
+          this.addEventListener('task_finished', thisMakeProgress);
+
+          Async.series(tasks, thisFinishCallback);
+        }
+      });
+    })();
+  </script>
+</polymer-element>

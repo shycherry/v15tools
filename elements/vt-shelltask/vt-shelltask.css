@@ -1,0 +1,24 @@
+:host {
+  display: block;
+}
+
+:host #taskview, :host #result *{
+  overflow: hidden;
+  -webkit-user-select: text;
+}
+
+:host #showresult{
+  display: inline-block;
+}
+
+:host(:not([result])) #result{
+  display: none;
+}
+
+:host(:not([result])) #hide{
+  display: none;
+}
+
+:host([result]) #show{
+  display: none;
+}

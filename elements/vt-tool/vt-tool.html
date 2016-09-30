@@ -1,0 +1,77 @@
+<link rel="import" href="../vt-model-element/vt-model-element.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+
+<!--
+    TODO(polyup): Inheriting from other custom elements is not yet supported.
+    See: https://www.polymer-project.org/1.0/docs/migration.html#inheritance
+ -->
+<dom-module id="vt-tool">
+  <link rel="import" type="css" href="vt-tool.css">
+  <template>
+    <!-- <vt-model-element></vt-model-element> -->
+    <paper-material animated="" elevation="1" id="shadowTool">
+      <div id="innerTool" style$="{{_computeStyle(tool)}}">
+        <content id="content"></content>
+      </div>
+    </paper-material>
+  </template>
+  <script>
+    Polymer({
+      is: 'vt-tool',
+      properties: {
+        margin: {
+          type: Number,
+          value: 10,
+          notify: true
+        },
+        tool: {
+          type: Object,
+          value: function () {
+            return {};
+          }
+        }
+      },
+      ready: function () {
+        this.startRelayout = this.startRelayout.bind(this);
+      },
+      attached: function () {
+        this.toolParent = Polymer.dom(this).parentNode;
+        this.toolParent.addEventListener('relayout', this.startRelayout);
+        this.addEventListener('mouseover', this.addFocus);
+        this.addEventListener('mouseout', this.removeFocus);
+      },
+      detached: function () {
+        this.toolParent.removeEventListener('relayout', this.startRelayout);
+        this.removeEventListener('mouseover', this.addFocus);
+        this.removeEventListener('mouseout', this.removeFocus);
+      },
+      addFocus: function () {
+        this.$.shadowTool.setZ(2);
+      },
+      removeFocus: function () {
+        this.$.shadowTool.setZ(1);
+      },
+      startRelayout: function () {
+        console.log('relayouting tool');
+        var shadowTool = this.$.shadowTool;
+        var innerTool = this.$.innerTool;
+        var totalWidth = this.clientWidth;
+        var totalHeight = this.clientHeight;
+        var eltWidth = totalWidth - 2 * this.margin;
+        var eltHeight = totalHeight - 2 * this.margin;
+        shadowTool.style.left = this.margin + 'px';
+        shadowTool.style.top = this.margin + 'px';
+        shadowTool.style.width = eltWidth + 'px';
+        shadowTool.style.height = eltHeight + 'px';
+        innerTool.style.left = this.margin + 'px';
+        innerTool.style.top = this.margin + 'px';
+        innerTool.style.width = eltWidth + 'px';
+        innerTool.style.height = eltHeight + 'px';
+      },
+      // extends: 'vt-model-element',
+      _computeStyle: function (tool) {
+        return 'background : ' + tool.color || 'initial';
+      }
+    });
+  </script>
+</dom-module>

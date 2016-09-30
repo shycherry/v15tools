@@ -1,0 +1,8 @@
+:host {
+  display: block;
+  overflow: hidden;
+}
+
+:host #innerTool {
+  overflow: auto !important;
+}

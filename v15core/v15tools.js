@@ -131,7 +131,7 @@ V15Tools.prototype.loadTools = function(iCallback){
         var currentTool = tools[iTool]
         var currentToolItem = document.createElement('vt-toolbar-item');
         currentToolItem.tool = currentTool;
-        toolbar.appendChild(currentToolItem);
+        Polymer.dom(toolbar).appendChild(currentToolItem);
       }
 
       if(iCallback) iCallback(null, tools);

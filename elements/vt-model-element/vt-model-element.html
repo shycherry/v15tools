@@ -1,0 +1,40 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="vt-model-element">
+  <script>
+    var globId = 0;
+    Polymer({
+      is: 'vt-model-element',
+      properties: {
+        attribute: { observer: 'attributeChanged' },
+        data: { notify: true },
+        elt_id: {
+          notify: true,
+          observer: 'elt_idChanged'
+        }
+      },
+      elt_idChanged: function (newVal, oldVal) {
+        console.log(this.localName + ' elt_id changed from ' + oldVal + ' to ' + newVal);
+        Polymer.dom(this).setAttribute('elt_id', this.elt_id);
+      },
+      created: function () {
+        console.log(this.localName + ' created');
+      },
+      ready: function () {
+        console.log(this.localName + ' ready');
+        this.elt_id = this.localName + '_' + globId;
+        globId++;
+        console.log(this.localName + ' domReady');
+      },
+      attached: function () {
+        console.log(this.localName + ' attached');
+      },
+      detached: function () {
+        console.log(this.localName + ' detached');
+      },
+      attributeChanged: function (oldVal, attrName, newVal) {
+        console.log(this.localName + ' attr ' + attrName + ' changed from ' + oldVal + ' to ' + newVal);
+      }
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,70 @@
+<link rel="import" href="../vt-model-element/vt-model-element.html">
+
+<polymer-element name="vt-shellworker" extends="vt-model-element">
+  <script type="text/javascript" src="../../bower_components/underscore/underscore.js"></script>
+  <script>
+    var ChildProcess = global.require('child_process');
+    var _StartTransactionMarker = 'echo V15TStart_';
+    var _EndTransactionMarker = 'echo V15TEnd_';
+    var _TransactionMarker = '_Trans_';
+
+    Polymer('vt-shellworker',{
+      created : function(){
+        this.child_process = ChildProcess.spawn('cmd');
+        this.locTransactionId = 0;
+
+        var self = this;
+
+        var stdoutCallback = function(data){
+          self.fire('stdout_data', data);
+        };
+
+        var stderrCallback = function(data){
+          self.fire('stderr_data', data);
+        };
+
+        this.child_process.stdout.on('data', stdoutCallback);
+        this.child_process.stderr.on('data', stderrCallback);
+        this.child_process.on('exit', function(){console.log('child_process exited')});
+      },
+      write : function(iData){
+        this.child_process.stdin.write(iData);
+      },
+      // doCommand
+      doShellTask : function(iShellTaskElt, iCallback){
+        iCallback = (iCallback)? iCallback : _.noop;
+        var self = this;
+        var transactionId = _TransactionMarker+this.locTransactionId;
+
+        this.write(_StartTransactionMarker+iShellTaskElt.elt_id+transactionId+'\n');
+        var command = iShellTaskElt.injected || iShellTaskElt.command;
+        this.write( (command ? command : '') + '\n');
+        this.write(_EndTransactionMarker+iShellTaskElt.elt_id+transactionId+'\n');
+
+        var dataBuffer='';
+
+        var dataCallback = function(customEvent){
+          var stringData = customEvent.detail.toString();
+          dataBuffer += stringData;
+          if(RegExp(_EndTransactionMarker+iShellTaskElt.elt_id+transactionId).test(stringData)){
+            self.removeEventListener('stdout_data', stdoutCallback);
+            self.removeEventListener('stderr_data', stderrCallback);
+            self.locTransactionId++;
+            iCallback(null, dataBuffer);
+          }
+        };
+
+        var stdoutCallback = function(customEvent){
+          dataCallback(customEvent);
+        };
+
+        var stderrCallback = function(customEvent){
+          dataCallback(customEvent);
+        };
+
+        this.addEventListener('stdout_data', stdoutCallback);
+        this.addEventListener('stderr_data', stderrCallback);
+      }
+    });
+  </script>
+</polymer-element>

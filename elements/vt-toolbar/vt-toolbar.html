@@ -1,0 +1,72 @@
+<link rel="import" href="../vt-model-element/vt-model-element.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../vt-toolbar-item/vt-toolbar-item.html">
+
+  <!--
+      TODO(polyup): unable to infer path to components
+      directory. This import path is probably incomplete.
+   -->
+  <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<!--
+    TODO(polyup): Inheriting from other custom elements is not yet supported.
+    See: https://www.polymer-project.org/1.0/docs/migration.html#inheritance
+ -->
+<dom-module id="vt-toolbar">
+  <style>
+    /* TODO(polyup): For speed, consider reworking these styles with .classes
+                     and #ids rather than [attributes].
+    */
+    [layout] {
+      @apply(--layout);
+    }
+    [layout][horizontal] {
+      @apply(--layout-horizontal);
+    }
+    [layout][center] {
+      @apply(--layout-center);
+    }
+  </style>
+  <link rel="import" type="css" href="vt-toolbar.css">
+  <template>
+    <div horizontal="" layout="" center="">
+      <paper-icon-button on-click="toggleDevTools" icon="bug-report"></paper-icon-button>
+      <div id="tools"></div>
+      <paper-icon-button on-click="toggleToolsDialog" icon="add-circle-outline"></paper-icon-button>
+    </div>
+    <paper-dialog heading="Open tool..." id="dialog">
+      <content id="toolbarItemsContent"></content>
+    </paper-dialog>
+  </template>
+  <script type="text/javascript" src="../../bower_components/underscore/underscore.js"></script>
+  <script>
+    (function () {
+      // var gui = require('nw.gui');
+      Polymer({
+        is: 'vt-toolbar',
+        properties: { status: { notify: true } },
+        toggleToolsDialog: function () {
+          this.$.dialog.toggle();
+        },
+        toggleDevTools: function () {
+        }  // var Window = gui.Window.get();
+           // if(!Window.isDevToolsOpen())
+           //   Window.showDevTools();
+           // else
+           //   Window.closeDevTools();
+,
+        ready: function () {
+          this.$.dialog.addEventListener('click_tool', function (ev) {
+            var clickedTool = ev.detail.tool;
+            var toolItem = document.createElement('vt-toolbar-item');
+            toolItem.tool = clickedTool;
+            toolItem.icon = null;
+            Polymer.dom(this.$.tools).appendChild(toolItem);
+          }.bind(this));
+        },
+        // extends: 'vt-model-element'
+      });
+    }());
+  </script>
+</dom-module>

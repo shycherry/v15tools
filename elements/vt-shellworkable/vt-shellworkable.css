@@ -1,0 +1,28 @@
+@-webkit-keyframes working
+{
+  from {-webkit-filter : opacity(0);}
+  to {-webkit-filter : opacity(1);}
+}
+
+:host([status="working"]){
+  background-color: rgba(255,140,0,0.1);
+  -webkit-animation: working 1s infinite;
+}
+
+:host([status="canceled"]){
+  background-color: rgba(0,0,0,0.5);
+  text-decoration: line-through;
+}
+
+:host([status="enqueued"]){
+  background-color: rgba(0,0,255,0.1);
+  -webkit-animation: working 1s infinite;
+}
+
+:host([status="finished"]){
+  background-color: rgba(0,255,0,0.1);
+}
+
+:host([status="error"]){
+  background-color: rgba(255,0,0,0.1);
+}

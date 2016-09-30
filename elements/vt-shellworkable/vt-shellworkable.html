@@ -1,0 +1,31 @@
+<link rel="import" href="../vt-model-element/vt-model-element.html">
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../bower_components/shy-injecter/shy-injecter.html">
+
+<!-- status : none, edit, enqueued, working, canceled, finished -->
+<polymer-element name="vt-shellworkable" extends="vt-model-element" attributes="status activated autodesactive activewhenresolvable autostartwhenresolvable params">
+  <template>
+    <link rel="stylesheet" href="vt-shellworkable.css"/>
+    <shy-injecter id="injecter"></shy-injecter>
+    <template if="{{status == 'edit'}}">
+      <paper-toggle-button checked="{{activated}}" id="checkActiv"></paper-toggle-button>
+    </template>
+  </template>
+  <script type="text/javascript" src="../../bower_components/underscore/underscore.js"></script>
+  <script>
+    (function(){
+      // var Async = global.require('async');
+
+      Polymer('vt-shellworkable',{
+        publish : {
+          activated : {value: true, reflect: true},
+          status: {value: 'none', reflect: true}
+        },
+        params: {},
+        doTask : function(iWorker, iCallback){
+          iCallback = (iCallback)? iCallback : _.noop;
+        }
+      });
+    })();
+  </script>
+</polymer-element>
