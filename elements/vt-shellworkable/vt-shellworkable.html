@@ -3,29 +3,56 @@
 <link rel="import" href="../../bower_components/shy-injecter/shy-injecter.html">
 
 <!-- status : none, edit, enqueued, working, canceled, finished -->
-<polymer-element name="vt-shellworkable" extends="vt-model-element" attributes="status activated autodesactive activewhenresolvable autostartwhenresolvable params">
+<!--
+    TODO(polyup): Inheriting from other custom elements is not yet supported.
+    See: https://www.polymer-project.org/1.0/docs/migration.html#inheritance
+ -->
+<dom-module id="vt-shellworkable">
+  <link rel="import" type="css" href="vt-shellworkable.css">
   <template>
-    <link rel="stylesheet" href="vt-shellworkable.css"/>
     <shy-injecter id="injecter"></shy-injecter>
-    <template if="{{status == 'edit'}}">
+    <template is="dom-if" if="{{_computeIf(status)}}">
       <paper-toggle-button checked="{{activated}}" id="checkActiv"></paper-toggle-button>
     </template>
   </template>
   <script type="text/javascript" src="../../bower_components/underscore/underscore.js"></script>
   <script>
-    (function(){
+    (function () {
       // var Async = global.require('async');
-
-      Polymer('vt-shellworkable',{
-        publish : {
-          activated : {value: true, reflect: true},
-          status: {value: 'none', reflect: true}
+      Polymer({
+        is: 'vt-shellworkable',
+        properties: {
+          activated: {
+            type: Boolean,
+            value: true,
+            notify: true,
+            reflectToAttribute: true
+          },
+          activewhenresolvable: { notify: true },
+          autodesactive: { notify: true },
+          autostartwhenresolvable: { notify: true },
+          params: {
+            type: Object,
+            value: function () {
+              return {};
+            },
+            notify: true
+          },
+          status: {
+            type: String,
+            value: 'none',
+            notify: true,
+            reflectToAttribute: true
+          }
         },
-        params: {},
-        doTask : function(iWorker, iCallback){
-          iCallback = (iCallback)? iCallback : _.noop;
+        doTask: function (iWorker, iCallback) {
+          iCallback = iCallback ? iCallback : _.noop;
+        },
+        // extends: 'vt-model-element',
+        _computeIf: function (status) {
+          return status == 'edit';
         }
       });
-    })();
+    }());
   </script>
-</polymer-element>
+</dom-module>
