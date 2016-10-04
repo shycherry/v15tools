@@ -1,0 +1,58 @@
+<link rel="import" href="../../elements/vt-model-element/vt-model-element.html">
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../bower_components/shy-injecter/shy-injecter.html">
+
+<!-- status : none, edit, enqueued, working, canceled, finished -->
+<!--
+    TODO(polyup): Inheriting from other custom elements is not yet supported.
+    See: https://www.polymer-project.org/1.0/docs/migration.html#inheritance
+ -->
+<dom-module id="test-tool">
+  <template>
+    <shy-injecter id="injecter"></shy-injecter>
+    <template is="dom-if" if="{{_computeIf(status)}}">
+      <paper-toggle-button checked="{{activated}}" id="checkActiv"></paper-toggle-button>
+      Test <content></content>
+    </template>
+  </template>
+  <script type="text/javascript" src="../../bower_components/underscore/underscore.js"></script>
+  <script>
+    (function () {
+      // var Async = global.require('async');
+      Polymer({
+        is: 'test-tool',
+        properties: {
+          activated: {
+            type: Boolean,
+            value: true,
+            notify: true,
+            reflectToAttribute: true
+          },
+          activewhenresolvable: { notify: true },
+          autodesactive: { notify: true },
+          autostartwhenresolvable: { notify: true },
+          params: {
+            type: Object,
+            value: function () {
+              return {};
+            },
+            notify: true
+          },
+          status: {
+            type: String,
+            value: 'none',
+            notify: true,
+            reflectToAttribute: true
+          }
+        },
+        doTask: function (iWorker, iCallback) {
+          iCallback = iCallback ? iCallback : _.noop;
+        },
+        // extends: 'vt-model-element',
+        _computeIf: function (status) {
+          return status == 'edit';
+        }
+      });
+    }());
+  </script>
+</dom-module>

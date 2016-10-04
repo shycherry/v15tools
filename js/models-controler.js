@@ -152,7 +152,7 @@
       model: iModel,
       registeredListener: onChangeListener
     };
-    return newModelGui;
+    return newModelGui[0];
   }
 
   function removeModelGui(iModelGui){
@@ -192,69 +192,11 @@
   }
 
   function makeMultiDroppableZone(iJQueryObject, iRestrictedToClass, iMaxCount){
-    var newGui = (iJQueryObject)?iJQueryObject : $('<div></div>');
+    var newGui = (iJQueryObject)? $(iJQueryObject) : $('<div></div>');
+    var newGuiElem = newGui[0];
+
     newGui.addClass('vt-multidroppablezone');
     var _models = [];
-
-    newGui.addModel = function addModel(model){
-
-      if(iRestrictedToClass && !(model instanceof iRestrictedToClass)){
-        return;
-      }
-
-      if(iMaxCount && _models.length >= iMaxCount){
-        return;
-      }
-
-      if(_models.indexOf(model) == -1){
-        newGui.append(makeModelGui(model));
-        _models.push(model);
-        newGui.trigger('models_changed');
-      }
-    }
-
-    newGui.addModels = function addModels(models){
-      for(var idx in models){
-        var model = models[idx];
-        newGui.addModel(model);
-      }
-    }
-
-    newGui.removeModel = function removeModel(model){
-      if(_models.indexOf(model) != -1){
-        _models = _models.filter(function(current){
-          return current.vid != model.vid;
-        });
-        var modelGui = newGui.find('.vt-model[vid="'+model.vid+'"]');
-        if(modelGui){
-          removeModelGui(modelGui);
-          newGui.trigger('models_changed');
-        }
-      }
-    }
-
-    newGui.removeModels = function removeModels(models){
-      for(var idx in models){
-        var model = models[idx];
-        newGui.removeModel(model);
-      }
-    }
-
-    newGui.removeAllModels = function removeAllModels(){
-      newGui.removeModels(_models);
-    }
-
-    newGui.unselectAll = function unselectAll(){
-      newGui.find('.vt-model.selected').removeClass('selected');
-    }
-
-    newGui.selectAll = function selectAll(){
-      newGui.find('.vt-model').addClass('selected');
-    }
-
-    newGui.getModels = function getModels(){
-      return _models.slice(0);
-    }
 
     newGui.contextmenu({
       beforeOpen: function(event, ui){
@@ -271,19 +213,19 @@
         {
           title:'select all',
           action: function(){
-            newGui.selectAll();
+            newGuiElem.selectAll();
           }
         },
         {
           title:'unselect all',
           action: function(){
-            newGui.unselectAll();
+            newGuiElem.unselectAll();
           }
         },
         {
           title:'remove selected',
           action: function(){
-            var selectedSharedItems = newGui.find('.selected');
+            var selectedSharedItems = newGuiElem.find('.selected');
             for(var idx = 0; idx < selectedSharedItems.length; idx++){
               var current = $(selectedSharedItems[idx]);
               if(!current) return;
@@ -292,14 +234,14 @@
               if(!vid) return;
 
               var currentModel = vt.findModel({'vid':vid});
-              newGui.removeModel(currentModel);
+              newGuiElem.removeModel(currentModel);
             }
           }
         },
         {
           title:'remove all',
           action: function(){
-            newGui.removeAllModels();
+            newGuiElem.removeAllModels();
           }
         }
       ]
@@ -318,7 +260,7 @@
 
         var selectedOthers = getOthersSelectedBrosModelsOf(draggedModelGui);
         if(selectedOthers.length){
-          newGui.addModels(selectedOthers);
+          newGuiElem.addModels(selectedOthers);
         }
 
         var vid = draggedModelGui.attr('vid');
@@ -327,7 +269,7 @@
         var model = vt.findModel({'vid': vid});
         if(!model) return;
 
-        newGui.addModel(model);
+        newGuiElem.addModel(model);
       }
     });
 
@@ -337,6 +279,66 @@
         $(ui.selected).toggleClass('selected');
       }
     });
+
+    newGuiElem.addModel = function addModel(model){
+
+      if(iRestrictedToClass && !(model instanceof iRestrictedToClass)){
+        return;
+      }
+
+      if(iMaxCount && _models.length >= iMaxCount){
+        return;
+      }
+
+      if(_models.indexOf(model) == -1){
+        newGuiElem.append(makeModelGui(model));
+        _models.push(model);
+        newGuiElem.trigger('models_changed');
+      }
+    }
+
+    newGuiElem.addModels = function addModels(models){
+      for(var idx in models){
+        var model = models[idx];
+        newGuiElem.addModel(model);
+      }
+    }
+
+    newGuiElem.removeModel = function removeModel(model){
+      if(_models.indexOf(model) != -1){
+        _models = _models.filter(function(current){
+          return current.vid != model.vid;
+        });
+        var modelGui = newGuiElem.find('.vt-model[vid="'+model.vid+'"]');
+        if(modelGui){
+          removeModelGui(modelGui);
+          newGuiElem.trigger('models_changed');
+        }
+      }
+    }
+
+    newGuiElem.removeModels = function removeModels(models){
+      for(var idx in models){
+        var model = models[idx];
+        newGuiElem.removeModel(model);
+      }
+    }
+
+    newGuiElem.removeAllModels = function removeAllModels(){
+      newGuiElem.removeModels(_models);
+    }
+
+    newGuiElem.unselectAll = function unselectAll(){
+      newGuiElem.find('.vt-model.selected').removeClass('selected');
+    }
+
+    newGuiElem.selectAll = function selectAll(){
+      newGuiElem.find('.vt-model').addClass('selected');
+    }
+
+    newGuiElem.getModels = function getModels(){
+      return _models.slice(0);
+    }
 
     return newGui;
   }

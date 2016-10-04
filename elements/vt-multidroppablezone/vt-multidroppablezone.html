@@ -1,0 +1,153 @@
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+
+<dom-module id="vt-multidroppablezone">
+  <template>
+    <paper-material elevation="1" id="zone">
+      <content id="contents"></content>
+    </paper-material>
+  </template>
+  <style>
+    :host{
+      padding: 5px;
+    };
+  </style>
+  <script>
+    Polymer({
+      is: 'vt-multidroppablezone',
+      properties: {
+        typeFilter : {
+          type: Object,
+          value: function(){
+            return vt.Types.Model;
+          }
+        },
+        maxCount: {
+          type: Number,
+          value: 0
+        },
+        models : {
+          type: Array,
+          value: function(){
+            return [];
+          },
+          notify: true
+        }
+      },
+      ready: function () {
+        this._$zone = $(this.$.zone);
+        var self = this;
+        this._$zone.contextmenu({
+          beforeOpen: function(event, ui){
+            // if(_contextMenuLockAvailable){
+              // _contextMenuLockAvailable = false;
+              return true;
+            // }
+            // return false;
+          },
+          close: function(event){
+            // _contextMenuLockAvailable = true;
+          },
+          menu:[
+            {
+              title:'select all',
+              action: function(){
+                self.selectAll();
+              }
+            },
+            {
+              title:'unselect all',
+              action: function(){
+                self.unselectAll();
+              }
+            },
+            {
+              title:'remove selected',
+              action: function(){
+                var selectedSharedItems = self.find('.selected');
+                for(var idx = 0; idx < selectedSharedItems.length; idx++){
+                  var current = $(selectedSharedItems[idx]);
+                  if(!current) return;
+
+                  var vid = current.attr('vid');
+                  if(!vid) return;
+
+                  var currentModel = vt.findModel({'vid':vid});
+                  self.removeModel(currentModel);
+                }
+              }
+            },
+            {
+              title:'remove all',
+              action: function(){
+                self.removeAllModels();
+              }
+            }
+          ]
+        });
+      },
+      attached: function () {
+        // this.toolParent = Polymer.dom(this).parentNode;
+        // this.toolParent.addEventListener('relayout', this.startRelayout);
+        // this.addEventListener('mouseover', this.addFocus);
+        // this.addEventListener('mouseout', this.removeFocus);
+      },
+      detached: function () {
+        // this.toolParent.removeEventListener('relayout', this.startRelayout);
+        // this.removeEventListener('mouseover', this.addFocus);
+        // this.removeEventListener('mouseout', this.removeFocus);
+      },
+      addModel: function (model){
+
+        if(this.typeFilter && !(model instanceof this.typeFilter)){
+          return;
+        }
+
+        if(this.maxCount && this.models.length >= this.maxCount){
+          return;
+        }
+
+        if(this.models.indexOf(model) == -1){
+          Polymer.dom(this).appendChild(makeModelGui(model));
+          this.models.push(model);
+          this._$zone.trigger('models_changed');
+        }
+      },
+      addModels: function (models){
+        for(var idx in models){
+          var model = models[idx];
+          this.addModel(model);
+        }
+      },
+      removeModel: function (model){
+        if(this.models.indexOf(model) != -1){
+          this.models = this.models.filter(function(current){
+            return current.vid != model.vid;
+          });
+          var modelGui = this._$zone.find('.vt-model[vid="'+model.vid+'"]');
+          if(modelGui){
+            removeModelGui(modelGui);
+            this._$zone.trigger('models_changed');
+          }
+        }
+      },
+      removeModels: function (models){
+        for(var idx in models){
+          var model = models[idx];
+          this.removeModel(model);
+        }
+      },
+      removeAllModels: function (){
+        this.removeModels(this.models);
+      },
+      unselectAll: function (){
+        this._$zone.find('.vt-model.selected').removeClass('selected');
+      },
+      selectAll: function (){
+        this._$zone.find('.vt-model').addClass('selected');
+      },
+      getModels: function (){
+        return this.models.slice(0);
+      }
+    });
+  </script>
+</dom-module>

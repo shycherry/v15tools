@@ -9,12 +9,6 @@
   var _currentTool;
   // var gui = require('nw.gui');
 
-
-  function relayout(){
-    $('#vt-central').height($(window).height() -  $('#vt-tabs').height());
-    $('#vt-central').width($(window).width());
-  }
-
   window.openTool = global.openTool = function openTool(iTool, iCallback){
     var hiddenZone = $('#vt-hidden');
     var mainZone = $('#vt-main');
@@ -34,7 +28,7 @@
       var newToolDOM = $('<vt-tool id="'+iTool.vid+'"></vt-tool>');
       newToolDOM[0].tool = iTool;
       newToolDOM.load(iTool.pathToDir+'/layout.html', function(){
-        mainZone.append(newToolDOM);
+        Polymer.dom(mainZone[0]).appendChild(newToolDOM);
         if(fs.existsSync(path.resolve(cssPath))){
           newToolDOM.prepend('<link rel="stylesheet" type="text/css" href="'+cssPath+'">');
         }
@@ -60,7 +54,7 @@
   }
 
   $(document).ready(function() {
-    $(window).resize(relayout);
+    // $(window).resize(relayout);
     $('#vt-logo').click(function(){
       // var Window = gui.Window.get();
       // if(!Window.isDevToolsOpen())

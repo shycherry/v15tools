@@ -1,5 +1,6 @@
 <link rel="import" href="../vt-shellworkable/vt-shellworkable.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
+
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <!--
     TODO(polyup): Inheriting from other custom elements is not yet supported.
@@ -22,8 +23,9 @@
   </style>
   <link rel="import" type="css" href="vt-shellbatch.css">
   <template>
-      <paper-material z="1">
+      <paper-material elevation="1">
         <div horizontal="" layout="" center="">
+        <shadow id="parent"></shadow>
           <template is="dom-if" if="{{_computeIf(batchname)}}">
             <b>{{batchname}}</b>
           </template>
@@ -53,13 +55,21 @@
           },
           status: { observer: 'statusChanged' }
         },
-        ready: function () {
-          this.onMutation(this, this.childrenUpdated);
+        // ready: function () {
+        //   this.onMutation(this, this.childrenUpdated);
+        // },
+        attached: function () {
+          var boundChildrenUpdated = this.childrenUpdated.bind(this);
+          this._childrenObserver = Polymer.dom(this.$.contentNode).observeNodes(boundChildrenUpdated);
+          this.childrenUpdated();
+        },
+        dettached: function () {
+          Polymer.dom(this.$.contentNode).unobserveNodes(this._childrenObserver);
         },
         childrenUpdated: function (mutations) {
           this.progress = 0;
           this.updateChildren();
-          this.onMutation(this, this.childrenUpdated);
+          // this.onMutation(this, this.childrenUpdated);
         },
         updateChildren: function () {
           var subTasksNodes = Polymer.dom(this.$.subTasksContent).getDistributedNodes();

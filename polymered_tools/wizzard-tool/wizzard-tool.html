@@ -1,0 +1,102 @@
+<link rel="import" href="../../bower_components/shy-elt-freewall/shy-elt-freewall.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../elements/vt-multidroppablezone/vt-multidroppablezone.html">
+
+<dom-module id="wizzard-tool">
+  <style>
+    textarea{
+      overflow: auto;
+      display: block;
+      width: 100%;
+      height: 40%;
+    }
+
+    #wizz_get_models{
+      height: 5%;
+      min-height: 1.5em;
+    }
+
+    #wizz_freewall{
+      width: 100%;
+      height: 55%;
+    }
+  </style>
+  <template>
+    <textarea cols=50 rows=35 wrap='off' id="wizz_input" class="vt-boxshadow">
+      Example :
+      e:\path\to\WS\FW\PrivateInterfaces\file.h
+      e:\path\to\WS\FW\ProtectedInterfaces\file.h
+      e:\path\to\WS\FW\PublicInterfaces\file.h
+      e:\path\to\WS\FW\PublicInterfaces\file.h
+      e:\path\to\WS\FW\IdentityCard\IdentityCard.xml
+      e:\path\to\WS\FW\MOD.m\iMakefile.mk
+      e:\path\to\WS\FW\MOD.m\src\file.cpp
+      e:\path\to\WS\FW\MOD.m\LocalInterfaces\file.h
+      e:\path\to\WS\FW.tst\FunctionTests\TestCases\file.sh
+      e:\path\to\WS\FW.tst\FunctionTests\InputData\path\to\rep\file.bin
+      e:\path\to\WS\FW.tst\FunctionTests\InputData\file.txt
+      MechanicalModeler\CATMmrBrepAccess.m\src\CATBRepAccessFactory.cpp has been modified
+      MechanicalModeler\PrivateInterfaces\CATBRepAccessFactory.h has been modified
+      MechanicalModelerBase.tst\FunctionTests\InputData\CATMmrBrepDomainAccess_Batch.txt has been modified
+      MechanicalModeler\PrivateInterfaces has been modified
+      MechanicalModeler\CATMmrBrepAccess.m has been created
+    </textarea>
+    <paper-button raised id="wizz_get_models" on-tap="_handleGetModels">Get Models</paper-button><br/>
+    <shy-elt-freewall id="wizz_freewall" transition-duration="100">
+      <vt-multidroppablezone id="wizz_fws_list" type="[[vt.Types.FILE]]"></vt-multidroppablezone>
+      <vt-multidroppablezone id="wizz_mods_list" type="[[vt.Types.FW]]"></vt-multidroppablezone>
+      <vt-multidroppablezone id="wizz_files_list" type="[[vt.Types.FW]]"></vt-multidroppablezone>
+      <vt-multidroppablezone id="wizz_fullpathes_list" type="[[vt.Types.FW]]"></vt-multidroppablezone>
+    </shy-elt-freewall>
+  </template>
+  <script type="text/javascript" src="../../bower_components/underscore/underscore.js"></script>
+  <script>
+    (function () {
+      Polymer({
+        is: 'wizzard-tool',
+        ready: function(){
+          this._dropZonesModels = [];
+          this._dropZonesModels.push(this.$.wizz_fws_list);
+          this._dropZonesModels.push(this.$.wizz_mods_list);
+          this._dropZonesModels.push(this.$.wizz_files_list);
+          this._dropZonesModels.push(this.$.wizz_fullpathes_list);
+
+          // this._dropZonesModels.push(makeMultiDroppableZone(this.$.wizz_fws_list), vt.Types.FW);
+          // this._dropZonesModels.push(makeMultiDroppableZone(this.$.wizz_mods_list), vt.Types.MOD);
+          // this._dropZonesModels.push(makeMultiDroppableZone(this.$.wizz_files_list), vt.Types.FILE);
+          // this._dropZonesModels.push(makeMultiDroppableZone(this.$.wizz_fullpathes_list), vt.Types.FullPath);
+
+          this._makeModelsList();
+        },
+        _handleGetModels: function() {
+          var total_input = $('#wizz_input').val();
+          var models = vt.magicGetModelsFromText(total_input);
+          this._makeModelsList(models);
+        },
+        _makeModelsList: function (iModels){
+          //fill drop zones
+          for(var idx = 0; idx <= this._dropZonesModels.length;  idx++){
+            var currentDropZone = this._dropZonesModels[idx];
+            if(currentDropZone){
+              currentDropZone.removeAllModels();
+              if(iModels){
+                currentDropZone.addModels(iModels);
+              }
+            }
+          }
+
+          //show only dropzones with at least 1 item
+          for(var idx = 0; idx < this._dropZonesModels.length;  idx++){
+            var currentDropZone = this._dropZonesModels[idx];
+            // if(currentDropZone.getModels().length >= 1){
+              // Polymer.dom(this.$.wizz_freewall).appendChild(currentDropZone[0]);
+            // }else{
+              // Polymer.dom(this.$.wizz_freewall).removeChild(currentDropZone[0]);
+            // }
+          }
+        }
+
+      });
+    }());
+  </script>
+</dom-module>

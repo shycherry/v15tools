@@ -37,13 +37,13 @@
         <paper-button id="button" on-click="click" raised="" flex="">{{injectedlabel}}</paper-button>
       </div>
       <div horizontal="" layout="" center="">
-        <paper-progress id="progress" value="{{$.runbatch.progress}}" flex=""></paper-progress>
+        <paper-progress id="progress" value="[[runbatch-progress]]" flex=""></paper-progress>
       </div>
       <div id="details">
         <vt-shellbatch batchname="{{injectedlabel}}" status="edit" params="{{params}}">
           <content id="subTasksContent" select="vt-shelltask, vt-shellbatch"></content>
         </vt-shellbatch>
-        <vt-shellbatch id="runbatch" status="{{status}}"></vt-shellbatch>
+        <vt-shellbatch id="runbatch" progress="{{runbatch-progress}}" status="{{status}}"></vt-shellbatch>
       </div>
     </paper-material>
   </template>
@@ -96,12 +96,19 @@
             observer: 'reinjectParams'
           }
         },
-        ready: function () {
-          this.onMutation(this, this.childrenUpdated);
+        // ready: function () {
+        //   // this.onMutation(this, this.childrenUpdated);
+        // },
+        attached: function () {
+          var boundChildrenUpdated = this.childrenUpdated.bind(this);
+          this._childrenObserver = Polymer.dom(this.$.contentNode).observeNodes(boundChildrenUpdated);
+        },
+        dettached: function () {
+          Polymer.dom(this.$.contentNode).unobserveNodes(this._childrenObserver);
         },
         childrenUpdated: function (mutations) {
           this.updateChildren();
-          this.onMutation(this, this.childrenUpdated);
+          // this.onMutation(this, this.childrenUpdated);
         },
         updateChildren: function () {
           var subTasksNodes = Polymer.dom(this.$.subTasksContent).getDistributedNodes();
@@ -133,7 +140,7 @@
         },
         detailsClick: function () {
           this.details = !this.details;
-          this.$.shadow.setZ(this.$.shadow.z == 1 ? 2 : 1);
+          this.$.shadow.elevation = (this.$.shadow.elevation == 1) ? 2 : 1;
         },
         setTaskFinishedCallback: function (id, cb) {
           this.set('_finishedCallbacks' + ('.' + id), cb);

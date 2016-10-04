@@ -46,10 +46,10 @@
         this.removeEventListener('mouseout', this.removeFocus);
       },
       addFocus: function () {
-        this.$.shadowTool.setZ(2);
+        this.$.shadowTool.elevation = 2;
       },
       removeFocus: function () {
-        this.$.shadowTool.setZ(1);
+        this.$.shadowTool.elevation = 1;
       },
       startRelayout: function () {
         console.log('relayouting tool');
