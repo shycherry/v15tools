@@ -14,15 +14,23 @@
   <link rel="import" href="bower_components/shy-elt-freewall/shy-elt-freewall.html">
   <link rel="import" href="elements/vt-tool/vt-tool.html">
   <link rel="import" href="elements/vt-toolbar/vt-toolbar.html">
+  <link rel="import" href="polymered_tools/test-tool/test-tool.html">
+  <link rel="import" href="polymered_tools/wizzard-tool/wizzard-tool.html">
   <script src="js/v15tools-controler.js"></script>
   <script src="js/models-controler.js"></script>
 </head>
 <body>
-  <vt-toolbar id="vt-tabs"></vt-toolbar>
-  <div id="vt-hidden"></div>
-  <div id="vt-central">
-    <shy-elt-freewall id="vt-main" transitionDuration="100"></shy-elt-freewall>
-  </div>
-  <div id="vt-status"></div>
+  <template is="dom-bind" id="app">
+    <vt-toolbar id="vt-tabs"></vt-toolbar>
+    <div id="vt-hidden"></div>
+    <div id="vt-central">
+      <shy-elt-freewall id="vt-main" transition-duration="100">
+        <wizzard-tool></wizzard-tool>
+        <test-tool status="edit">tool2</test-tool>
+      </shy-elt-freewall>
+    </div>
+    <div id="vt-status"></div>
+  </template>
+  <script src="app.js"></script>
 </body>
 </html>
