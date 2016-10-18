@@ -36,6 +36,7 @@
       ready: function () {
         this._$zone = $(this.$.zone);
         var self = this;
+        var $self = this._$zone;
         this._$zone.contextmenu({
           beforeOpen: function(event, ui){
             // if(_contextMenuLockAvailable){
@@ -63,7 +64,7 @@
             {
               title:'remove selected',
               action: function(){
-                var selectedSharedItems = self.find('.selected');
+                var selectedSharedItems = $self.find('.selected');
                 for(var idx = 0; idx < selectedSharedItems.length; idx++){
                   var current = $(selectedSharedItems[idx]);
                   if(!current) return;

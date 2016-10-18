@@ -43,10 +43,10 @@
     </textarea>
     <paper-button raised id="wizz_get_models" on-tap="_handleGetModels">Get Models</paper-button><br/>
     <shy-elt-freewall id="wizz_freewall" transition-duration="100">
-      <vt-multidroppablezone id="wizz_fws_list" type="[[vt.Types.FILE]]"></vt-multidroppablezone>
-      <vt-multidroppablezone id="wizz_mods_list" type="[[vt.Types.FW]]"></vt-multidroppablezone>
-      <vt-multidroppablezone id="wizz_files_list" type="[[vt.Types.FW]]"></vt-multidroppablezone>
-      <vt-multidroppablezone id="wizz_fullpathes_list" type="[[vt.Types.FW]]"></vt-multidroppablezone>
+      <vt-multidroppablezone id="wizz_fws_list" type-filter="[[getVTType('FW')]]"></vt-multidroppablezone>
+      <vt-multidroppablezone id="wizz_mods_list" type-filter="[[getVTType('MOD')]]"></vt-multidroppablezone>
+      <vt-multidroppablezone id="wizz_files_list" type-filter="[[getVTType('FILE')]]"></vt-multidroppablezone>
+      <vt-multidroppablezone id="wizz_fullpathes_list" type-filter="[[getVTType('FullPath')]]"></vt-multidroppablezone>
     </shy-elt-freewall>
   </template>
   <script type="text/javascript" src="../../bower_components/underscore/underscore.js"></script>
@@ -54,6 +54,9 @@
     (function () {
       Polymer({
         is: 'wizzard-tool',
+        getVTType: function(iName){
+          return vt.Types[iName];
+        },
         ready: function(){
           this._dropZonesModels = [];
           this._dropZonesModels.push(this.$.wizz_fws_list);
